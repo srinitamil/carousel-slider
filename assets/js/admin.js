@@ -12,7 +12,7 @@
             panel.css('overflow', 'visible');
         }
     });
-})(jQuery);
+})(window.jQuery);
 (function ($) {
     "use strict";
 
@@ -307,7 +307,7 @@
         }
     })
 
-})(jQuery);
+})(window.jQuery);
 (function ($) {
     'use strict';
 
@@ -337,8 +337,8 @@
         $(this).closest('.carousel-slider-range-wrapper').find('.range-value .value').val(value);
     });
 
-})(jQuery);
-(function ($) {
+})(window.jQuery);
+(function ($, wp) {
     "use strict";
 
     var frame,
@@ -468,7 +468,7 @@
         return false;
     }
 
-})(jQuery);
+})(window.jQuery, window.wp);
 /**
  * Carousel Slider Gallery from URL
  */
@@ -508,7 +508,7 @@
     // Make fields sortable
     $('#carousel_slider_form').sortable();
 
-})(jQuery);
+})(window.jQuery);
 (function ($) {
     'use strict';
 
@@ -524,7 +524,7 @@
         $(this).closest('.modal').removeClass('is-active');
     });
 
-})(jQuery);
+})(window.jQuery);
 (function ($) {
     "use strict";
 
@@ -551,6 +551,11 @@
         _product_tags = $('.product_tags').closest('.sp-input-group'),
         _product_in = $('.product_in').closest('.sp-input-group'),
         _products_per_page = $('.products_per_page').closest('.sp-input-group');
+
+    $(document).on('change', '#_carousel_slider_slide_type', function (e) {
+        var _val = $(this).val();
+        $(document).trigger("CarouselSlider.change", [_val]);
+    });
 
     // Slide Type
     slide_type.on('change', function () {
@@ -671,7 +676,7 @@
             _products_per_page.hide('fast');
         }
     });
-})(jQuery);
+})(window.jQuery);
 
 (function ($) {
     "use strict";

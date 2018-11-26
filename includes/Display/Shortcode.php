@@ -58,7 +58,7 @@ class Shortcode {
 
 		$view->set_slider_id( $id );
 		$html      = $view->render();
-		$hook_name = 'carousel_slider/view/' . str_replace( '-', '_', $slide_type );
+		$hook_name = 'carousel_slider/view/' . $slide_type;
 
 		return apply_filters( $hook_name, $html, $view );
 	}

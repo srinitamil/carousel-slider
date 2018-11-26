@@ -1,18 +1,28 @@
 class CarouselSlider {
     constructor($) {
         $('body').find('.carousel-slider').each(function () {
-            let _this = $(this);
-            let autoWidth = _this.data('auto-width');
-            let stagePadding = parseInt(_this.data('stage-padding'));
-            stagePadding = stagePadding > 0 ? stagePadding : 0;
+            let _this = $(this),
+                autoplaySpeed = 500,
+                slideType = _this.data('slide-type'),
+                isHeroCarousel = ('hero-banner-slider' === slideType),
+                isProductCarousel = ('product-carousel' === slideType),
+                isVideoCarousel = ('video-carousel' === slideType);
 
-            if (jQuery().owlCarousel) {
-                let owl_options = _this.data('owl_options');
+            if (typeof jQuery().owlCarousel === 'function') {
+                let owl_options = _this.data('owl_options'),
+                    animation = _this.data('animation');
+
                 if (owl_options) {
                     _this.owlCarousel(owl_options);
+                    if (isHeroCarousel && owl_options.autoplaySpeed) {
+                        autoplaySpeed = owl_options.autoplaySpeed;
+                    }
                 } else {
+                    let autoWidth = _this.data('auto-width'),
+                        stagePadding = parseInt(_this.data('stage-padding'));
+
                     _this.owlCarousel({
-                        stagePadding: stagePadding,
+                        stagePadding: stagePadding > 0 ? stagePadding : 0,
                         nav: _this.data('nav'),
                         dots: _this.data('dots'),
                         margin: _this.data('margin'),
@@ -37,31 +47,32 @@ class CarouselSlider {
                             1921: {items: _this.data('colums')}
                         }
                     });
+
+                    if (isHeroCarousel) {
+                        autoplaySpeed = _this.data('autoplay-speed');
+                    }
                 }
 
-                if ('hero-banner-slider' === _this.data('slide-type')) {
-                    var animation = _this.data('animation');
-                    if (animation.length) {
-                        _this.on('change.owl.carousel', function () {
-                            var sliderContent = _this.find('.carousel-slider-hero__cell__content');
-                            sliderContent.removeClass('animated' + ' ' + animation).hide();
-                        });
-                        _this.on('changed.owl.carousel', function (e) {
-                            setTimeout(function () {
-                                var current = $(e.target).find('.carousel-slider-hero__cell__content').eq(e.item.index);
-                                current.show().addClass('animated' + ' ' + animation);
-                            }, _this.data('autoplay-speed'));
-                        });
-                    }
+                if (isHeroCarousel && animation.length) {
+                    _this.on('change.owl.carousel', function () {
+                        let sliderContent = _this.find('.carousel-slider-hero__cell__content');
+                        sliderContent.removeClass('animated' + ' ' + animation).hide();
+                    });
+                    _this.on('changed.owl.carousel', function (e) {
+                        setTimeout(function () {
+                            let current = $(e.target).find('.carousel-slider-hero__cell__content').eq(e.item.index);
+                            current.show().addClass('animated' + ' ' + animation);
+                        }, autoplaySpeed);
+                    });
                 }
             }
 
-            if (jQuery().magnificPopup) {
-                if (_this.data('slide-type') === 'product-carousel') {
+            if (typeof jQuery().magnificPopup === 'function') {
+                if (isProductCarousel) {
                     $(this).find('.magnific-popup').magnificPopup({
                         type: 'ajax'
                     });
-                } else if ('video-carousel' === _this.data('slide-type')) {
+                } else if (isVideoCarousel) {
                     $(this).find('.magnific-popup').magnificPopup({
                         type: 'iframe'
                     });

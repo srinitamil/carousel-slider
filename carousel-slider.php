@@ -98,6 +98,13 @@ if ( ! class_exists( 'Carousel_Slider' ) ) {
 				register_activation_hook( __FILE__, array( self::$instance, 'activation' ) );
 				register_deactivation_hook( __FILE__, array( self::$instance, 'deactivation' ) );
 
+				/*
+				 * WP-CLI Commands
+				 */
+				if ( class_exists( 'WP_CLI' ) && class_exists( 'WP_CLI_Command' ) ) {
+					WP_CLI::add_command( 'carousel-slider', 'CarouselSlider\\CLI\\Command' );
+				}
+
 				do_action( 'carousel_slider/loaded' );
 			}
 

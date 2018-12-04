@@ -7,25 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
-class GalleryImageCarousel extends Template {
-
-	/**
-	 * Get default image carousel settings
-	 *
-	 * @return array
-	 */
-	public static function get_default_settings() {
-		$settings = wp_parse_args( array(
-			'_slide_type'              => 'image-carousel',
-			// Image Carousel Settings
-			'_show_attachment_title'   => 'off',
-			'_show_attachment_caption' => 'off',
-			'_image_lightbox'          => 'on',
-			'_image_target'            => '_self',
-		), parent::get_default_settings() );
-
-		return $settings;
-	}
+class VideoCarousel extends Template {
 
 	/**
 	 * Create gallery image carousel with random images
@@ -36,18 +18,16 @@ class GalleryImageCarousel extends Template {
 	 * @return int The post ID on success. The value 0 on failure.
 	 */
 	public static function create( $slider_title = null, $args = array() ) {
-		$images = self::get_images();
-		$images = array_slice( $images, 0, 10 );
-		$ids    = wp_list_pluck( $images, 'id' );
-		$ids    = is_array( $ids ) ? implode( ',', $ids ) : $ids;
-
 		if ( empty( $slider_title ) ) {
 			$slider_title = 'Image Carousel with Dummy Data';
 		}
 
 		$default = self::get_default_settings();
+		$urls    = self::get_video_urls();
+		$urls    = is_array( $urls ) ? implode( ',', $urls ) : $urls;
 
-		$default['_wpdh_image_ids'] = $ids;
+		$default['_slide_type'] = 'video-carousel';
+		$default['_video_url']  = $urls;
 
 		$data = wp_parse_args( $args, $default );
 
@@ -62,5 +42,25 @@ class GalleryImageCarousel extends Template {
 		}
 
 		return $post_id;
+	}
+
+	/**
+	 * Get video url
+	 *
+	 * @return array
+	 */
+	private static function get_video_urls() {
+		$urls = array(
+			'https://www.youtube.com/watch?v=_hVsamgr1k4',
+			'https://www.youtube.com/watch?v=ZzI1JhElrxc',
+			'https://www.youtube.com/watch?v=ImJB946azy0',
+			'https://www.youtube.com/watch?v=a7hqn1yNzwM',
+			'https://www.youtube.com/watch?v=OaYQZfr1RM',
+			'https://www.youtube.com/watch?v=kYgp6wp27lM',
+			'https://www.youtube.com/watch?v=4LhDXH81whk',
+			'https://www.youtube.com/watch?v=yiAkvXyfakg',
+		);
+
+		return $urls;
 	}
 }

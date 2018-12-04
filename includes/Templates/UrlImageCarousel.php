@@ -7,8 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	die;
 }
 
-class GalleryImageCarousel extends Template {
-
+class UrlImageCarousel extends Template {
 	/**
 	 * Get default image carousel settings
 	 *
@@ -16,7 +15,7 @@ class GalleryImageCarousel extends Template {
 	 */
 	public static function get_default_settings() {
 		$settings = wp_parse_args( array(
-			'_slide_type'              => 'image-carousel',
+			'_slide_type'              => 'image-carousel-url',
 			// Image Carousel Settings
 			'_show_attachment_title'   => 'off',
 			'_show_attachment_caption' => 'off',
@@ -38,16 +37,25 @@ class GalleryImageCarousel extends Template {
 	public static function create( $slider_title = null, $args = array() ) {
 		$images = self::get_images();
 		$images = array_slice( $images, 0, 10 );
-		$ids    = wp_list_pluck( $images, 'id' );
-		$ids    = is_array( $ids ) ? implode( ',', $ids ) : $ids;
+
+		$_urls = array();
+		foreach ( $images as $image ) {
+			$_urls[] = array(
+				'url'      => $image['image_src'],
+				'title'    => $image['title'],
+				'caption'  => $image['caption'],
+				'alt'      => $image['alt_text'],
+				'link_url' => $image['link_url'],
+			);
+		}
 
 		if ( empty( $slider_title ) ) {
-			$slider_title = 'Image Carousel with Dummy Data';
+			$slider_title = 'URL Image Carousel with Dummy Data';
 		}
 
 		$default = self::get_default_settings();
 
-		$default['_wpdh_image_ids'] = $ids;
+		$default['_images_urls'] = $_urls;
 
 		$data = wp_parse_args( $args, $default );
 

@@ -86,10 +86,13 @@ class View extends AbstractView {
 	 * @return string
 	 */
 	protected function query_type() {
-		$valid      = array( 'query_porduct', 'product_categories', 'product_tags', 'specific_products' );
+		$valid      = array( 'query_product', 'product_categories', 'product_tags', 'specific_products' );
 		$query_type = $this->get_meta( '_product_query_type' );
 
-		return in_array( $query_type, $valid ) ? $query_type : 'query_porduct';
+		// Typo mistake, for backup compatibility
+		$query_type = ( 'query_porduct' == $query_type ) ? 'query_product' : $query_type;
+
+		return in_array( $query_type, $valid ) ? $query_type : 'query_product';
 	}
 
 	/**

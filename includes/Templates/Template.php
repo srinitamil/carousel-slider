@@ -31,7 +31,7 @@ class Template {
 			'_autoplay_speed'              => '500',
 			// Navigation Settings
 			'_nav_button'                  => 'always',
-			'_slide_by'                    => 'page',
+			'_slide_by'                    => '1',
 			'_arrow_position'              => 'outside',
 			'_arrow_size'                  => '48',
 			'_dot_nav'                     => 'on',// Always

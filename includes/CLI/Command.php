@@ -3,7 +3,9 @@
 namespace CarouselSlider\CLI;
 
 use CarouselSlider\Templates\GalleryImageCarousel;
+use CarouselSlider\Templates\HeroCarousel;
 use CarouselSlider\Templates\PostCarousel;
+use CarouselSlider\Templates\ProductCarousel;
 use CarouselSlider\Templates\UrlImageCarousel;
 use CarouselSlider\Templates\VideoCarousel;
 use WP_CLI;
@@ -136,6 +138,41 @@ class Command extends WP_CLI_Command {
 
 		$response = sprintf( __( "#%s - %s has been created successfully.", "carousel-slider" ), $slider_id, $slider_title );
 		WP_CLI::success( $response );
+	}
+
+	public function create_sliders() {
+		// Image Carousel - Gallery
+		GalleryImageCarousel::create( 'Test: Image Carousel - Gallery' );
+		// Image Carousel - URL
+		UrlImageCarousel::create( 'Test: Image Carousel - URL' );
+		// Video Slider
+		VideoCarousel::create( 'Test: Video Carousel - Youtube' );
+		// Post Carousel
+		PostCarousel::create( 'Test: Post Carousel - Latest Posts', array( '_post_query_type' => 'latest_posts' ) );
+		PostCarousel::create( 'Test: Post Carousel - Date Range', array( '_post_query_type' => 'date_range' ) );
+		PostCarousel::create( 'Test: Post Carousel - Categories', array( '_post_query_type' => 'post_categories' ) );
+		PostCarousel::create( 'Test: Post Carousel - Tags', array( '_post_query_type' => 'post_tags' ) );
+		PostCarousel::create( 'Test: Post Carousel - IDs', array( '_post_query_type' => 'specific_posts' ) );
+		// Product Carousel
+		ProductCarousel::create( 'Test: Product Carousel - IDs', array( '_product_query_type' => 'specific_products' ) );
+		ProductCarousel::create( 'Test: Product Carousel - Categories', array( '_product_query_type' => 'product_categories' ) );
+		ProductCarousel::create( 'Test: Product Carousel - Tags', array( '_product_query_type' => 'product_tags' ) );
+		ProductCarousel::create( 'Test: Product Carousel - Recent Products',
+			array( '_product_query_type' => 'query_product', '_product_query' => 'recent' ) );
+		ProductCarousel::create( 'Test: Product Carousel - Featured Products',
+			array( '_product_query_type' => 'query_product', '_product_query' => 'featured' ) );
+		ProductCarousel::create( 'Test: Product Carousel - Sale Products',
+			array( '_product_query_type' => 'query_product', '_product_query' => 'sale' ) );
+		ProductCarousel::create( 'Test: Product Carousel - Best Selling Products',
+			array( '_product_query_type' => 'query_product', '_product_query' => 'best_selling' ) );
+		ProductCarousel::create( 'Test: Product Carousel - Top Rated Products',
+			array( '_product_query_type' => 'query_product', '_product_query' => 'top_rated' ) );
+		ProductCarousel::create( 'Test: Product Carousel - Product Categories List',
+			array( '_product_query_type' => 'query_product', '_product_query' => 'product_categories_list' ) );
+		// Hero Carousel
+		HeroCarousel::create( 'Test: Hero Carousel' );
+
+		WP_CLI::success( "All test sliders has been created successfully." );
 	}
 
 	/**

@@ -19,9 +19,9 @@ if ( ! defined( 'WPINC' ) ) {
 			echo Form::select( array(
 				'id'               => '_product_query_type',
 				'label'            => esc_html__( 'Query Type', 'carousel-slider' ),
-				'default'          => 'query_porduct',
+				'default'          => 'query_product',
 				'choices'          => array(
-					'query_porduct'      => esc_html__( 'Query Products', 'carousel-slider' ),
+					'query_product'      => esc_html__( 'Query Products', 'carousel-slider' ),
 					'product_categories' => esc_html__( 'Product Categories', 'carousel-slider' ),
 					'product_tags'       => esc_html__( 'Product Tags', 'carousel-slider' ),
 					'specific_products'  => esc_html__( 'Specific Products', 'carousel-slider' ),

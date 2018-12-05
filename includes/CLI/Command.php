@@ -2,6 +2,7 @@
 
 namespace CarouselSlider\CLI;
 
+use CarouselSlider\Supports\Utils;
 use CarouselSlider\Templates\GalleryImageCarousel;
 use CarouselSlider\Templates\HeroCarousel;
 use CarouselSlider\Templates\PostCarousel;
@@ -140,37 +141,123 @@ class Command extends WP_CLI_Command {
 		WP_CLI::success( $response );
 	}
 
+	/**
+	 * Create sliders for testing
+	 */
 	public function create_sliders() {
-		// Image Carousel - Gallery
-		GalleryImageCarousel::create( 'Test: Image Carousel - Gallery' );
-		// Image Carousel - URL
-		UrlImageCarousel::create( 'Test: Image Carousel - URL' );
-		// Video Slider
-		VideoCarousel::create( 'Test: Video Carousel - Youtube' );
-		// Post Carousel
-		PostCarousel::create( 'Test: Post Carousel - Latest Posts', array( '_post_query_type' => 'latest_posts' ) );
-		PostCarousel::create( 'Test: Post Carousel - Date Range', array( '_post_query_type' => 'date_range' ) );
-		PostCarousel::create( 'Test: Post Carousel - Categories', array( '_post_query_type' => 'post_categories' ) );
-		PostCarousel::create( 'Test: Post Carousel - Tags', array( '_post_query_type' => 'post_tags' ) );
-		PostCarousel::create( 'Test: Post Carousel - IDs', array( '_post_query_type' => 'specific_posts' ) );
-		// Product Carousel
-		ProductCarousel::create( 'Test: Product Carousel - IDs', array( '_product_query_type' => 'specific_products' ) );
-		ProductCarousel::create( 'Test: Product Carousel - Categories', array( '_product_query_type' => 'product_categories' ) );
-		ProductCarousel::create( 'Test: Product Carousel - Tags', array( '_product_query_type' => 'product_tags' ) );
-		ProductCarousel::create( 'Test: Product Carousel - Recent Products',
-			array( '_product_query_type' => 'query_product', '_product_query' => 'recent' ) );
-		ProductCarousel::create( 'Test: Product Carousel - Featured Products',
-			array( '_product_query_type' => 'query_product', '_product_query' => 'featured' ) );
-		ProductCarousel::create( 'Test: Product Carousel - Sale Products',
-			array( '_product_query_type' => 'query_product', '_product_query' => 'sale' ) );
-		ProductCarousel::create( 'Test: Product Carousel - Best Selling Products',
-			array( '_product_query_type' => 'query_product', '_product_query' => 'best_selling' ) );
-		ProductCarousel::create( 'Test: Product Carousel - Top Rated Products',
-			array( '_product_query_type' => 'query_product', '_product_query' => 'top_rated' ) );
-		ProductCarousel::create( 'Test: Product Carousel - Product Categories List',
-			array( '_product_query_type' => 'query_product', '_product_query' => 'product_categories_list' ) );
-		// Hero Carousel
-		HeroCarousel::create( 'Test: Hero Carousel' );
+		$ids     = array();
+		$sliders = array(
+			array( 'type' => 'hero-banner-slider', 'title' => 'Test: Hero Carousel', 'args' => array() ),
+			array( 'type' => 'image-carousel', 'title' => 'Test: Image Carousel - Gallery', 'args' => array() ),
+			array( 'type' => 'image-carousel-url', 'title' => 'Test: Image Carousel - URL', 'args' => array() ),
+			array( 'type' => 'video-carousel', 'title' => 'Test: Video Carousel - Youtube', 'args' => array() ),
+			// Post Carousel
+			array(
+				'type'  => 'post-carousel',
+				'title' => 'Test: Post Carousel - Latest Posts',
+				'args'  => array( '_post_query_type' => 'latest_posts' )
+			),
+			array(
+				'type'  => 'post-carousel',
+				'title' => 'Test: Post Carousel - Date Range',
+				'args'  => array( '_post_query_type' => 'date_range' )
+			),
+			array(
+				'type'  => 'post-carousel',
+				'title' => 'Test: Post Carousel - Categories',
+				'args'  => array( '_post_query_type' => 'post_categories' )
+			),
+			array(
+				'type'  => 'post-carousel',
+				'title' => 'Test: Post Carousel - Tags',
+				'args'  => array( '_post_query_type' => 'post_tags' )
+			),
+			array(
+				'type'  => 'post-carousel',
+				'title' => 'Test: Post Carousel - IDs',
+				'args'  => array( '_post_query_type' => 'specific_posts' )
+			),
+			// Product Carousel
+			array(
+				'type'  => 'product-carousel',
+				'title' => 'Test: Product Carousel - IDs',
+				'args'  => array( '_product_query_type' => 'specific_products' )
+			),
+			array(
+				'type'  => 'product-carousel',
+				'title' => 'Test: Product Carousel - Categories',
+				'args'  => array( '_product_query_type' => 'product_categories' )
+			),
+			array(
+				'type'  => 'product-carousel',
+				'title' => 'Test: Product Carousel - Tags',
+				'args'  => array( '_product_query_type' => 'product_tags' )
+			),
+			array(
+				'type'  => 'product-carousel',
+				'title' => 'Test: Product Carousel - Recent Products',
+				'args'  => array( '_product_query_type' => 'query_product', '_product_query' => 'recent' )
+			),
+			array(
+				'type'  => 'product-carousel',
+				'title' => 'Test: Product Carousel - Featured Products',
+				'args'  => array( '_product_query_type' => 'query_product', '_product_query' => 'featured' )
+			),
+			array(
+				'type'  => 'product-carousel',
+				'title' => 'Test: Product Carousel - Sale Products',
+				'args'  => array( '_product_query_type' => 'query_product', '_product_query' => 'sale' )
+			),
+			array(
+				'type'  => 'product-carousel',
+				'title' => 'Test: Product Carousel - Best Selling Products',
+				'args'  => array( '_product_query_type' => 'query_product', '_product_query' => 'best_selling' )
+			),
+			array(
+				'type'  => 'product-carousel',
+				'title' => 'Test: Product Carousel - Top Rated Products',
+				'args'  => array( '_product_query_type' => 'query_product', '_product_query' => 'top_rated' )
+			),
+			array(
+				'type'  => 'product-carousel',
+				'title' => 'Test: Product Carousel - Product Categories List',
+				'args'  => array(
+					'_product_query_type' => 'query_product',
+					'_product_query'      => 'product_categories_list'
+				)
+			),
+		);
+
+		foreach ( $sliders as $slider ) {
+			switch ( $slider['type'] ) {
+				case 'image-carousel';
+					$ids[] = GalleryImageCarousel::create( $slider['title'], $slider['args'] );
+					WP_CLI::line( "{$slider['title']} has been created successfully." );
+					break;
+				case 'image-carousel-url';
+					$ids[] = UrlImageCarousel::create( $slider['title'], $slider['args'] );
+					WP_CLI::line( "{$slider['title']} has been created successfully." );
+					break;
+				case 'video-carousel';
+					$ids[] = VideoCarousel::create( $slider['title'], $slider['args'] );
+					WP_CLI::line( "{$slider['title']} has been created successfully." );
+					break;
+				case 'post-carousel';
+					$ids[] = PostCarousel::create( $slider['title'], $slider['args'] );
+					WP_CLI::line( "{$slider['title']} has been created successfully." );
+					break;
+				case 'hero-banner-slider';
+					$ids[] = HeroCarousel::create( $slider['title'], $slider['args'] );
+					WP_CLI::line( "{$slider['title']} has been created successfully." );
+					break;
+				case 'product-carousel';
+					$ids[] = ProductCarousel::create( $slider['title'], $slider['args'] );
+					WP_CLI::line( "{$slider['title']} has been created successfully." );
+					break;
+			}
+		}
+
+		Utils::create_test_page( $ids );
 
 		WP_CLI::success( "All test sliders has been created successfully." );
 	}
@@ -197,7 +284,13 @@ class Command extends WP_CLI_Command {
 	 * Delete all sliders
 	 */
 	public function delete_sliders() {
-		$sliders = array();
+		/** @var \WP_Post[] $sliders */
+		$sliders = get_posts( array( 'post_type' => 'carousels', 'post_status' => 'any', 'numberposts' => - 1 ) );
+		foreach ( $sliders as $slider ) {
+			if ( wp_delete_post( $slider->ID, true ) ) {
+				WP_CLI::line( "Carousel Slider #{$slider->ID} has been deleted successfully." );
+			}
+		}
 		WP_CLI::success( 'Carousel Slider: all sliders has been deleted successfully.' );
 	}
 }

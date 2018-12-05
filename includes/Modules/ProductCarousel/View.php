@@ -113,7 +113,7 @@ class View extends AbstractView {
 	 * @return bool
 	 */
 	protected function is_product_categories_list() {
-		return ( $this->query_type() == 'query_porduct' && $this->query() == 'product_categories_list' );
+		return ( $this->query_type() == 'query_product' && $this->query() == 'product_categories_list' );
 	}
 
 	/**

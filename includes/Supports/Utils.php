@@ -99,12 +99,12 @@ class Utils {
 		$id            = $carousel_id;
 		$per_page      = intval( get_post_meta( $id, '_products_per_page', true ) );
 		$query_type    = get_post_meta( $id, '_product_query_type', true );
-		$query_type    = empty( $query_type ) ? 'query_porduct' : $query_type;
+		$query_type    = ! empty( $query_type ) ? $query_type : 'query_product';
 		$product_query = get_post_meta( $id, '_product_query', true );
 
 		$args = array( 'posts_per_page' => $per_page );
 
-		if ( $query_type == 'query_porduct' ) {
+		if ( $query_type == 'query_product' ) {
 
 			// Get features products
 			if ( $product_query == 'featured' ) {
@@ -210,5 +210,49 @@ class Utils {
 		}
 
 		return $types;
+	}
+
+	/**
+	 * Creates Carousel Slider test page
+	 *
+	 * @param array $ids
+	 */
+	public static function create_test_page( array $ids = array() ) {
+		$page_path    = 'carousel-slider-test';
+		$page_title   = __( 'Carousel Slider Test', 'carousel-slider' );
+		$page_content = '';
+
+		if ( empty( $ids ) ) {
+			$ids = get_posts( array( 'post_type' => 'carousels', 'post_status' => 'publish', 'numberposts' => - 1 ) );
+		}
+
+		foreach ( $ids as $id ) {
+			$_post        = get_post( $id );
+			$page_content .= '<!-- wp:heading {"level":4} --><h4>' . $_post->post_title . '</h4><!-- /wp:heading -->';
+			$page_content .= '<!-- wp:shortcode -->[carousel_slide id=\'' . $id . '\']<!-- /wp:shortcode -->';
+			$page_content .= '<!-- wp:spacer {"height":100} --><div style="height:100px" aria-hidden="true" class="wp-block-spacer"></div><!-- /wp:spacer -->';
+		}
+
+		// Check that the page doesn't exist already
+		$_page = get_page_by_path( $page_path );
+
+		if ( $_page instanceof \WP_Post ) {
+			wp_update_post( array(
+				'ID'           => $_page->ID,
+				'post_content' => $page_content,
+				'post_name'    => $page_path,
+				'post_title'   => $page_title,
+			) );
+		} else {
+			wp_insert_post( array(
+				'post_content'   => $page_content,
+				'post_name'      => $page_path,
+				'post_title'     => $page_title,
+				'post_status'    => 'publish',
+				'post_type'      => 'page',
+				'ping_status'    => 'closed',
+				'comment_status' => 'closed',
+			) );
+		}
 	}
 }

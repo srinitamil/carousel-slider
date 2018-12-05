@@ -44,9 +44,9 @@ class Template {
 			'_items_portrait_mobile'       => '1',
 			'_items_small_portrait_tablet' => '2',
 			'_items_portrait_tablet'       => '3',
-			'_items_small_desktop'         => '4',
-			'_items_desktop'               => '5',
-			'_items'                       => '6',
+			'_items_small_desktop'         => '3',
+			'_items_desktop'               => '3',
+			'_items'                       => '4',
 		);
 
 		return $default;

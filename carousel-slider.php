@@ -177,6 +177,7 @@ if ( ! class_exists( 'Carousel_Slider' ) ) {
 			if ( $this->is_request( 'frontend' ) ) {
 				$this->container['structured-data'] = \CarouselSlider\Display\StructuredData::init();
 				$this->container['shortcode']       = \CarouselSlider\Display\Shortcode::init();
+				$this->container['rest']            = \CarouselSlider\REST\SliderController::init();
 
 				// Quick view and wish list button
 				add_action( 'carousel_slider_after_shop_loop_item',

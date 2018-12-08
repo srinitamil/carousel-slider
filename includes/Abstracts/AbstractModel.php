@@ -578,19 +578,58 @@ class AbstractModel {
 	 * Create new slider
 	 *
 	 * @param array $data
+	 *
+	 * @return self
 	 */
-	public static function create( array $data ) {
+	public function create( array $data = array() ) {
+		if ( empty( $data ) ) {
+			$data = $this->get_changes();
+		}
+		$title     = isset( $data['title'] ) ? $data['title'] : '';
+		$slider_id = static::create_slider( $title );
+		if ( $slider_id ) {
+			$this->update( $data );
+		}
 
+		return new self( $slider_id );
 	}
 
 	/**
 	 * Update current slider
 	 *
-	 * @param int $slider_id
 	 * @param array $data
+	 *
+	 * @return self
 	 */
-	public static function update( $slider_id, array $data ) {
+	public function update( array $data = array() ) {
+		$id = isset( $data['id'] ) ? intval( $data['id'] ) : $this->get_id();
+		if ( empty( $data ) ) {
+			$data = $this->get_changes();
+		}
 
+		$data_to_update = array();
+
+		$keys = static::props_to_meta_key();
+		foreach ( $keys as $props => $meta_key ) {
+			if ( array_key_exists( $props, $data ) ) {
+				$value = $data[ $props ];
+				if ( is_bool( $value ) ) {
+					$value = ( true === $value ) ? 'on' : 'off';
+				}
+				if ( is_numeric( $value ) ) {
+					$value = (string) $value;
+				}
+				$data_to_update[ $meta_key ] = $value;
+			}
+		}
+
+		foreach ( $data_to_update as $meta_key => $meta_value ) {
+			update_post_meta( $id, $meta_key, $meta_value );
+		}
+
+		$this->apply_changes();
+
+		return $this;
 	}
 
 	/**
@@ -831,5 +870,24 @@ class AbstractModel {
 			'items_desktop'          => '_items_desktop',
 			'items_desktop_large'    => '_items',
 		);
+	}
+
+	/**
+	 * Create new slider post type
+	 *
+	 * @param $slider_title
+	 *
+	 * @return int|\WP_Error The post ID on success. The value 0 or \WP_Error on failure.
+	 */
+	protected static function create_slider( $slider_title ) {
+		$post_id = wp_insert_post( array(
+			'post_title'     => $slider_title,
+			'post_type'      => self::POST_TYPE,
+			'post_status'    => 'publish',
+			'comment_status' => 'closed',
+			'ping_status'    => 'closed',
+		) );
+
+		return $post_id;
 	}
 }

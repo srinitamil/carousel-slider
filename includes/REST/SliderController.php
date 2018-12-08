@@ -2,6 +2,8 @@
 
 namespace CarouselSlider\REST;
 
+use CarouselSlider\Abstracts\AbstractModel;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
 }
@@ -69,8 +71,12 @@ class SliderController extends ApiController {
 	 * @return \WP_Error|\WP_REST_Response Response object on success, or WP_Error object on failure.
 	 */
 	public function get_items( $request ) {
-		/* translators: %s: method name */
-		return new \WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be overridden in subclass." ), __METHOD__ ), array( 'status' => 405 ) );
+		if ( ! current_user_can( 'edit_posts' ) ) {
+			return $this->respond_forbidden( 'rest_forbidden_context',
+				__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
+		}
+
+		return $this->respond_ok();
 	}
 
 	/**
@@ -81,8 +87,21 @@ class SliderController extends ApiController {
 	 * @return \WP_Error|\WP_REST_Response Response object on success, or WP_Error object on failure.
 	 */
 	public function get_item( $request ) {
-		/* translators: %s: method name */
-		return new \WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be overridden in subclass." ), __METHOD__ ), array( 'status' => 405 ) );
+		$id = (int) $request->get_param( 'id' );
+
+		if ( ! current_user_can( 'publish_pages', $id ) ) {
+			return $this->respond_forbidden( 'rest_forbidden_context',
+				__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
+		}
+
+		$slider = new AbstractModel( $id );
+
+		if ( ! $slider->get_id() ) {
+			return $this->respond_not_found( 'rest_no_item_found',
+				__( 'The requested slider was not found.', 'carousel-slider' ) );
+		}
+
+		return $this->respond_ok( $slider->to_array() );
 	}
 
 	/**
@@ -93,8 +112,20 @@ class SliderController extends ApiController {
 	 * @return \WP_Error|\WP_REST_Response Response object on success, or WP_Error object on failure.
 	 */
 	public function create_item( $request ) {
-		/* translators: %s: method name */
-		return new \WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be overridden in subclass." ), __METHOD__ ), array( 'status' => 405 ) );
+		if ( ! current_user_can( 'publish_pages' ) ) {
+			return $this->respond_forbidden( 'rest_forbidden_context',
+				__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
+		}
+
+		$slider = new AbstractModel();
+		$slider = $slider->create( $request->get_params() );
+
+		if ( ! $slider->get_id() ) {
+			return $this->respond_not_found( 'rest_cannot_save',
+				__( 'There was an error saving the slider.', 'carousel-slider' ) );
+		}
+
+		return $this->respond_created( $slider->to_array() );
 	}
 
 	/**
@@ -105,8 +136,23 @@ class SliderController extends ApiController {
 	 * @return \WP_Error|\WP_REST_Response Response object on success, or WP_Error object on failure.
 	 */
 	public function update_item( $request ) {
-		/* translators: %s: method name */
-		return new \WP_Error( 'invalid-method', sprintf( __( "Method '%s' not implemented. Must be overridden in subclass." ), __METHOD__ ), array( 'status' => 405 ) );
+		$id = (int) $request->get_param( 'id' );
+
+		if ( ! current_user_can( 'publish_pages', $id ) ) {
+			return $this->respond_forbidden( 'rest_forbidden_context',
+				__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
+		}
+
+		$slider = new AbstractModel( $id );
+
+		if ( ! $slider->get_id() ) {
+			return $this->respond_not_found( 'rest_no_item_found',
+				__( 'The requested slider was not found.', 'carousel-slider' ) );
+		}
+
+		$response = $slider->update( $request->get_params() );
+
+		return $this->respond_ok( $response->to_array() );
 	}
 
 	/**
@@ -119,16 +165,23 @@ class SliderController extends ApiController {
 	public function delete_item( $request ) {
 		$id = (int) $request->get_param( 'id' );
 
-		if ( ! $id ) {
-			return $this->respond_not_found( 'rest_no_item_found',
-				__( 'The requested slider was not found.', 'carousel-slider' ) );
-		}
-
 		if ( ! current_user_can( 'publish_pages', $id ) ) {
 			return $this->respond_forbidden( 'rest_forbidden_context',
 				__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
 		}
 
-		return $this->respond_ok( array( 'deleted' => true ) );
+		$slider = new AbstractModel( $id );
+
+		if ( ! $slider->get_id() ) {
+			return $this->respond_not_found( 'rest_no_item_found',
+				__( 'The requested slider was not found.', 'carousel-slider' ) );
+		}
+
+		if ( ! $slider->delete() ) {
+			return $this->respond_internal_server_error( 'rest_cannot_delete',
+				__( 'There was an error deleting the slider.', 'carousel-slider' ) );
+		}
+
+		return $this->respond_ok();
 	}
 }

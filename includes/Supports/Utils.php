@@ -255,4 +255,44 @@ class Utils {
 			) );
 		}
 	}
+
+	/**
+	 * Get available image sizes
+	 *
+	 * @param bool $key_only
+	 *
+	 * @return array
+	 */
+	public static function get_available_image_sizes( $key_only = false ) {
+		global $_wp_additional_image_sizes;
+
+		$sizes = array();
+
+		foreach ( get_intermediate_image_sizes() as $_size ) {
+			if ( in_array( $_size, array( 'thumbnail', 'medium', 'medium_large', 'large' ) ) ) {
+
+				$width  = get_option( "{$_size}_size_w" );
+				$height = get_option( "{$_size}_size_h" );
+				$crop   = (bool) get_option( "{$_size}_crop" ) ? 'hard' : 'soft';
+
+				$sizes[ $_size ] = "{$_size} - $crop:{$width}x{$height}";
+
+			} elseif ( isset( $_wp_additional_image_sizes[ $_size ] ) ) {
+
+				$width  = $_wp_additional_image_sizes[ $_size ]['width'];
+				$height = $_wp_additional_image_sizes[ $_size ]['height'];
+				$crop   = $_wp_additional_image_sizes[ $_size ]['crop'] ? 'hard' : 'soft';
+
+				$sizes[ $_size ] = "{$_size} - $crop:{$width}x{$height}";
+			}
+		}
+
+		$sizes = array_merge( $sizes, array( 'full' => 'original uploaded image' ) );
+
+		if ( $key_only ) {
+			return array_keys( $sizes );
+		}
+
+		return $sizes;
+	}
 }

@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class AbstractModel {
+class AbstractModel implements \JsonSerializable {
 
 	const POST_TYPE = 'carousels';
 
@@ -81,6 +81,15 @@ class AbstractModel {
 			$this->read_slider_data();
 			$this->set_object_read();
 		}
+	}
+
+	/**
+	 * Get found items
+	 *
+	 * @return int
+	 */
+	public static function get_found_items() {
+		return self::$found_items;
 	}
 
 	/**
@@ -170,7 +179,7 @@ class AbstractModel {
 	 * @return string
 	 */
 	public function get_type() {
-		return $this->type;
+		return $this->get_prop( 'type' );
 	}
 
 	/**
@@ -179,7 +188,7 @@ class AbstractModel {
 	 * @param string $type
 	 */
 	public function set_type( $type ) {
-		$this->type = $type;
+		$this->set_prop( 'type', $type );
 	}
 
 	/**
@@ -305,17 +314,21 @@ class AbstractModel {
 	 * @return string
 	 */
 	public function get_arrow_visibility() {
-		$visibility = $this->get_prop( 'arrow_nav' );
+		$visibility = $this->get_prop( 'arrow_visibility' );
 
-		if ( in_array( $visibility, array( 'on', 'hover' ) ) ) {
+		if ( in_array( $visibility, array( 'always', 'hover', 'never' ) ) ) {
+			return $visibility;
+		}
+
+		if ( 'on' == $visibility ) {
 			return 'hover';
 		}
 
-		if ( in_array( $visibility, array( 'off', 'never' ) ) ) {
+		if ( 'off' == $visibility ) {
 			return 'never';
 		}
 
-		return $visibility;
+		return 'always';
 	}
 
 	/**
@@ -346,7 +359,7 @@ class AbstractModel {
 	public function get_arrow_steps() {
 		$slide_by = $this->get_prop( 'arrow_steps' );
 
-		if ( false !== strpos( 'page', $slide_by ) ) {
+		if ( ! empty( $slide_by ) && false !== strpos( 'page', $slide_by ) ) {
 			return 'page';
 		}
 
@@ -368,7 +381,7 @@ class AbstractModel {
 	 * @return string
 	 */
 	public function get_dots_visibility() {
-		$visibility = $this->get_prop( 'dot_nav' );
+		$visibility = $this->get_prop( 'dots_visibility' );
 
 		if ( in_array( $visibility, array( 'always', 'hover', 'never' ) ) ) {
 			return $visibility;
@@ -489,11 +502,11 @@ class AbstractModel {
 			'autoplay_timeout'       => $this->get_meta( '_autoplay_timeout' ),
 			'autoplay_speed'         => $this->get_meta( '_autoplay_speed' ),
 			// Navigation Settings
-			'arrow_nav'              => $this->get_meta( '_nav_button' ),
+			'arrow_visibility'       => $this->get_meta( '_nav_button' ),
 			'arrow_steps'            => $this->get_meta( '_slide_by' ),
 			'arrow_position'         => $this->get_meta( '_arrow_position' ),
 			'arrow_size'             => $this->get_meta( '_arrow_size' ),
-			'dot_nav'                => $this->get_meta( '_dot_nav' ),
+			'dots_visibility'        => $this->get_meta( '_dot_nav' ),
 			'dots_position'          => $this->get_meta( '_bullet_position' ),
 			'dots_size'              => $this->get_meta( '_bullet_size' ),
 			'dots_shape'             => $this->get_meta( '_bullet_shape' ),
@@ -538,7 +551,7 @@ class AbstractModel {
 		}
 
 		$defaults = array(
-			'post_status'    => 'any',
+			'post_status'    => 'publish',
 			'posts_per_page' => - 1,
 			'offset'         => 0,
 			'orderby'        => 'ID',
@@ -579,19 +592,40 @@ class AbstractModel {
 	 *
 	 * @param array $data
 	 *
-	 * @return self
+	 * @return self|bool
 	 */
 	public function create( array $data = array() ) {
 		if ( empty( $data ) ) {
 			$data = $this->get_changes();
 		}
+
 		$title     = isset( $data['title'] ) ? $data['title'] : '';
 		$slider_id = static::create_slider( $title );
 		if ( $slider_id ) {
-			$this->update( $data );
+			$data_to_update = array();
+
+			$keys = static::props_to_meta_key();
+			foreach ( $keys as $props => $meta_key ) {
+				if ( array_key_exists( $props, $data ) ) {
+					$value = $data[ $props ];
+					if ( is_bool( $value ) ) {
+						$value = ( true === $value ) ? 'on' : 'off';
+					}
+					if ( is_numeric( $value ) ) {
+						$value = (string) $value;
+					}
+					$data_to_update[ $meta_key ] = $value;
+				}
+			}
+
+			foreach ( $data_to_update as $meta_key => $meta_value ) {
+				update_post_meta( $slider_id, $meta_key, $meta_value );
+			}
+
+			return new self( $slider_id );
 		}
 
-		return new self( $slider_id );
+		return false;
 	}
 
 	/**
@@ -626,8 +660,6 @@ class AbstractModel {
 		foreach ( $data_to_update as $meta_key => $meta_value ) {
 			update_post_meta( $id, $meta_key, $meta_value );
 		}
-
-		$this->apply_changes();
 
 		return $this;
 	}
@@ -852,11 +884,11 @@ class AbstractModel {
 			'autoplay_timeout'       => '_autoplay_timeout',
 			'autoplay_speed'         => '_autoplay_speed',
 			// Navigation Settings
-			'arrow_nav'              => '_nav_button',
+			'arrow_visibility'       => '_nav_button',
 			'arrow_steps'            => '_slide_by',
 			'arrow_position'         => '_arrow_position',
 			'arrow_size'             => '_arrow_size',
-			'dot_nav'                => '_dot_nav',
+			'dots_visibility'        => '_dot_nav',
 			'dots_position'          => '_bullet_position',
 			'dots_size'              => '_bullet_size',
 			'dots_shape'             => '_bullet_shape',
@@ -889,5 +921,15 @@ class AbstractModel {
 		) );
 
 		return $post_id;
+	}
+
+	/**
+	 * Specify data which should be serialized to JSON
+	 * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
+	 * @return mixed data which can be serialized by <b>json_encode</b>,
+	 * which is a value of any type other than a resource.
+	 */
+	public function jsonSerialize() {
+		return $this->to_array();
 	}
 }

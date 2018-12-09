@@ -192,6 +192,8 @@ if ( ! class_exists( 'Carousel_Slider' ) ) {
 			// Product quick view
 			add_action( 'wp_ajax_carousel_slider_quick_view', array( 'CarouselSlider\\QuickView', 'product' ) );
 			add_action( 'wp_ajax_nopriv_carousel_slider_quick_view', array( 'CarouselSlider\\QuickView', 'product' ) );
+
+			\CarouselSlider\Test::init();
 		}
 
 		/**

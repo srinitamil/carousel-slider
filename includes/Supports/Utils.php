@@ -2,7 +2,10 @@
 
 namespace CarouselSlider\Supports;
 
+use CarouselSlider\Abstracts\Carousel;
+use CarouselSlider\GalleryImageCarousel;
 use CarouselSlider\Product;
+use CarouselSlider\UrlImageCarousel;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -210,6 +213,29 @@ class Utils {
 		}
 
 		return $types;
+	}
+
+	public static function get_sliders( array $args = array() ) {
+
+	}
+
+	/**
+	 * Get slider
+	 *
+	 * @param int $slider_id
+	 *
+	 * @return Carousel
+	 */
+	public static function get_slider( $slider_id ) {
+		$type = get_post_meta( $slider_id, '_slide_type', true );
+		if ( 'image-carousel' == $type ) {
+			return new GalleryImageCarousel( $slider_id );
+		}
+		if ( 'image-carousel-url' == $type ) {
+			return new UrlImageCarousel( $slider_id );
+		}
+
+		return new Carousel( $slider_id );
 	}
 
 	/**

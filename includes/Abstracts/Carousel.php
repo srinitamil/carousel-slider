@@ -7,7 +7,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit;
 }
 
-class AbstractModel implements \JsonSerializable {
+class Carousel implements \JsonSerializable {
 
 	const POST_TYPE = 'carousels';
 
@@ -26,25 +26,11 @@ class AbstractModel implements \JsonSerializable {
 	protected $title;
 
 	/**
-	 * Slider type
-	 *
-	 * @var string
-	 */
-	protected $type;
-
-	/**
 	 * Cache group.
 	 *
 	 * @var string
 	 */
 	protected $cache_group = 'carousel-slider';
-
-	/**
-	 * Number of items found from current query
-	 *
-	 * @var int
-	 */
-	protected static $found_items = 0;
 
 	/**
 	 * Slider data
@@ -77,19 +63,9 @@ class AbstractModel implements \JsonSerializable {
 		if ( $post && self::POST_TYPE == get_post_type( $post ) ) {
 			$this->set_id( $post->ID );
 			$this->set_title( $post->post_title );
-			$this->set_type( $this->get_meta( '_slide_type' ) );
 			$this->read_slider_data();
 			$this->set_object_read();
 		}
-	}
-
-	/**
-	 * Get found items
-	 *
-	 * @return int
-	 */
-	public static function get_found_items() {
-		return self::$found_items;
 	}
 
 	/**
@@ -543,7 +519,7 @@ class AbstractModel implements \JsonSerializable {
 	 *
 	 * @param array|int $args
 	 *
-	 * @return AbstractModel|AbstractModel[]
+	 * @return Carousel|Carousel[]
 	 */
 	public static function find( $args = array() ) {
 		if ( is_numeric( $args ) ) {
@@ -565,8 +541,6 @@ class AbstractModel implements \JsonSerializable {
 		$q     = new \WP_Query();
 		$posts = $q->query( $args );
 
-		self::$found_items = $q->found_posts;
-
 		$sliders = array();
 
 		foreach ( (array) $posts as $post ) {
@@ -581,7 +555,7 @@ class AbstractModel implements \JsonSerializable {
 	 *
 	 * @param int $id
 	 *
-	 * @return AbstractModel
+	 * @return Carousel
 	 */
 	public static function find_single( $id = 0 ) {
 		return new self( $id );

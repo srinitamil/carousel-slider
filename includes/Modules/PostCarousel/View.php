@@ -39,7 +39,7 @@ class View extends AbstractView {
 			$html .= '</header>';
 
 			$html .= '<div class="entry-summary">';
-			$html .= wp_trim_words( wp_strip_all_tags( $post->post_content ), '20', ' ...' );
+			$html .= wp_trim_words( $post->post_content, '20', ' ...' );
 			$html .= '</div>';
 
 			$html .= $this->post_tag( $post );

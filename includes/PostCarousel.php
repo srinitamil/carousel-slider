@@ -139,17 +139,9 @@ class PostCarousel extends Carousel {
 	 * @return array
 	 */
 	public function to_array() {
-		$data               = parent::to_array();
-		$data['query_type'] = $this->get_query_type();
-		$data['per_page']   = $this->get_per_page();
-		$data['orderby']    = $this->get_orderby();
-		$data['order']      = $this->get_order();
-		$data['post_in']    = $this->get_post_in();
-		$data['categories'] = $this->get_categories();
-		$data['tags']       = $this->get_tags();
-		$data['date_from']  = $this->get_date_from();
-		$data['date_to']    = $this->get_date_to();
-		$data['height']     = $this->get_height();
+		$data           = parent::to_array();
+		$data['height'] = $this->get_height();
+		$data['posts']  = $this->prepare_posts_for_rest();
 
 		return $data;
 	}
@@ -191,6 +183,70 @@ class PostCarousel extends Carousel {
 		$keys['height']     = '_post_height';
 
 		return $keys;
+	}
+
+	/**
+	 * Get posts data for array representation
+	 *
+	 * @return array
+	 */
+	public function prepare_posts_for_rest() {
+		$_posts = $this->get_posts();
+		$posts  = array();
+		foreach ( $_posts as $post ) {
+			setup_postdata( $post );
+			// Author
+			$author      = (int) $post->post_author;
+			$author_url  = esc_url( get_author_posts_url( $author ) );
+			$author_name = esc_html( get_the_author_meta( 'display_name', $author ) );
+			// Categories
+			$_categories = get_the_terms( $post, 'category' );
+			$categories  = array();
+			foreach ( $_categories as $category ) {
+				$categories[] = array(
+					'id'    => $category->term_id,
+					'name'  => $category->name,
+					'count' => $category->count,
+					'link'  => get_category_link( $category->term_id ),
+				);
+			}
+			// Tags
+			$_tags = get_the_terms( $post, 'post_tag' );
+			$tags  = array();
+			foreach ( $_tags as $tag ) {
+				$tags[] = array(
+					'id'    => $tag->term_id,
+					'name'  => $tag->name,
+					'count' => $tag->count,
+					'link'  => get_category_link( $tag->term_id ),
+				);
+			}
+			$posts[] = array(
+				'id'         => $post->ID,
+				'link'       => get_permalink( $post->ID ),
+				'title'      => get_the_title( $post->ID ),
+				'excerpt'    => get_the_excerpt( $post ),
+				'author'     => array(
+					'id'     => $author,
+					'name'   => $author_name,
+					'url'    => $author_url,
+					'avatar' => get_avatar_url( $author, 20 ),
+				),
+				'date'       => array(
+					'created'  => mysql_to_rfc3339( $post->post_date ),
+					'modified' => mysql_to_rfc3339( $post->post_modified ),
+				),
+				'date_gmt'   => array(
+					'created'  => mysql_to_rfc3339( $post->post_date_gmt ),
+					'modified' => mysql_to_rfc3339( $post->post_modified_gmt ),
+				),
+				'categories' => $categories,
+				'tags'       => $tags,
+			);
+		}
+		wp_reset_postdata();
+
+		return $posts;
 	}
 
 	/**

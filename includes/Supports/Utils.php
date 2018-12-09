@@ -4,8 +4,12 @@ namespace CarouselSlider\Supports;
 
 use CarouselSlider\Abstracts\Carousel;
 use CarouselSlider\GalleryImageCarousel;
+use CarouselSlider\HeroCarousel;
+use CarouselSlider\PostCarousel;
 use CarouselSlider\Product;
+use CarouselSlider\ProductCarousel;
 use CarouselSlider\UrlImageCarousel;
+use CarouselSlider\VideoCarousel;
 
 // Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -215,6 +219,54 @@ class Utils {
 		return $types;
 	}
 
+	/**
+	 * Get post query type
+	 *
+	 * @param bool $key_only
+	 *
+	 * @return array
+	 */
+	public static function get_post_query_type( $key_only = true ) {
+		$types = array(
+			'latest_posts'    => esc_html__( 'Latest Posts', 'carousel-slider' ),
+			'date_range'      => esc_html__( 'Date Range', 'carousel-slider' ),
+			'post_categories' => esc_html__( 'Post Categories', 'carousel-slider' ),
+			'post_tags'       => esc_html__( 'Post Tags', 'carousel-slider' ),
+			'specific_posts'  => esc_html__( 'Specific posts', 'carousel-slider' ),
+		);
+
+		if ( $key_only ) {
+			return array_keys( $types );
+		}
+
+		return $types;
+	}
+
+	/**
+	 * Get post orderby
+	 *
+	 * @param bool $key_only
+	 *
+	 * @return array
+	 */
+	public static function get_post_orderby( $key_only = true ) {
+		$options = array(
+			'none'          => esc_html__( 'No order', 'carousel-slider' ),
+			'ID'            => esc_html__( 'Post id', 'carousel-slider' ),
+			'author'        => esc_html__( 'Post author', 'carousel-slider' ),
+			'title'         => esc_html__( 'Post title', 'carousel-slider' ),
+			'modified'      => esc_html__( 'Last modified date', 'carousel-slider' ),
+			'rand'          => esc_html__( 'Random order', 'carousel-slider' ),
+			'comment_count' => esc_html__( 'Number of comments', 'carousel-slider' ),
+		);
+
+		if ( $key_only ) {
+			return array_keys( $options );
+		}
+
+		return $options;
+	}
+
 	public static function get_sliders( array $args = array() ) {
 
 	}
@@ -233,6 +285,18 @@ class Utils {
 		}
 		if ( 'image-carousel-url' == $type ) {
 			return new UrlImageCarousel( $slider_id );
+		}
+		if ( 'post-carousel' == $type ) {
+			return new PostCarousel( $slider_id );
+		}
+		if ( 'product-carousel' == $type ) {
+			return new ProductCarousel( $slider_id );
+		}
+		if ( 'video-carousel' == $type ) {
+			return new VideoCarousel( $slider_id );
+		}
+		if ( 'hero-banner-slider' == $type ) {
+			return new HeroCarousel( $slider_id );
 		}
 
 		return new Carousel( $slider_id );

@@ -1,6 +1,7 @@
 <?php
 
 use CarouselSlider\Supports\Form;
+use CarouselSlider\Supports\Utils;
 
 // If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
@@ -20,13 +21,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'id'               => '_post_query_type',
 				'label'            => esc_html__( 'Query Type', 'carousel-slider' ),
 				'default'          => 'latest_posts',
-				'choices'          => array(
-					'latest_posts'    => esc_html__( 'Latest Posts', 'carousel-slider' ),
-					'date_range'      => esc_html__( 'Date Range', 'carousel-slider' ),
-					'post_categories' => esc_html__( 'Post Categories', 'carousel-slider' ),
-					'post_tags'       => esc_html__( 'Post Tags', 'carousel-slider' ),
-					'specific_posts'  => esc_html__( 'Specific posts', 'carousel-slider' ),
-				),
+				'choices'          => Utils::get_post_query_type( false ),
 				'input_attributes' => array( 'class' => 'sp-input-text post_query_type' ),
 			) );
 
@@ -95,15 +90,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'id'               => '_post_orderby',
 				'label'            => esc_html__( 'Order by', 'carousel-slider' ),
 				'default'          => 'ID',
-				'choices'          => array(
-					'none'          => esc_html__( 'No order', 'carousel-slider' ),
-					'ID'            => esc_html__( 'Post id', 'carousel-slider' ),
-					'author'        => esc_html__( 'Post author', 'carousel-slider' ),
-					'title'         => esc_html__( 'Post title', 'carousel-slider' ),
-					'modified'      => esc_html__( 'Last modified date', 'carousel-slider' ),
-					'rand'          => esc_html__( 'Random order', 'carousel-slider' ),
-					'comment_count' => esc_html__( 'Number of comments', 'carousel-slider' ),
-				),
+				'choices'          => Utils::get_post_orderby( false ),
 				'input_attributes' => array( 'class' => 'sp-input-text' ),
 			) );
 

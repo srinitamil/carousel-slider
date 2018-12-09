@@ -268,7 +268,7 @@ class View extends AbstractView {
 				$args = array_merge( $args, array(
 					'date_query' => array(
 						array(
-							'before'    => $post_date_before,
+							'before'    => $post_date_after,
 							'inclusive' => true,
 						),
 					),

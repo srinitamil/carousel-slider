@@ -4,9 +4,8 @@ namespace CarouselSlider;
 
 use CarouselSlider\Supports\Collection;
 
-// If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
-	die;
+	exit; // Exit if accessed directly.
 }
 
 class ModuleManager extends Collection {

@@ -3,7 +3,7 @@
 namespace CarouselSlider\Admin;
 
 if ( ! defined( 'ABSPATH' ) ) {
-	die; // If this file is called directly, abort.
+	exit; // Exit if accessed directly.
 }
 
 class Documentation {

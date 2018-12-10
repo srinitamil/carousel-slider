@@ -3,9 +3,8 @@
 use CarouselSlider\Supports\Form;
 use CarouselSlider\Supports\Utils;
 
-// If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
-	die;
+	exit; // Exit if accessed directly.
 }
 
 echo Form::field( array(

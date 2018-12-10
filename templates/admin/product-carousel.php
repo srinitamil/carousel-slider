@@ -1,11 +1,11 @@
 <?php
 
+use CarouselSlider\ProductCarousel;
 use CarouselSlider\Supports\Form;
 use CarouselSlider\Supports\Utils;
 
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
 }
 ?>
 <div data-id="open" id="section_product_query" class="shapla-toggle shapla-toggle--stroke"
@@ -20,26 +20,14 @@ if ( ! defined( 'WPINC' ) ) {
 				'id'               => '_product_query_type',
 				'label'            => esc_html__( 'Query Type', 'carousel-slider' ),
 				'default'          => 'query_product',
-				'choices'          => array(
-					'query_product'      => esc_html__( 'Query Products', 'carousel-slider' ),
-					'product_categories' => esc_html__( 'Product Categories', 'carousel-slider' ),
-					'product_tags'       => esc_html__( 'Product Tags', 'carousel-slider' ),
-					'specific_products'  => esc_html__( 'Specific Products', 'carousel-slider' ),
-				),
+				'choices'          => ProductCarousel::get_query_types(),
 				'input_attributes' => array( 'class' => 'sp-input-text select2 product_query_type' ),
 			) );
 			echo Form::select( array(
 				'id'               => '_product_query',
 				'label'            => esc_html__( 'Choose Query', 'carousel-slider' ),
 				'default'          => 'featured',
-				'choices'          => array(
-					'featured'                => esc_html__( 'Featured Products', 'carousel-slider' ),
-					'recent'                  => esc_html__( 'Recent Products', 'carousel-slider' ),
-					'sale'                    => esc_html__( 'Sale Products', 'carousel-slider' ),
-					'best_selling'            => esc_html__( 'Best-Selling Products', 'carousel-slider' ),
-					'top_rated'               => esc_html__( 'Top Rated Products', 'carousel-slider' ),
-					'product_categories_list' => esc_html__( 'Product Categories List', 'carousel-slider' ),
-				),
+				'choices'          => ProductCarousel::get_product_query_types(),
 				'input_attributes' => array( 'class' => 'sp-input-text select2 product_query' ),
 			) );
 			echo Form::post_terms( array(

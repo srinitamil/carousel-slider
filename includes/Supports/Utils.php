@@ -6,14 +6,12 @@ use CarouselSlider\Abstracts\Carousel;
 use CarouselSlider\GalleryImageCarousel;
 use CarouselSlider\HeroCarousel;
 use CarouselSlider\PostCarousel;
-use CarouselSlider\Product;
 use CarouselSlider\ProductCarousel;
 use CarouselSlider\UrlImageCarousel;
 use CarouselSlider\VideoCarousel;
 
-// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+	exit; // Exit if accessed directly.
 }
 
 class Utils {
@@ -93,79 +91,6 @@ class Utils {
 		}
 
 		return false;
-	}
-
-	/**
-	 * Get products by carousel slider ID
-	 *
-	 * @param $carousel_id
-	 *
-	 * @return array
-	 */
-	public static function get_products( $carousel_id ) {
-		$id            = $carousel_id;
-		$per_page      = intval( get_post_meta( $id, '_products_per_page', true ) );
-		$query_type    = get_post_meta( $id, '_product_query_type', true );
-		$query_type    = ! empty( $query_type ) ? $query_type : 'query_product';
-		$product_query = get_post_meta( $id, '_product_query', true );
-
-		$args = array( 'posts_per_page' => $per_page );
-
-		if ( $query_type == 'query_product' ) {
-
-			// Get features products
-			if ( $product_query == 'featured' ) {
-				return Product::featured_products( $args );
-			}
-
-			// Get best_selling products
-			if ( $product_query == 'best_selling' ) {
-				return Product::best_selling_products( $args );
-			}
-
-			// Get recent products
-			if ( $product_query == 'recent' ) {
-				return Product::recent_products( $args );
-			}
-
-			// Get sale products
-			if ( $product_query == 'sale' ) {
-				return Product::sale_products( $args );
-			}
-
-			// Get top_rated products
-			if ( $product_query == 'top_rated' ) {
-				return Product::top_rated_products( $args );
-			}
-		}
-
-		// Get products by product IDs
-		if ( $query_type == 'specific_products' ) {
-			$product_in = get_post_meta( $id, '_product_in', true );
-			$product_in = array_map( 'intval', explode( ',', $product_in ) );
-
-			return Product::products_by_ids( array(
-				'post__in' => $product_in
-			) );
-		}
-
-		// Get posts by post categories IDs
-		if ( $query_type == 'product_categories' ) {
-			$product_cat_ids = get_post_meta( $id, '_product_categories', true );
-			$product_cat_ids = array_map( 'intval', explode( ",", $product_cat_ids ) );
-
-			return Product::products_by_categories( $product_cat_ids, $per_page );
-		}
-
-		// Get posts by post tags IDs
-		if ( $query_type == 'product_tags' ) {
-			$product_tags = get_post_meta( $id, '_product_tags', true );
-			$product_tags = array_map( 'intval', explode( ',', $product_tags ) );
-
-			return Product::products_by_tags( $product_tags, $per_page );
-		}
-
-		return array();
 	}
 
 	/**

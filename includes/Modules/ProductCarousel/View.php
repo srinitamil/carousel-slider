@@ -3,11 +3,11 @@
 namespace CarouselSlider\Modules\ProductCarousel;
 
 use CarouselSlider\Abstracts\AbstractView;
+use CarouselSlider\ProductCarousel;
 use CarouselSlider\Supports\Utils;
 
-// If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
-	die;
+	exit; // Exit if accessed directly.
 }
 
 class View extends AbstractView {
@@ -43,7 +43,8 @@ class View extends AbstractView {
 
 		global $post;
 		global $product;
-		$posts = Utils::get_products( $this->get_slider_id() );
+		$slider = new ProductCarousel( $this->get_slider_id() );
+		$posts  = $slider->get_products();
 
 		$this->set_total_slides( count( $posts ) );
 

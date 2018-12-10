@@ -2,9 +2,8 @@
 
 use CarouselSlider\Supports\Form;
 
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
 }
 
 $_images_urls = get_post_meta( $post->ID, '_images_urls', true );

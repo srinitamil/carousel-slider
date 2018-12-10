@@ -6,7 +6,7 @@ use CarouselSlider\Abstracts\Carousel;
 use CarouselSlider\Supports\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 class SliderController extends ApiController {

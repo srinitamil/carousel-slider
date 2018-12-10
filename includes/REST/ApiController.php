@@ -3,7 +3,7 @@
 namespace CarouselSlider\REST;
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 class ApiController extends \WP_REST_Controller {

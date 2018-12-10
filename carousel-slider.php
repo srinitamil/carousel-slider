@@ -21,9 +21,8 @@
  * @author Sayful Islam
  */
 
-// If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
-	die;
+	exit; // Exit if accessed directly.
 }
 
 if ( ! class_exists( 'Carousel_Slider' ) ) {
@@ -59,7 +58,9 @@ if ( ! class_exists( 'Carousel_Slider' ) ) {
 		private $container = array();
 
 		/**
-		 * @var object
+		 * The instance of the class
+		 *
+		 * @var self
 		 */
 		private static $instance;
 
@@ -193,7 +194,9 @@ if ( ! class_exists( 'Carousel_Slider' ) ) {
 			add_action( 'wp_ajax_carousel_slider_quick_view', array( 'CarouselSlider\\QuickView', 'product' ) );
 			add_action( 'wp_ajax_nopriv_carousel_slider_quick_view', array( 'CarouselSlider\\QuickView', 'product' ) );
 
-			\CarouselSlider\Test::init();
+			if ( defined( "SCRIPT_DEBUG" ) && SCRIPT_DEBUG ) {
+				$this->container['test'] = \CarouselSlider\Test::init();
+			}
 		}
 
 		/**

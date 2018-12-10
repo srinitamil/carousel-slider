@@ -4,9 +4,8 @@ namespace CarouselSlider\Modules\PostCarousel;
 
 use CarouselSlider\Abstracts\AbstractView;
 
-// If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
-	die;
+	exit; // Exit if accessed directly.
 }
 
 class View extends AbstractView {

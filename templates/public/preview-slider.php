@@ -1,8 +1,7 @@
 <?php
 
-// Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+	exit; // Exit if accessed directly.
 }
 
 $slider_id = isset( $_GET['slider_id'] ) ? intval( $_GET['slider_id'] ) : 0;

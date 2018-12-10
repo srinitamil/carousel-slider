@@ -2,9 +2,8 @@
 
 use CarouselSlider\Supports\Form;
 
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
 }
 ?>
 <div data-id="open" id="section_video_settings" class="shapla-toggle shapla-toggle--stroke"

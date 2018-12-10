@@ -2,12 +2,11 @@
 
 namespace CarouselSlider\Templates;
 
-// If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
-	die;
+	exit; // Exit if accessed directly.
 }
 
-class VideoCarousel extends Template {
+class TemplateVideoCarousel extends Template {
 
 	/**
 	 * Create gallery image carousel with random images

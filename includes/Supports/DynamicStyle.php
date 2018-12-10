@@ -2,9 +2,8 @@
 
 namespace CarouselSlider\Supports;
 
-// Exit if accessed directly.
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+	exit; // Exit if accessed directly.
 }
 
 class DynamicStyle {

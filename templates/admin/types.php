@@ -2,10 +2,10 @@
 
 use CarouselSlider\Supports\Utils;
 
-// If this file is called directly, abort.
-if ( ! defined( 'WPINC' ) ) {
-	die;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
 }
+
 $slide_types = Utils::get_slide_types( false );
 ?>
 <div class="sp-input-group" style="margin: 10px 0 30px;">

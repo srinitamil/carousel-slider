@@ -2,9 +2,8 @@
 
 use CarouselSlider\Supports\Form;
 
-// If this file is called directly, abort.
-if (!defined('WPINC')) {
-    die;
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
 }
 ?>
 <div id="carousel-slider-tab-link" class="shapla-tab tab-content-link">

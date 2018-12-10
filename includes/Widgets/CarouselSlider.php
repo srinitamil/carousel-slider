@@ -2,9 +2,8 @@
 
 namespace CarouselSlider\Widgets;
 
-// If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
-	die;
+	exit; // Exit if accessed directly.
 }
 
 class CarouselSlider extends \WP_Widget {
@@ -126,6 +125,9 @@ class CarouselSlider extends \WP_Widget {
 		return $old_instance;
 	}
 
+	/**
+	 * Register current class as WordPress widget
+	 */
 	public static function register() {
 		register_widget( __CLASS__ );
 	}

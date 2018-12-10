@@ -2,9 +2,8 @@
 
 namespace CarouselSlider\Admin;
 
-// If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
-	die;
+	exit; // Exit if accessed directly.
 }
 
 class VisualComposerElement {

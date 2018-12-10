@@ -2,12 +2,11 @@
 
 namespace CarouselSlider\Templates;
 
-// If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
-	die;
+	exit; // Exit if accessed directly.
 }
 
-class HeroCarousel extends Template {
+class TemplateHeroCarousel extends Template {
 
 	/**
 	 * Get default hero carousel settings

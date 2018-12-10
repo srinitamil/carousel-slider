@@ -2,9 +2,8 @@
 
 namespace CarouselSlider\Display;
 
-// Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+	exit; // Exit if accessed directly.
 }
 
 class Preview {

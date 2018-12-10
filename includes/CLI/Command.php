@@ -3,17 +3,17 @@
 namespace CarouselSlider\CLI;
 
 use CarouselSlider\Supports\Utils;
-use CarouselSlider\Templates\GalleryImageCarousel;
-use CarouselSlider\Templates\HeroCarousel;
-use CarouselSlider\Templates\PostCarousel;
-use CarouselSlider\Templates\ProductCarousel;
-use CarouselSlider\Templates\UrlImageCarousel;
-use CarouselSlider\Templates\VideoCarousel;
+use CarouselSlider\Templates\TemplateGalleryImageCarousel;
+use CarouselSlider\Templates\TemplateHeroCarousel;
+use CarouselSlider\Templates\TemplatePostCarousel;
+use CarouselSlider\Templates\TemplateProductCarousel;
+use CarouselSlider\Templates\TemplateUrlImageCarousel;
+use CarouselSlider\Templates\TemplateVideoCarousel;
 use WP_CLI;
 use WP_CLI_Command;
 
 if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
+	exit; // Exit if accessed directly.
 }
 
 class Command extends WP_CLI_Command {
@@ -95,19 +95,19 @@ class Command extends WP_CLI_Command {
 		$post_query = ! empty( $assoc_args['post-query'] ) ? $assoc_args['post-query'] : 'latest_posts';
 
 		if ( 'image-carousel' == $type ) {
-			$slider_id = GalleryImageCarousel::create( $slider_title, array(
+			$slider_id = TemplateGalleryImageCarousel::create( $slider_title, array(
 				'_created_via' => 'wp-cli',
 			) );
 		}
 
 		if ( 'image-carousel-url' == $type ) {
-			$slider_id = UrlImageCarousel::create( $slider_title, array(
+			$slider_id = TemplateUrlImageCarousel::create( $slider_title, array(
 				'_created_via' => 'wp-cli',
 			) );
 		}
 
 		if ( 'video-carousel' == $type ) {
-			$slider_id = VideoCarousel::create( $slider_title, array(
+			$slider_id = TemplateVideoCarousel::create( $slider_title, array(
 				'_created_via' => 'wp-cli',
 			) );
 		}
@@ -128,7 +128,7 @@ class Command extends WP_CLI_Command {
 				'_post_in'          => $post_in,
 			);
 
-			$slider_id = PostCarousel::create( $slider_title, $post_args );
+			$slider_id = TemplatePostCarousel::create( $slider_title, $post_args );
 		}
 
 		if ( ! $slider_id ) {
@@ -231,27 +231,27 @@ class Command extends WP_CLI_Command {
 		foreach ( $sliders as $slider ) {
 			switch ( $slider['type'] ) {
 				case 'image-carousel';
-					$ids[] = GalleryImageCarousel::create( $slider['title'], $slider['args'] );
+					$ids[] = TemplateGalleryImageCarousel::create( $slider['title'], $slider['args'] );
 					WP_CLI::line( "{$slider['title']} has been created successfully." );
 					break;
 				case 'image-carousel-url';
-					$ids[] = UrlImageCarousel::create( $slider['title'], $slider['args'] );
+					$ids[] = TemplateUrlImageCarousel::create( $slider['title'], $slider['args'] );
 					WP_CLI::line( "{$slider['title']} has been created successfully." );
 					break;
 				case 'video-carousel';
-					$ids[] = VideoCarousel::create( $slider['title'], $slider['args'] );
+					$ids[] = TemplateVideoCarousel::create( $slider['title'], $slider['args'] );
 					WP_CLI::line( "{$slider['title']} has been created successfully." );
 					break;
 				case 'post-carousel';
-					$ids[] = PostCarousel::create( $slider['title'], $slider['args'] );
+					$ids[] = TemplatePostCarousel::create( $slider['title'], $slider['args'] );
 					WP_CLI::line( "{$slider['title']} has been created successfully." );
 					break;
 				case 'hero-banner-slider';
-					$ids[] = HeroCarousel::create( $slider['title'], $slider['args'] );
+					$ids[] = TemplateHeroCarousel::create( $slider['title'], $slider['args'] );
 					WP_CLI::line( "{$slider['title']} has been created successfully." );
 					break;
 				case 'product-carousel';
-					$ids[] = ProductCarousel::create( $slider['title'], $slider['args'] );
+					$ids[] = TemplateProductCarousel::create( $slider['title'], $slider['args'] );
 					WP_CLI::line( "{$slider['title']} has been created successfully." );
 					break;
 			}

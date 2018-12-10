@@ -4,9 +4,8 @@ namespace CarouselSlider\Supports;
 
 use CarouselSlider\Interfaces\CollectionInterface;
 
-// Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+	exit; // Exit if accessed directly.
 }
 
 class Collection implements CollectionInterface {

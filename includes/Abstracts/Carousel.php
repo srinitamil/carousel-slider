@@ -2,9 +2,8 @@
 
 namespace CarouselSlider\Abstracts;
 
-// Exit if accessed directly
 if ( ! defined( 'ABSPATH' ) ) {
-	exit;
+	exit; // Exit if accessed directly.
 }
 
 class Carousel implements \JsonSerializable {

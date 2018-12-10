@@ -2,12 +2,11 @@
 
 namespace CarouselSlider\Templates;
 
-// If this file is called directly, abort.
 if ( ! defined( 'ABSPATH' ) ) {
-	die;
+	exit; // Exit if accessed directly.
 }
 
-class PostCarousel extends Template {
+class TemplatePostCarousel extends Template {
 
 	/**
 	 * Get default image carousel settings

@@ -7,6 +7,45 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class QuickView {
+
+	/**
+	 * Show quick view button on product slider
+	 *
+	 * @param \WC_Product $product
+	 * @param \WP_Post $post
+	 * @param $slider_id
+	 */
+	public static function button( $product, $post, $slider_id ) {
+		$_show_btn = get_post_meta( $slider_id, '_product_quick_view', true );
+
+		if ( $_show_btn == 'on' ) {
+
+			if ( defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '3.0.0', '>=' ) ) {
+				$product_id = $product->get_id();
+			} else {
+				$product_id = $post->ID;
+			}
+
+			wp_enqueue_script( 'magnific-popup' );
+
+			$ajax_url = wp_nonce_url( add_query_arg( array(
+				'ajax'       => 'true',
+				'action'     => 'carousel_slider_quick_view',
+				'product_id' => $product_id,
+				'slide_id'   => $slider_id
+			), admin_url( 'admin-ajax.php' ) ), 'carousel_slider_quick_view' );
+
+			$quick_view_html = '<div style="clear: both;"></div>';
+			$quick_view_html .= sprintf(
+				'<a class="magnific-popup button quick_view" href="%1$s" data-product-id="%2$s">%3$s</a>',
+				$ajax_url,
+				$product_id,
+				__( 'Quick View', 'carousel-slider' )
+			);
+			echo apply_filters( 'carousel_slider_product_quick_view', $quick_view_html, $product );
+		}
+	}
+
 	/**
 	 * Display quick view popup content
 	 */

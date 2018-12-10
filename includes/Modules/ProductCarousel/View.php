@@ -3,7 +3,6 @@
 namespace CarouselSlider\Modules\ProductCarousel;
 
 use CarouselSlider\Abstracts\AbstractView;
-use CarouselSlider\ProductCarousel;
 use CarouselSlider\Supports\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -36,15 +35,16 @@ class View extends AbstractView {
 			return '';
 		}
 
+		$slider = new ProductCarousel( $this->get_slider_id() );
+
 		// Check if category list slider
-		if ( $this->is_product_categories_list() ) {
-			return $this->product_categories();
+		if ( $slider->is_product_categories_list() ) {
+			return $this->product_categories( $slider->get_product_categories() );
 		}
 
 		global $post;
 		global $product;
-		$slider = new ProductCarousel( $this->get_slider_id() );
-		$posts  = $slider->get_products();
+		$posts = $slider->get_products();
 
 		$this->set_total_slides( count( $posts ) );
 
@@ -120,12 +120,12 @@ class View extends AbstractView {
 	/**
 	 * Get product categories list carousel
 	 *
+	 * @param array $product_categories
+	 *
 	 * @return string
 	 */
-	private function product_categories() {
-
-		$product_categories = \CarouselSlider\Product::product_categories();
-		$count              = count( $product_categories );
+	private function product_categories( $product_categories = array() ) {
+		$count = count( $product_categories );
 
 		if ( ! $count ) {
 			return '';

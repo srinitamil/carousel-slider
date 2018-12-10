@@ -1,6 +1,6 @@
 <?php
 
-namespace CarouselSlider;
+namespace CarouselSlider\Modules\PostCarousel;
 
 use CarouselSlider\Abstracts\Carousel;
 use CarouselSlider\Supports\Utils;

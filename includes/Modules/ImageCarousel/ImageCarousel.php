@@ -1,6 +1,6 @@
 <?php
 
-namespace CarouselSlider;
+namespace CarouselSlider\Modules\ImageCarousel;
 
 use CarouselSlider\Abstracts\Carousel;
 
@@ -8,7 +8,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-class GalleryImageCarousel extends Carousel {
+class ImageCarousel extends Carousel {
 
 	/**
 	 * Represent current class as array

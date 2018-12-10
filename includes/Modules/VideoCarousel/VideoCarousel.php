@@ -1,6 +1,6 @@
 <?php
 
-namespace CarouselSlider;
+namespace CarouselSlider\Modules\VideoCarousel;
 
 use CarouselSlider\Abstracts\Carousel;
 use CarouselSlider\Supports\Utils;

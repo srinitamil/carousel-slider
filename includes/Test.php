@@ -2,6 +2,8 @@
 
 namespace CarouselSlider;
 
+use CarouselSlider\Modules\HeroCarousel\HeroCarousel;
+use CarouselSlider\Modules\ImageCarousel\ImageCarousel;
 use CarouselSlider\Supports\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -23,9 +25,9 @@ class Test {
 	}
 
 	public static function test() {
-		/** @var GalleryImageCarousel $slider */
-		$slider = Utils::get_slider( 1538 );
-		var_dump( $slider->to_array() );
+		/** @var HeroCarousel $slider */
+		$slider = Utils::get_slider( 2465 );
+		var_dump( $slider->get_content() );
 		die();
 	}
 }

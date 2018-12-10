@@ -1,6 +1,6 @@
 <?php
 
-use CarouselSlider\ProductCarousel;
+use CarouselSlider\Modules\ProductCarousel\ProductCarousel;
 use CarouselSlider\Supports\Form;
 use CarouselSlider\Supports\Utils;
 

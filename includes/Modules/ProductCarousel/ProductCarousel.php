@@ -1,6 +1,6 @@
 <?php
 
-namespace CarouselSlider;
+namespace CarouselSlider\Modules\ProductCarousel;
 
 use CarouselSlider\Abstracts\Carousel;
 
@@ -543,7 +543,7 @@ class ProductCarousel extends Carousel {
 	 * List all (or limited) product categories.
 	 * Works with WooCommerce Version 2.5.*, 2.6.*, 3.0.* - 3.5.*
 	 *
-	 * @return array|\WP_Post[] List of posts.
+	 * @return \WP_Term[] List of products terms.
 	 */
 	public function get_product_categories() {
 		$terms = get_terms( array(

@@ -8,34 +8,38 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Script {
 
-	protected static $instance = null;
+	/**
+	 * The instance of the carousel
+	 *
+	 * @var self
+	 */
+	private static $instance = null;
 
 	/**
 	 * Ensures only one instance of this class is loaded or can be loaded.
 	 *
-	 * @return Script
+	 * @return self
 	 */
 	public static function init() {
 		if ( is_null( self::$instance ) ) {
 			self::$instance = new self();
+
+			add_action( 'wp_loaded', array( self::$instance, 'register_styles' ) );
+			add_action( 'wp_loaded', array( self::$instance, 'register_scripts' ) );
+
+			add_action( 'wp_enqueue_scripts', array( self::$instance, 'frontend_scripts' ), 15 );
+
+			add_action( 'admin_enqueue_scripts', array( self::$instance, 'admin_scripts' ), 10 );
+			add_action( 'admin_footer', array( self::$instance, 'gallery_url_template' ), 5 );
 		}
 
 		return self::$instance;
 	}
 
-	public function __construct() {
-		add_action( 'wp_loaded', array( $this, 'register_styles' ) );
-		add_action( 'wp_loaded', array( $this, 'register_scripts' ) );
-
-		add_action( 'wp_enqueue_scripts', array( $this, 'frontend_scripts' ), 15 );
-
-		add_action( 'admin_enqueue_scripts', array( $this, 'admin_scripts' ), 10 );
-		add_action( 'admin_footer', array( $this, 'gallery_url_template' ), 5 );
-	}
-
+	/**
+	 * Register plugin styles
+	 */
 	public function register_styles() {
-		$suffix = ( defined( "SCRIPT_DEBUG" ) && SCRIPT_DEBUG ) ? '' : '.min';
-
 		$styles = array(
 			'carousel-slider'       => array(
 				'src'        => CAROUSEL_SLIDER_ASSETS . '/css/style.css',
@@ -56,6 +60,9 @@ class Script {
 		}
 	}
 
+	/**
+	 * Register plugin scripts
+	 */
 	public function register_scripts() {
 		$suffix = ( defined( "SCRIPT_DEBUG" ) && SCRIPT_DEBUG ) ? '' : '.min';
 
@@ -226,4 +233,3 @@ class Script {
 		return apply_filters( 'carousel_slider_load_scripts', $load_scripts );
 	}
 }
-

@@ -3,12 +3,12 @@
 namespace CarouselSlider\Supports;
 
 use CarouselSlider\Abstracts\Carousel;
-use CarouselSlider\GalleryImageCarousel;
-use CarouselSlider\HeroCarousel;
-use CarouselSlider\PostCarousel;
-use CarouselSlider\ProductCarousel;
-use CarouselSlider\UrlImageCarousel;
-use CarouselSlider\VideoCarousel;
+use CarouselSlider\Modules\ImageCarousel\ImageCarousel;
+use CarouselSlider\Modules\HeroCarousel\HeroCarousel;
+use CarouselSlider\Modules\PostCarousel\PostCarousel;
+use CarouselSlider\Modules\ProductCarousel\ProductCarousel;
+use CarouselSlider\Modules\ImageCarouselUrl\ImageCarouselUrl;
+use CarouselSlider\Modules\VideoCarousel\VideoCarousel;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -206,10 +206,10 @@ class Utils {
 	public static function get_slider( $slider_id ) {
 		$type = get_post_meta( $slider_id, '_slide_type', true );
 		if ( 'image-carousel' == $type ) {
-			return new GalleryImageCarousel( $slider_id );
+			return new ImageCarousel( $slider_id );
 		}
 		if ( 'image-carousel-url' == $type ) {
-			return new UrlImageCarousel( $slider_id );
+			return new ImageCarouselUrl( $slider_id );
 		}
 		if ( 'post-carousel' == $type ) {
 			return new PostCarousel( $slider_id );

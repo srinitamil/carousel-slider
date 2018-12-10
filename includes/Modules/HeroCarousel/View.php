@@ -21,7 +21,6 @@ class View extends AbstractView {
 	 * Generates the final HTML on the frontend.
 	 */
 	public function render() {
-
 		$slides       = $this->content_slider();
 		$slides_count = count( $slides );
 

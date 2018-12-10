@@ -2,11 +2,11 @@
 /**
  * Plugin Name: Carousel Slider
  * Plugin URI: http://wordpress.org/plugins/carousel-slider
- * Description: The Easiest Way to Create SEO friendly Image, Logo, Video, Post and WooCommerce Product Carousel.
+ * Description: <strong>Carousel Slider</strong> allows you to create beautiful, touch enabled, responsive carousels and sliders. It let you create SEO friendly Image carousel from Media Library or from custom URL, Video carousel using Youtube and Vimeo video, Post carousel, Hero banner slider and various types of WooCommerce products carousels.
  * Version: 2.0.0
  * Author: Sayful Islam
  * Author URI: https://sayfulislam.com
- * Requires at least: 4.4
+ * Requires at least: 4.7
  * Tested up to: 5.0
  *
  * WC requires at least: 2.5
@@ -26,7 +26,11 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 if ( ! class_exists( 'Carousel_Slider' ) ) {
-
+	/**
+	 * Main Carousel_Slider Class.
+	 *
+	 * @class Carousel_Slider
+	 */
 	final class Carousel_Slider {
 
 		/**
@@ -182,15 +186,14 @@ if ( ! class_exists( 'Carousel_Slider' ) ) {
 
 				// Quick view and wish list button
 				add_action( 'carousel_slider_after_shop_loop_item',
-					array( 'CarouselSlider\\Product', 'quick_view_button' ), 10, 3 );
-				add_action( 'carousel_slider_after_shop_loop_item',
-					array( 'CarouselSlider\\Product', 'wish_list_button' ), 12, 3 );
+					array( 'CarouselSlider\\WishList', 'button' ), 12, 3 );
 			}
 
 			// Widgets
 			add_action( 'widgets_init', array( 'CarouselSlider\\Widgets\\CarouselSlider', 'register' ) );
 
 			// Product quick view
+			add_action( 'carousel_slider_after_shop_loop_item', array( 'CarouselSlider\\QuickView', 'button' ), 10, 3 );
 			add_action( 'wp_ajax_carousel_slider_quick_view', array( 'CarouselSlider\\QuickView', 'product' ) );
 			add_action( 'wp_ajax_nopriv_carousel_slider_quick_view', array( 'CarouselSlider\\QuickView', 'product' ) );
 

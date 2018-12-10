@@ -1,5 +1,6 @@
 <?php
 
+use CarouselSlider\Modules\HeroCarousel\HeroCarouselItem;
 use CarouselSlider\Supports\Form;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -32,22 +33,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$total_sliders = count( $content_sliders );
 					foreach ( $content_sliders as $slide_num => $content_slider ) {
 
-						$_all_bg_position = array(
-							'left top'      => 'left top',
-							'left center'   => 'left center',
-							'left bottom'   => 'left bottom',
-							'center top'    => 'center top',
-							'center center' => 'center', // Default
-							'center bottom' => 'center bottom',
-							'right top'     => 'right top',
-							'right center'  => 'right center',
-							'right bottom'  => 'right bottom',
-						);
-						$_all_bg_size     = array(
-							'auto'    => 'auto',
-							'contain' => 'contain',
-							'cover'   => 'cover', // Default
-						);
+						$_all_bg_position = HeroCarouselItem::get_background_positions();
+						$_all_bg_size     = HeroCarouselItem::get_background_sizes();
 						// Slide Content
 						$_slide_heading     = isset( $content_slider['slide_heading'] ) ? $content_slider['slide_heading'] : '';
 						$_slide_description = isset( $content_slider['slide_description'] ) ? $content_slider['slide_description'] : '';

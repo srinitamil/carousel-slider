@@ -2,14 +2,14 @@
 
 namespace CarouselSlider\Modules\VideoCarousel;
 
-use CarouselSlider\Abstracts\Carousel;
+use CarouselSlider\Abstracts\AbstractSlider;
 use CarouselSlider\Supports\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-class VideoCarousel extends Carousel {
+class Slider extends AbstractSlider {
 
 	/**
 	 * Represent current class as array

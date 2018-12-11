@@ -2,7 +2,7 @@
 
 namespace CarouselSlider\REST;
 
-use CarouselSlider\Abstracts\Carousel;
+use CarouselSlider\Abstracts\AbstractSlider;
 use CarouselSlider\Supports\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -84,7 +84,7 @@ class SliderController extends ApiController {
 			'posts_per_page' => $request->get_param( 'per_page' ),
 		);
 
-		$sliders = Carousel::find( $args );
+		$sliders = AbstractSlider::find( $args );
 
 		if ( count( $sliders ) < 1 ) {
 			return $this->respond_not_found( 'rest_no_item_found',
@@ -109,7 +109,7 @@ class SliderController extends ApiController {
 				__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
 		}
 
-		$slider = new Carousel( $id );
+		$slider = new AbstractSlider( $id );
 
 		if ( ! $slider->get_id() ) {
 			return $this->respond_not_found( 'rest_no_item_found',
@@ -132,7 +132,7 @@ class SliderController extends ApiController {
 				__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
 		}
 
-		$slider = new Carousel();
+		$slider = new AbstractSlider();
 		$slider = $slider->create( $request->get_params() );
 
 		if ( ! $slider->get_id() ) {
@@ -158,7 +158,7 @@ class SliderController extends ApiController {
 				__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
 		}
 
-		$slider = new Carousel( $id );
+		$slider = new AbstractSlider( $id );
 
 		if ( ! $slider->get_id() ) {
 			return $this->respond_not_found( 'rest_no_item_found',
@@ -189,7 +189,7 @@ class SliderController extends ApiController {
 				__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
 		}
 
-		$slider = new Carousel( $id );
+		$slider = new AbstractSlider( $id );
 
 		if ( ! $slider->get_id() ) {
 			return $this->respond_not_found( 'rest_no_item_found',

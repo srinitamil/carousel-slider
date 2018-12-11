@@ -1,6 +1,7 @@
 <?php
 
-use CarouselSlider\Modules\HeroCarousel\HeroCarouselItem;
+use CarouselSlider\Modules\HeroCarousel\Slider;
+use CarouselSlider\Modules\HeroCarousel\SliderItem;
 use CarouselSlider\Supports\Form;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -33,8 +34,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 					$total_sliders = count( $content_sliders );
 					foreach ( $content_sliders as $slide_num => $content_slider ) {
 
-						$_all_bg_position = HeroCarouselItem::get_background_positions();
-						$_all_bg_size     = HeroCarouselItem::get_background_sizes();
+						$_all_bg_position = SliderItem::get_background_positions();
+						$_all_bg_size     = SliderItem::get_background_sizes();
 						// Slide Content
 						$_slide_heading     = isset( $content_slider['slide_heading'] ) ? $content_slider['slide_heading'] : '';
 						$_slide_description = isset( $content_slider['slide_description'] ) ? $content_slider['slide_description'] : '';
@@ -230,14 +231,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 					'label'            => esc_html__( 'Content Animation', 'carousel-slider' ),
 					'description'      => esc_html__( 'Select slide content animation.', 'carousel-slider' ),
 					'input_attributes' => array( 'class' => 'sp-input-text' ),
-					'choices'          => array(
-						''            => esc_html__( 'None', 'carousel-slider' ),
-						'fadeInDown'  => esc_html__( 'Fade In Down', 'carousel-slider' ),
-						'fadeInUp'    => esc_html__( 'Fade In Up', 'carousel-slider' ),
-						'fadeInRight' => esc_html__( 'Fade In Right', 'carousel-slider' ),
-						'fadeInLeft'  => esc_html__( 'Fade In Left', 'carousel-slider' ),
-						'zoomIn'      => esc_html__( 'Zoom In', 'carousel-slider' ),
-					),
+					'choices'          => Slider::get_available_animations(),
 				) );
 				echo Form::field( array(
 					'type'        => 'spacing',

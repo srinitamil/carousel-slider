@@ -56,6 +56,7 @@ class Shortcode {
 		}
 
 		$view->set_slider_id( $id );
+		$view->set_slider( Utils::get_slider( $id ) );
 		$html      = $view->render();
 		$hook_name = 'carousel_slider/view/' . $slide_type;
 

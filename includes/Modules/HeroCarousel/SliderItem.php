@@ -2,7 +2,11 @@
 
 namespace CarouselSlider\Modules\HeroCarousel;
 
-class HeroCarouselItem {
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
+class SliderItem implements \JsonSerializable {
 
 	/**
 	 * @var array
@@ -90,14 +94,14 @@ class HeroCarouselItem {
 				'image'         => $this->get_background_image(),
 				'position'      => $this->get_background_position(),
 				'size'          => $this->get_background_size(),
-				'color'         => $this->get_prop( 'bg_color' ),
-				'overlay_color' => $this->get_prop( 'bg_overlay' ),
-				'effect'        => $this->get_prop( 'ken_burns_effect' ),
+				'color'         => $this->get_background_color(),
+				'overlay_color' => $this->get_background_overly_color(),
+				'effect'        => $this->get_ken_burns_effect(),
 			),
-			'link_type'         => $this->get_prop( 'link_type' ),
+			'link_type'         => $this->get_link_type(),
 			'full_link'         => array(
-				'url'    => $this->get_prop( 'slide_link' ),
-				'target' => $this->get_prop( 'link_target' ),
+				'url'    => $this->get_full_slide_link(),
+				'target' => $this->get_full_slide_link_target(),
 			),
 			'button_one'        => array(
 				'text'             => $this->get_button_one_text(),
@@ -111,17 +115,48 @@ class HeroCarouselItem {
 				'color'            => $this->get_button_one_color(),
 			),
 			'button_two'        => array(
-				'text'             => $this->get_prop( 'button_two_text' ),
-				'url'              => $this->get_prop( 'button_two_url' ),
-				'target'           => $this->get_prop( 'button_two_target' ),
-				'type'             => $this->get_prop( 'button_two_type' ),
-				'size'             => $this->get_prop( 'button_two_size' ),
-				'border_width'     => $this->get_prop( 'button_two_border_width' ),
-				'border_radius'    => $this->get_prop( 'button_two_border_radius' ),
-				'background_color' => $this->get_prop( 'button_two_bg_color' ),
-				'color'            => $this->get_prop( 'button_two_color' ),
+				'text'             => $this->get_button_two_text(),
+				'url'              => $this->get_button_two_url(),
+				'target'           => $this->get_button_two_target(),
+				'type'             => $this->get_button_two_type(),
+				'size'             => $this->get_button_two_size(),
+				'border_width'     => $this->get_button_two_border_width(),
+				'border_radius'    => $this->get_button_two_border_radius(),
+				'background_color' => $this->get_button_two_background_color(),
+				'color'            => $this->get_button_two_color(),
 			),
 		);
+	}
+
+	/**
+	 * Get link type
+	 *
+	 * @return string
+	 */
+	private function get_link_type() {
+		$link_type = $this->get_prop( 'link_type', 'none' );
+
+		return in_array( $link_type, array( 'none', 'full', 'button' ) ) ? $link_type : 'full';
+	}
+
+	/**
+	 * Get slide full link url
+	 *
+	 * @return string
+	 */
+	public function get_full_slide_link() {
+		return esc_url( $this->get_prop( 'slide_link' ) );
+	}
+
+	/**
+	 * Get slide full link target
+	 *
+	 * @return string
+	 */
+	private function get_full_slide_link_target() {
+		$link_target = $this->get_prop( 'link_target' );
+
+		return in_array( $link_target, array( '_self', '_blank' ) ) ? $link_target : '_self';
 	}
 
 	/**
@@ -169,7 +204,36 @@ class HeroCarouselItem {
 	}
 
 	/**
-	 * Get button on text
+	 * Get background color
+	 *
+	 * @return string
+	 */
+	public function get_background_color() {
+		return $this->get_prop( 'bg_color', 'rgba(255,255,255,0.5)' );
+	}
+
+	/**
+	 * Get background overlay color
+	 *
+	 * @return string
+	 */
+	public function get_background_overly_color() {
+		return $this->get_prop( 'bg_overlay', 'rgba(0,0,0,0.5)' );
+	}
+
+	/**
+	 * Get ken burns effect
+	 *
+	 * @return string
+	 */
+	public function get_ken_burns_effect() {
+		$effect = $this->get_prop( 'ken_burns_effect' );
+
+		return in_array( $effect, array( "", "zoom-in", "zoom-out" ) ) ? $effect : "";
+	}
+
+	/**
+	 * Get button one text
 	 *
 	 * @return string|null
 	 */
@@ -180,7 +244,7 @@ class HeroCarouselItem {
 	}
 
 	/**
-	 * Get button on url
+	 * Get button one url
 	 *
 	 * @return string|null
 	 */
@@ -191,7 +255,7 @@ class HeroCarouselItem {
 	}
 
 	/**
-	 * Get button on target
+	 * Get button one target
 	 *
 	 * @return string
 	 */
@@ -213,7 +277,7 @@ class HeroCarouselItem {
 	}
 
 	/**
-	 * Get button one type
+	 * Get button one size
 	 *
 	 * @return string
 	 */
@@ -260,6 +324,97 @@ class HeroCarouselItem {
 	}
 
 	/**
+	 * Get button two text
+	 *
+	 * @return string|null
+	 */
+	public function get_button_two_text() {
+		$text = $this->get_prop( 'button_two_text' );
+
+		return $text;
+	}
+
+	/**
+	 * Get button two url
+	 *
+	 * @return string|null
+	 */
+	public function get_button_two_url() {
+		$url = $this->get_prop( 'button_two_url' );
+
+		return $url;
+	}
+
+	/**
+	 * Get button two target
+	 *
+	 * @return string
+	 */
+	public function get_button_two_target() {
+		$target = $this->get_prop( 'button_two_target' );
+
+		return in_array( $target, array( '_blank', '_self' ) ) ? $target : '_self';
+	}
+
+	/**
+	 * Get button two type
+	 *
+	 * @return string
+	 */
+	public function get_button_two_type() {
+		$type = $this->get_prop( 'button_two_type' );
+
+		return in_array( $type, array( 'normal', 'stroke' ) ) ? $type : 'stroke';
+	}
+
+	/**
+	 * Get button two size
+	 *
+	 * @return string
+	 */
+	public function get_button_two_size() {
+		$size = $this->get_prop( 'button_two_size' );
+
+		return in_array( $size, array( 'large', 'medium', 'small' ) ) ? $size : 'medium';
+	}
+
+	/**
+	 * Get button two border width
+	 *
+	 * @return string
+	 */
+	public function get_button_two_border_width() {
+		return $this->get_prop( 'button_two_border_width', '2px' );
+	}
+
+	/**
+	 * Get button two border radius
+	 *
+	 * @return string
+	 */
+	public function get_button_two_border_radius() {
+		return $this->get_prop( 'button_two_border_radius', '3px' );
+	}
+
+	/**
+	 * Get button two background color
+	 *
+	 * @return string
+	 */
+	public function get_button_two_background_color() {
+		return $this->get_prop( 'button_two_bg_color', '#00d1b2' );
+	}
+
+	/**
+	 * Get button two color
+	 *
+	 * @return string
+	 */
+	public function get_button_two_color() {
+		return $this->get_prop( 'button_two_color', '#ffffff' );
+	}
+
+	/**
 	 * Check button one exists
 	 *
 	 * @return bool
@@ -267,6 +422,18 @@ class HeroCarouselItem {
 	public function has_button_one() {
 		$text = $this->get_button_one_text();
 		$url  = $this->get_button_one_url();
+
+		return ( ! empty( $text ) && ! empty( $url ) );
+	}
+
+	/**
+	 * Check button two exists
+	 *
+	 * @return bool
+	 */
+	public function has_button_two() {
+		$text = $this->get_button_two_text();
+		$url  = $this->get_button_two_url();
 
 		return ( ! empty( $text ) && ! empty( $url ) );
 	}
@@ -296,5 +463,15 @@ class HeroCarouselItem {
 		}
 
 		return $default;
+	}
+
+	/**
+	 * Specify data which should be serialized to JSON
+	 * @link https://php.net/manual/en/jsonserializable.jsonserialize.php
+	 * @return mixed data which can be serialized by <b>json_encode</b>,
+	 * which is a value of any type other than a resource.
+	 */
+	public function jsonSerialize() {
+		return $this->to_array();
 	}
 }

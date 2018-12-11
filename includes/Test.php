@@ -2,8 +2,6 @@
 
 namespace CarouselSlider;
 
-use CarouselSlider\Modules\HeroCarousel\HeroCarousel;
-use CarouselSlider\Modules\ImageCarousel\ImageCarousel;
 use CarouselSlider\Supports\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -11,8 +9,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 }
 
 class Test {
+
+	/**
+	 * The instance of the class
+	 *
+	 * @var self
+	 */
 	private static $instance;
 
+	/**
+	 * Only one instance of the class can be loaded
+	 *
+	 * @return self
+	 */
 	public static function init() {
 		if ( is_null( self::$instance ) ) {
 			self::$instance = new self();
@@ -25,9 +34,9 @@ class Test {
 	}
 
 	public static function test() {
-		/** @var HeroCarousel $slider */
-		$slider = Utils::get_slider( 2465 );
-		var_dump( $slider->get_content() );
+		/** @var \CarouselSlider\Modules\HeroCarousel\Slider $slider */
+		$slider = Utils::get_slider( 1522 );
+		wp_send_json( $slider );
 		die();
 	}
 }

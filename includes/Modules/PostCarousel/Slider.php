@@ -2,14 +2,14 @@
 
 namespace CarouselSlider\Modules\PostCarousel;
 
-use CarouselSlider\Abstracts\Carousel;
+use CarouselSlider\Abstracts\AbstractSlider;
 use CarouselSlider\Supports\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-class PostCarousel extends Carousel {
+class Slider extends AbstractSlider {
 
 	/**
 	 * Get query type

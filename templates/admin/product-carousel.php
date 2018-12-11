@@ -1,6 +1,6 @@
 <?php
 
-use CarouselSlider\Modules\ProductCarousel\ProductCarousel;
+use CarouselSlider\Modules\ProductCarousel\Slider;
 use CarouselSlider\Supports\Form;
 use CarouselSlider\Supports\Utils;
 
@@ -20,14 +20,14 @@ if ( ! defined( 'ABSPATH' ) ) {
 				'id'               => '_product_query_type',
 				'label'            => esc_html__( 'Query Type', 'carousel-slider' ),
 				'default'          => 'query_product',
-				'choices'          => ProductCarousel::get_query_types(),
+				'choices'          => Slider::get_query_types(),
 				'input_attributes' => array( 'class' => 'sp-input-text select2 product_query_type' ),
 			) );
 			echo Form::select( array(
 				'id'               => '_product_query',
 				'label'            => esc_html__( 'Choose Query', 'carousel-slider' ),
 				'default'          => 'featured',
-				'choices'          => ProductCarousel::get_product_query_types(),
+				'choices'          => Slider::get_product_query_types(),
 				'input_attributes' => array( 'class' => 'sp-input-text select2 product_query' ),
 			) );
 			echo Form::post_terms( array(

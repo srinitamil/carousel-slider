@@ -2,14 +2,6 @@
 
 namespace CarouselSlider\Supports;
 
-use CarouselSlider\Abstracts\Carousel;
-use CarouselSlider\Modules\ImageCarousel\ImageCarousel;
-use CarouselSlider\Modules\HeroCarousel\HeroCarousel;
-use CarouselSlider\Modules\PostCarousel\PostCarousel;
-use CarouselSlider\Modules\ProductCarousel\ProductCarousel;
-use CarouselSlider\Modules\ImageCarouselUrl\ImageCarouselUrl;
-use CarouselSlider\Modules\VideoCarousel\VideoCarousel;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
@@ -201,30 +193,30 @@ class Utils {
 	 *
 	 * @param int $slider_id
 	 *
-	 * @return Carousel
+	 * @return \CarouselSlider\Abstracts\AbstractSlider
 	 */
 	public static function get_slider( $slider_id ) {
 		$type = get_post_meta( $slider_id, '_slide_type', true );
 		if ( 'image-carousel' == $type ) {
-			return new ImageCarousel( $slider_id );
+			return new \CarouselSlider\Modules\ImageCarousel\Slider( $slider_id );
 		}
 		if ( 'image-carousel-url' == $type ) {
-			return new ImageCarouselUrl( $slider_id );
+			return new \CarouselSlider\Modules\ImageCarouselUrl\Slider( $slider_id );
 		}
 		if ( 'post-carousel' == $type ) {
-			return new PostCarousel( $slider_id );
+			return new \CarouselSlider\Modules\PostCarousel\Slider( $slider_id );
 		}
 		if ( 'product-carousel' == $type ) {
-			return new ProductCarousel( $slider_id );
+			return new \CarouselSlider\Modules\ProductCarousel\Slider( $slider_id );
 		}
 		if ( 'video-carousel' == $type ) {
-			return new VideoCarousel( $slider_id );
+			return new \CarouselSlider\Modules\VideoCarousel\Slider( $slider_id );
 		}
 		if ( 'hero-banner-slider' == $type ) {
-			return new HeroCarousel( $slider_id );
+			return new \CarouselSlider\Modules\HeroCarousel\Slider( $slider_id );
 		}
 
-		return new Carousel( $slider_id );
+		return new \CarouselSlider\Abstracts\AbstractSlider( $slider_id );
 	}
 
 	/**

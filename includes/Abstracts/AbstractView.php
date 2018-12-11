@@ -3,7 +3,6 @@
 namespace CarouselSlider\Abstracts;
 
 use CarouselSlider\Supports\DynamicStyle;
-use CarouselSlider\Supports\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -22,10 +21,35 @@ abstract class AbstractView {
 	protected $total_slides = 0;
 
 	/**
+	 * @var AbstractSlider
+	 */
+	protected $slider;
+
+	/**
 	 * Render element.
 	 * Generates the final HTML on the frontend.
 	 */
 	abstract public function render();
+
+	/**
+	 * Get slider CRUD class
+	 *
+	 * @return AbstractSlider
+	 */
+	public function get_slider() {
+		return $this->slider;
+	}
+
+	/**
+	 * Set slider CRUD class
+	 *
+	 * @param AbstractSlider $slider
+	 */
+	public function set_slider( $slider ) {
+		if ( $slider instanceof AbstractSlider ) {
+			$this->slider = $slider;
+		}
+	}
 
 	/**
 	 * Get numbers of slides of a slider
@@ -70,18 +94,18 @@ abstract class AbstractView {
 	 */
 	public function owl_options() {
 		$owl_setting = array(
-			'stagePadding'       => $this->stage_padding(),
-			'nav'                => $this->is_nav_enabled(),
-			'dots'               => $this->is_dot_enabled(),
-			'margin'             => $this->gutter(),
-			'loop'               => $this->infinity_loop(),
-			'autoplay'           => $this->autoplay(),
-			'autoplayTimeout'    => $this->autoplay_timeout(),
-			'autoplaySpeed'      => $this->autoplay_speed(),
-			'autoplayHoverPause' => $this->autoplay_hover_pause(),
-			'slideBy'            => $this->slide_by(),
-			'lazyLoad'           => $this->lazy_load_image(),
-			'autoWidth'          => $this->auto_width(),
+			'stagePadding'       => $this->get_slider()->get_stage_padding(),
+			'nav'                => $this->get_slider()->is_nav_enabled(),
+			'dots'               => $this->get_slider()->is_dot_enabled(),
+			'margin'             => $this->get_slider()->get_item_spacing(),
+			'loop'               => $this->get_slider()->get_infinity_loop(),
+			'autoplay'           => $this->get_slider()->get_autoplay(),
+			'autoplayTimeout'    => $this->get_slider()->get_autoplay_timeout(),
+			'autoplaySpeed'      => $this->get_slider()->get_autoplay_speed(),
+			'autoplayHoverPause' => $this->get_slider()->get_autoplay_hover_pause(),
+			'slideBy'            => $this->get_slider()->get_arrow_steps(),
+			'lazyLoad'           => $this->get_slider()->get_lazy_load_image(),
+			'autoWidth'          => $this->get_slider()->get_auto_width(),
 			'items'              => 1,
 		);
 
@@ -94,8 +118,8 @@ abstract class AbstractView {
 		}
 
 		$_responsive = array();
-		foreach ( $this->responsive() as $item ) {
-			$items   = intval( $item['items'] );
+		foreach ( $this->get_slider()->get_responsive_settings() as $item ) {
+			$items   = $item['items'];
 			$_config = array( 'items' => $items );
 			if ( $this->get_total_slides() <= $items ) {
 				$_config['mouseDrag'] = false;
@@ -204,27 +228,29 @@ abstract class AbstractView {
 		$class = array( 'owl-carousel', 'carousel-slider' );
 
 		// Arrows position
-		$class[] = 'arrows-' . $this->arrow_position();
+		$class[] = 'arrows-' . $this->get_slider()->get_arrow_position();
 
 		// Dots position
-		$class[] = 'dots-' . $this->dots_position();
+		$class[] = 'dots-' . $this->get_slider()->get_dots_position();
 
 		// Dots shape
-		$class[] = 'dots-' . $this->dots_shape();
+		$class[] = 'dots-' . $this->get_slider()->get_dots_shape();
 
 		// Arrows visibility
-		if ( $this->arrow_visibility() == 'always' ) {
+		$arrow_visibility = $this->get_slider()->get_arrow_visibility();
+		if ( $arrow_visibility == 'always' ) {
 			$class[] = 'arrows-visible-always';
-		} elseif ( $this->arrow_visibility() == 'never' ) {
+		} elseif ( $arrow_visibility == 'never' ) {
 			$class[] = 'arrows-hidden';
 		} else {
 			$class[] = 'arrows-visible-hover';
 		}
 
 		// Dots visibility
-		if ( $this->dots_visibility() == 'always' ) {
+		$dots_visibility = $this->get_slider()->get_dots_visibility();
+		if ( $dots_visibility == 'always' ) {
 			$class[] = 'dots-visible-always';
-		} elseif ( $this->dots_visibility() == 'never' ) {
+		} elseif ( $dots_visibility == 'never' ) {
 			$class[] = 'dots-hidden';
 		} else {
 			$class[] = 'dots-visible-hover';
@@ -243,7 +269,7 @@ abstract class AbstractView {
 	 * @return mixed
 	 */
 	protected function slider_type() {
-		return $this->get_meta( '_slide_type', 'image-carousel' );
+		return $this->get_slider()->get_type();
 	}
 
 	/**
@@ -252,7 +278,7 @@ abstract class AbstractView {
 	 * @return string
 	 */
 	protected function image_size() {
-		return $this->get_meta( '_image_size', 'full' );
+		return $this->get_slider()->get_image_size();
 	}
 
 	/**
@@ -261,253 +287,6 @@ abstract class AbstractView {
 	 * @return bool
 	 */
 	protected function lazy_load_image() {
-		$default = Utils::get_default_setting( 'lazy_load_image' );
-
-		return $this->checked( $this->get_meta( '_lazy_load_image', $default ) );
-	}
-
-	/**
-	 * Get space between two slide
-	 *
-	 * @return int
-	 */
-	protected function gutter() {
-		$default = Utils::get_default_setting( 'margin_right' );
-
-		$meta = $this->get_meta( '_margin_right', $default );
-		if ( $meta == 'zero' ) {
-			$meta = 0;
-		}
-
-		return intval( $meta );
-	}
-
-	/**
-	 * Checked infinity loop is enabled or disabled
-	 *
-	 * @return bool
-	 */
-	protected function infinity_loop() {
-		return $this->checked( $this->get_meta( '_inifnity_loop' ) );
-	}
-
-	/**
-	 * Left and right padding on carousel slider stage wrapper.
-	 *
-	 * @return int
-	 */
-	protected function stage_padding() {
-		$meta = $this->get_meta( '_stage_padding', 0 );
-		if ( $meta == 'zero' ) {
-			$meta = 0;
-		}
-
-		return intval( $meta );
-	}
-
-	/**
-	 * Check auto width is enabled
-	 *
-	 * @return bool
-	 */
-	protected function auto_width() {
-		return $this->checked( $this->get_meta( '_auto_width', 'off' ) );
-	}
-
-	/********************************************************************************
-	 * Automatic Play Settings
-	 *******************************************************************************/
-
-	/**
-	 * Check if autoplay is enabled
-	 *
-	 * @return bool
-	 */
-	protected function autoplay() {
-		return $this->checked( $this->get_meta( '_autoplay', true ) );
-	}
-
-	/**
-	 * Check autoplay hover pause is enabled
-	 *
-	 * @return bool
-	 */
-	protected function autoplay_hover_pause() {
-		return $this->checked( $this->get_meta( '_autoplay_pause', true ) );
-	}
-
-	/**
-	 * Get autoplay timeout
-	 *
-	 * @return int
-	 */
-	protected function autoplay_timeout() {
-		return intval( $this->get_meta( '_autoplay_timeout', 5000 ) );
-	}
-
-	/**
-	 * Get autoplay speed
-	 *
-	 * @return int
-	 */
-	protected function autoplay_speed() {
-		return intval( $this->get_meta( '_autoplay_speed', 500 ) );
-	}
-
-	/********************************************************************************
-	 * Navigation Settings
-	 *******************************************************************************/
-
-	/**
-	 * Get number of steps to go for each navigation request
-	 *
-	 * @return int|string
-	 */
-	protected function slide_by() {
-		$slide_by = $this->get_meta( '_slide_by' );
-
-		if ( false !== strpos( 'page', $slide_by ) ) {
-			return 'page';
-		}
-
-		return intval( $slide_by );
-	}
-
-	/**
-	 * Get slider navigation color
-	 *
-	 * @return string
-	 */
-	protected function nav_color() {
-		$default = Utils::get_default_setting( 'nav_color' );
-
-		return Utils::sanitize_color( $this->get_meta( '_nav_color', $default ) );
-	}
-
-	/**
-	 * Get slider navigation color for hover and active state
-	 *
-	 * @return string
-	 */
-	protected function nav_active_color() {
-		$default = Utils::get_default_setting( 'nav_active_color' );
-
-		return Utils::sanitize_color( $this->get_meta( '_nav_active_color', $default ) );
-	}
-
-	/**
-	 * Check if navigation is enabled
-	 *
-	 * @return bool
-	 */
-	protected function is_nav_enabled() {
-		return 'off' !== $this->get_meta( '_nav_button' );
-	}
-
-	/**
-	 * Check if dot navigation is enabled
-	 *
-	 * @return bool
-	 */
-	protected function is_dot_enabled() {
-		return 'off' !== $this->get_meta( '_dot_nav' );
-	}
-
-	/**
-	 * Get arrow position
-	 *
-	 * @return string
-	 */
-	protected function arrow_position() {
-		$arrow_position = $this->get_meta( '_arrow_position', 'outside' );
-
-		return in_array( $arrow_position, array( 'inside', 'outside' ) ) ? $arrow_position : 'outside';
-	}
-
-	/**
-	 * Get arrow visibility
-	 *
-	 * @return string
-	 */
-	protected function arrow_visibility() {
-		$visibility = $this->get_meta( '_nav_button', 'on' );
-
-		if ( 'always' == $visibility ) {
-			return 'always';
-		}
-
-		if ( 'on' == $visibility ) {
-			return 'hover';
-		}
-
-		return 'never';
-	}
-
-	/**
-	 * Get dots position
-	 *
-	 * @return string
-	 */
-	protected function dots_position() {
-		$arrow_position = $this->get_meta( '_bullet_position', 'center' );
-
-		return in_array( $arrow_position, array( 'left', 'center', 'right' ) ) ? $arrow_position : 'center';
-	}
-
-	/**
-	 * Get dots visibility
-	 *
-	 * @return string
-	 */
-	protected function dots_visibility() {
-		$visibility = $this->get_meta( '_dot_nav', 'off' );
-
-		if ( 'on' == $visibility ) {
-			return 'always';
-		}
-
-		if ( 'hover' == $visibility ) {
-			return 'hover';
-		}
-
-		return 'never';
-	}
-
-	/**
-	 * Get dots shape
-	 *
-	 * @return string
-	 */
-	protected function dots_shape() {
-		$arrow_position = $this->get_meta( '_bullet_shape', 'circle' );
-
-		return in_array( $arrow_position, array( 'square', 'circle' ) ) ? $arrow_position : 'circle';
-	}
-
-	/********************************************************************************
-	 * Responsive Settings
-	 *******************************************************************************/
-
-	/**
-	 * Get responsive settings
-	 *
-	 * @return array
-	 */
-	protected function responsive() {
-		$items_mobile        = intval( $this->get_meta( '_items_portrait_mobile', 1 ) );
-		$items_small_tab     = intval( $this->get_meta( '_items_small_portrait_tablet', 2 ) );
-		$items_tablet        = intval( $this->get_meta( '_items_portrait_tablet', 3 ) );
-		$items_small_desktop = intval( $this->get_meta( '_items_small_desktop', 4 ) );
-		$items_desktop       = intval( $this->get_meta( '_items_desktop', 4 ) );
-		$items               = intval( $this->get_meta( '_items', 4 ) );
-
-		return array(
-			array( 'breakpoint' => 300, 'items' => $items_mobile ),
-			array( 'breakpoint' => 600, 'items' => $items_small_tab ),
-			array( 'breakpoint' => 768, 'items' => $items_tablet ),
-			array( 'breakpoint' => 993, 'items' => $items_small_desktop ),
-			array( 'breakpoint' => 1200, 'items' => $items_desktop ),
-			array( 'breakpoint' => 1600, 'items' => $items ),
-		);
+		return $this->get_slider()->get_lazy_load_image();
 	}
 }

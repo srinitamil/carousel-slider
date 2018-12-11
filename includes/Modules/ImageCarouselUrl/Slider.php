@@ -2,13 +2,13 @@
 
 namespace CarouselSlider\Modules\ImageCarouselUrl;
 
-use CarouselSlider\Abstracts\Carousel;
+use CarouselSlider\Abstracts\AbstractSlider;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-class ImageCarouselUrl extends Carousel {
+class Slider extends AbstractSlider {
 	/**
 	 * Represent current class as array
 	 *

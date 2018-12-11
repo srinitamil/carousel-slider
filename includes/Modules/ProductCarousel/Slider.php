@@ -2,13 +2,13 @@
 
 namespace CarouselSlider\Modules\ProductCarousel;
 
-use CarouselSlider\Abstracts\Carousel;
+use CarouselSlider\Abstracts\AbstractSlider;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-class ProductCarousel extends Carousel {
+class Slider extends AbstractSlider {
 
 	/**
 	 * Check if WooCommerce version at least 3.0.0

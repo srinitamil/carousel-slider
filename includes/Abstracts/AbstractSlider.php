@@ -6,7 +6,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-class Carousel implements \JsonSerializable {
+class AbstractSlider implements \JsonSerializable {
 
 	const POST_TYPE = 'carousels';
 
@@ -518,7 +518,7 @@ class Carousel implements \JsonSerializable {
 	 *
 	 * @param array|int $args
 	 *
-	 * @return Carousel|Carousel[]
+	 * @return AbstractSlider|AbstractSlider[]
 	 */
 	public static function find( $args = array() ) {
 		if ( is_numeric( $args ) ) {
@@ -554,7 +554,7 @@ class Carousel implements \JsonSerializable {
 	 *
 	 * @param int $id
 	 *
-	 * @return Carousel
+	 * @return AbstractSlider
 	 */
 	public static function find_single( $id = 0 ) {
 		return new self( $id );

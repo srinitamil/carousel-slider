@@ -35,7 +35,7 @@ class View extends AbstractView {
 			return '';
 		}
 
-		$slider = new ProductCarousel( $this->get_slider_id() );
+		$slider = new Slider( $this->get_slider_id() );
 
 		// Check if category list slider
 		if ( $slider->is_product_categories_list() ) {

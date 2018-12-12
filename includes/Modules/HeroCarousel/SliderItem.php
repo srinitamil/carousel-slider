@@ -128,12 +128,31 @@ class SliderItem implements \JsonSerializable {
 		);
 	}
 
+	public function get_slide_heading() {
+		return wp_kses_post( $this->get_prop( 'slide_heading' ) );
+	}
+
+	public function get_slide_description() {
+		return wp_kses_post( $this->get_prop( 'slide_description' ) );
+	}
+
+	/**
+	 * Get content alignment
+	 *
+	 * @return string
+	 */
+	public function get_content_alignment() {
+		$alignment = $this->get_prop( 'content_alignment' );
+
+		return in_array( $alignment, array( 'left', 'center', 'right' ) ) ? $alignment : 'left';
+	}
+
 	/**
 	 * Get link type
 	 *
 	 * @return string
 	 */
-	private function get_link_type() {
+	public function get_link_type() {
 		$link_type = $this->get_prop( 'link_type', 'none' );
 
 		return in_array( $link_type, array( 'none', 'full', 'button' ) ) ? $link_type : 'full';
@@ -153,7 +172,7 @@ class SliderItem implements \JsonSerializable {
 	 *
 	 * @return string
 	 */
-	private function get_full_slide_link_target() {
+	public function get_full_slide_link_target() {
 		$link_target = $this->get_prop( 'link_target' );
 
 		return in_array( $link_target, array( '_self', '_blank' ) ) ? $link_target : '_self';

@@ -35,12 +35,26 @@ class View extends AbstractView {
 			return '';
 		}
 
-		$slider = new Slider( $this->get_slider_id() );
+		$id     = $this->get_slider_id();
+		$slider = new Slider( $id );
 
 		// Check if category list slider
 		if ( $slider->is_product_categories_list() ) {
 			return $this->product_categories( $slider->get_product_categories() );
 		}
+
+		$element_1 = "#id-{$id} .carousel-slider__product h2,#id-{$id} .carousel-slider__product .price";
+		$element_2 = "#id-{$id} .carousel-slider__product a.add_to_cart_button,";
+		$element_2 .= "#id-{$id} .carousel-slider__product a.added_to_cart,";
+		$element_2 .= "#id-{$id} .carousel-slider__product a.quick_view,#id-{$id} .carousel-slider__product .onsale";
+		$element_3 = "#id-{$id} .carousel-slider__product .star-rating";
+
+		$this->style[ $element_1 ][] = array( 'property' => 'color', 'value' => $slider->get_title_color() );
+		$this->style[ $element_2 ]   = array(
+			array( 'property' => 'background-color', 'value' => $slider->get_button_color() ),
+			array( 'property' => 'color', 'value' => $slider->get_button_text_color() ),
+		);
+		$this->style[ $element_3 ][] = array( 'property' => 'color', 'value' => $slider->get_button_color() );
 
 		global $post;
 		global $product;

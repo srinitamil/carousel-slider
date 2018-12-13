@@ -280,47 +280,11 @@ class View extends AbstractView {
 
 		$html = '<div class="' . implode( ' ', $outer_classes ) . '">' . PHP_EOL;
 		$html .= '<style type="text/css">';
-		$html .= $this->dynamic_style();
-		$html .= $this->get_style();
+		$html .= $this->get_dynamic_style();
 		$html .= '</style>' . PHP_EOL;
 		$html .= "<div id='id-" . $slider->get_id() . "' class='" . $class . "' data-owl_options='" . $options . "'
 		data-animation='" . $slider->get_content_animation() . "' data-slide-type='" . $slider->get_type() . "'>";
 
 		return $html;
-	}
-
-	/**
-	 * Get slider style
-	 *
-	 * @return string
-	 */
-	protected function get_style() {
-		$styles    = $this->style;
-		$final_css = '';
-
-		foreach ( $styles as $selector => $style_array ) {
-			$final_css .= $selector . '{';
-			foreach ( $style_array as $style ) {
-
-				$property = $style['property'];
-				$value    = (string) $style['value'];
-
-				if ( empty( $value ) ) {
-					continue;
-				}
-
-				// Make sure background-images are properly formatted
-				if ( 'background-image' == $property ) {
-					if ( false === strrpos( $value, 'url(' ) ) {
-						$value = 'url("' . esc_url_raw( $value ) . '")';
-					}
-				}
-
-				$final_css .= $property . ':' . $value . ';';
-			}
-			$final_css .= '}';
-		}
-
-		return empty( $final_css ) ? '' : $final_css;
 	}
 }

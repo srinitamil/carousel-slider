@@ -26,6 +26,11 @@ abstract class AbstractView {
 	protected $slider;
 
 	/**
+	 * @var array
+	 */
+	protected $style = array();
+
+	/**
 	 * Render element.
 	 * Generates the final HTML on the frontend.
 	 */
@@ -173,105 +178,6 @@ abstract class AbstractView {
 	}
 
 	/**
-	 * Get slide dynamic style
-	 *
-	 * @param bool $newline
-	 *
-	 * @return string
-	 */
-	protected function dynamic_style( $newline = false ) {
-		$slider                  = $this->get_slider();
-		$id                      = $slider->get_id();
-		$_nav_color              = $slider->get_nav_color();
-		$_nav_active_color       = $slider->get_nav_active_color();
-		$_post_height            = get_post_meta( $id, '_post_height', true );
-		$_product_title_color    = get_post_meta( $id, '_product_title_color', true );
-		$_product_btn_bg_color   = get_post_meta( $id, '_product_button_bg_color', true );
-		$_product_btn_text_color = get_post_meta( $id, '_product_button_text_color', true );
-
-		$slide_type = $slider->get_type();
-		$slide_type = in_array( $slide_type, Utils::get_slide_types() ) ? $slide_type : 'image-carousel';
-
-		$_arrow_size = $slider->get_arrow_size();
-		$_arrow_size = empty( $_arrow_size ) ? 48 : absint( $_arrow_size );
-
-		$_bullet_size = $slider->get_dots_size();
-		$_bullet_size = empty( $_bullet_size ) ? 10 : absint( $_bullet_size );
-
-		ob_start();
-		// Arrows Nav
-		echo "
-            #id-{$id} .carousel-slider-nav-icon {
-                fill: {$_nav_color}
-            }
-            #id-{$id} .carousel-slider-nav-icon:hover {
-                fill: {$_nav_active_color}
-            }
-            #id-{$id} .owl-prev,
-            #id-{$id} .owl-next,
-            #id-{$id} .carousel-slider-nav-icon {
-                height: {$_arrow_size}px;
-                width: {$_arrow_size}px
-            }
-            #id-{$id}.arrows-outside .owl-prev {
-                left: -{$_arrow_size}px
-            }
-            #id-{$id}.arrows-outside .owl-next {
-                right: -{$_arrow_size}px
-            }
-        ";
-
-		// Dots Nav
-		echo "
-		    #id-{$id} .owl-dots .owl-dot span {
-                background-color: {$_nav_color};
-                width: {$_bullet_size}px;
-                height: {$_bullet_size}px;
-            }
-            #id-{$id} .owl-dots .owl-dot.active span,
-            #id-{$id} .owl-dots .owl-dot:hover span {
-                background-color: {$_nav_active_color}
-            }
-		";
-
-		// Post Carousel Slider
-		if ( $slide_type == 'post-carousel' ) {
-
-			echo "
-                #id-{$id} .carousel-slider__post {
-                    height: {$_post_height}px
-                }
-            ";
-		}
-
-		// Product Carousel Slider
-		if ( $slide_type == 'product-carousel' ) {
-			echo "
-		        #id-{$id} .carousel-slider__product h3,
-                #id-{$id} .carousel-slider__product .price {
-                    color: {$_product_title_color};
-                }
-
-                #id-{$id} .carousel-slider__product a.add_to_cart_button,
-                #id-{$id} .carousel-slider__product a.added_to_cart,
-                #id-{$id} .carousel-slider__product a.quick_view,
-                #id-{$id} .carousel-slider__product .onsale {
-                    background-color: {$_product_btn_bg_color};
-                    color: {$_product_btn_text_color};
-                }
-
-                #id-{$id} .carousel-slider__product .star-rating {
-                    color: {$_product_btn_bg_color};
-                }
-		    ";
-		}
-
-		$styles = ob_get_clean();
-
-		return self::minify_css( $styles, $newline );
-	}
-
-	/**
 	 * Slider wrapper start
 	 *
 	 * @return string
@@ -287,13 +193,9 @@ abstract class AbstractView {
 			'carousel-slider-' . $id
 		);
 
-		$html = '<div class="' . implode( ' ', $outer_classes ) . '">';
-		$html .= '<style type="text/css">' . $this->dynamic_style() . '</style>';
-		$html .= "<div 
-		id='id-" . $id . "' 
-		class='" . $class . "' 
-		data-owl_options='" . $options . "'
-		data-slide-type='" . $this->get_slider()->get_type() . "'>";
+		$html = '<div class="' . implode( ' ', $outer_classes ) . '">' . PHP_EOL;
+		$html .= '<style type="text/css">' . $this->get_dynamic_style() . '</style>' . PHP_EOL;
+		$html .= "<div id='id-" . $id . "' class='" . $class . "' data-owl_options='" . $options . "' data-slide-type='" . $this->get_slider()->get_type() . "'>";
 
 		return $html;
 	}
@@ -348,46 +250,76 @@ abstract class AbstractView {
 	}
 
 	/**
-	 * Minify CSS
-	 *
-	 * @param string $content
-	 * @param bool $newline
+	 * Get slider arrow and dot navigation style
+	 */
+	protected function get_navigation_style() {
+		$slider           = $this->get_slider();
+		$id               = $slider->get_id();
+		$nav_color        = $slider->get_nav_color();
+		$nav_active_color = $slider->get_nav_active_color();
+		$arrow_size       = $slider->get_arrow_size();
+		$bullet_size      = $slider->get_dots_size();
+		// Arrows Nav
+		$element_1 = "#id-{$id} .carousel-slider-nav-icon";
+		$element_2 = "#id-{$id} .carousel-slider-nav-icon:hover";
+		$element_3 = "#id-{$id} .owl-prev,#id-{$id} .owl-next,#id-{$id} .carousel-slider-nav-icon";
+		$element_4 = "#id-{$id}.arrows-outside .owl-prev";
+		$element_5 = "#id-{$id}.arrows-outside .owl-next";
+
+		$this->style[ $element_1 ][] = array( 'property' => 'fill', 'value' => $nav_color );
+		$this->style[ $element_2 ][] = array( 'property' => 'fill', 'value' => $nav_active_color );
+		$this->style[ $element_3 ]   = array(
+			array( 'property' => 'height', 'value' => $arrow_size . 'px' ),
+			array( 'property' => 'width', 'value' => $arrow_size . 'px' ),
+		);
+		$this->style[ $element_4 ][] = array( 'property' => 'left', 'value' => '-' . $arrow_size . 'px' );
+		$this->style[ $element_5 ][] = array( 'property' => 'right', 'value' => '-' . $arrow_size . 'px' );
+
+		// Dots Nav
+		$element_6 = "#id-{$id} .owl-dots .owl-dot span";
+		$element_7 = "#id-{$id} .owl-dots .owl-dot.active span,#id-{$id} .owl-dots .owl-dot:hover span";
+
+		$this->style[ $element_6 ]   = array(
+			array( 'property' => 'background-color', 'value' => $nav_color ),
+			array( 'property' => 'height', 'value' => $bullet_size . 'px' ),
+			array( 'property' => 'width', 'value' => $bullet_size . 'px' ),
+		);
+		$this->style[ $element_7 ][] = array( 'property' => 'background', 'value' => $nav_active_color );
+	}
+
+	/**
+	 * Get slider style
 	 *
 	 * @return string
 	 */
-	protected static function minify_css( $content = '', $newline = true ) {
-		// Strip comments
-		$content = preg_replace( '!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $content );
-		// remove leading & trailing whitespace
-		$content = preg_replace( '/^\s*/m', '', $content );
-		$content = preg_replace( '/\s*$/m', '', $content );
+	protected function get_dynamic_style() {
+		$this->get_navigation_style();
+		$styles    = $this->style;
+		$final_css = '';
 
-		// replace newlines with a single space
-		$content = preg_replace( '/\s+/', ' ', $content );
+		foreach ( $styles as $selector => $style_array ) {
+			$final_css .= $selector . '{';
+			foreach ( $style_array as $style ) {
 
-		// remove whitespace around meta characters
-		// inspired by stackoverflow.com/questions/15195750/minify-compress-css-with-regex
-		$content = preg_replace( '/\s*([\*$~^|]?+=|[{};,>~]|!important\b)\s*/', '$1', $content );
-		$content = preg_replace( '/([\[(:])\s+/', '$1', $content );
-		$content = preg_replace( '/\s+([\]\)])/', '$1', $content );
-		$content = preg_replace( '/\s+(:)(?![^\}]*\{)/', '$1', $content );
+				$property = $style['property'];
+				$value    = (string) $style['value'];
 
-		// whitespace around + and - can only be stripped inside some pseudo-
-		// classes, like `:nth-child(3+2n)`
-		// not in things like `calc(3px + 2px)`, shorthands like `3px -2px`, or
-		// selectors like `div.weird- p`
-		$pseudos = array( 'nth-child', 'nth-last-child', 'nth-last-of-type', 'nth-of-type' );
-		$content = preg_replace( '/:(' . implode( '|', $pseudos ) . ')\(\s*([+-]?)\s*(.+?)\s*([+-]?)\s*(.*?)\s*\)/',
-			':$1($2$3$4$5)', $content );
+				if ( empty( $value ) ) {
+					continue;
+				}
 
-		// remove semicolon/whitespace followed by closing bracket
-		$content = str_replace( ';}', '}', $content );
+				// Make sure background-images are properly formatted
+				if ( 'background-image' == $property ) {
+					if ( false === strrpos( $value, 'url(' ) ) {
+						$value = 'url("' . esc_url_raw( $value ) . '")';
+					}
+				}
 
-		// Add new line after closing bracket
-		if ( $newline ) {
-			$content = str_replace( '}', '}' . PHP_EOL, $content );
+				$final_css .= $property . ':' . $value . ';';
+			}
+			$final_css .= '}';
 		}
 
-		return trim( $content );
+		return empty( $final_css ) ? '' : $final_css;
 	}
 }

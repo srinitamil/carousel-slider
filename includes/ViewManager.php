@@ -8,15 +8,15 @@ if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-class ModuleManager extends Collection {
+class ViewManager extends Collection {
 
 	/**
-	 * @var ModuleManager
+	 * @var ViewManager
 	 */
 	private static $instance;
 
 	/**
-	 * @return ModuleManager
+	 * @return ViewManager
 	 */
 	public static function init() {
 		if ( is_null( self::$instance ) ) {

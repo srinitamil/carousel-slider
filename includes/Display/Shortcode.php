@@ -3,7 +3,7 @@
 namespace CarouselSlider\Display;
 
 use CarouselSlider\Abstracts\AbstractView;
-use CarouselSlider\ModuleManager;
+use CarouselSlider\ViewManager;
 use CarouselSlider\Supports\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -45,7 +45,7 @@ class Shortcode {
 		$slide_type = get_post_meta( $id, '_slide_type', true );
 		$slide_type = in_array( $slide_type, Utils::get_slide_types() ) ? $slide_type : 'image-carousel';
 
-		$moduleManager = ModuleManager::init();
+		$moduleManager = ViewManager::init();
 		if ( ! $moduleManager->has( $slide_type ) ) {
 			return '';
 		}

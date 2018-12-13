@@ -15,7 +15,13 @@ class View extends AbstractView {
 	 * Generates the final HTML on the frontend.
 	 */
 	public function render() {
-		$posts = self::get_posts( $this->get_slider_id() );
+		$id    = $this->get_slider_id();
+		$posts = self::get_posts( $id );
+
+		$this->style["#id-{$id} .blog-grid-inside"][] = array(
+			'property' => 'height',
+			'value'    => $this->get_slider()->get_prop( 'height' ) . 'px',
+		);
 
 		$this->set_total_slides( count( $posts ) );
 

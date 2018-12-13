@@ -77,7 +77,7 @@ class View extends ImageCarouselView {
 	 * @return string
 	 */
 	protected function get_image( $imageInfo ) {
-		if ( $this->lazy_load_image() ) {
+		if ( $this->get_slider()->get_lazy_load_image() ) {
 			return '<img class="owl-lazy" data-src="' . $imageInfo['url'] . '" alt="' . $imageInfo['alt'] . '" />';
 		}
 

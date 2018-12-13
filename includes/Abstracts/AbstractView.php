@@ -2,7 +2,7 @@
 
 namespace CarouselSlider\Abstracts;
 
-use CarouselSlider\Supports\DynamicStyle;
+use CarouselSlider\Supports\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -180,7 +180,95 @@ abstract class AbstractView {
 	 * @return string
 	 */
 	protected function dynamic_style( $newline = false ) {
-		return DynamicStyle::generate( $this->get_slider_id(), $newline );
+		$slider                  = $this->get_slider();
+		$id                      = $slider->get_id();
+		$_nav_color              = $slider->get_nav_color();
+		$_nav_active_color       = $slider->get_nav_active_color();
+		$_post_height            = get_post_meta( $id, '_post_height', true );
+		$_product_title_color    = get_post_meta( $id, '_product_title_color', true );
+		$_product_btn_bg_color   = get_post_meta( $id, '_product_button_bg_color', true );
+		$_product_btn_text_color = get_post_meta( $id, '_product_button_text_color', true );
+
+		$slide_type = $slider->get_type();
+		$slide_type = in_array( $slide_type, Utils::get_slide_types() ) ? $slide_type : 'image-carousel';
+
+		$_arrow_size = $slider->get_arrow_size();
+		$_arrow_size = empty( $_arrow_size ) ? 48 : absint( $_arrow_size );
+
+		$_bullet_size = $slider->get_dots_size();
+		$_bullet_size = empty( $_bullet_size ) ? 10 : absint( $_bullet_size );
+
+		ob_start();
+		// Arrows Nav
+		echo "
+            #id-{$id} .carousel-slider-nav-icon {
+                fill: {$_nav_color}
+            }
+            #id-{$id} .carousel-slider-nav-icon:hover {
+                fill: {$_nav_active_color}
+            }
+            #id-{$id} .owl-prev,
+            #id-{$id} .owl-next,
+            #id-{$id} .carousel-slider-nav-icon {
+                height: {$_arrow_size}px;
+                width: {$_arrow_size}px
+            }
+            #id-{$id}.arrows-outside .owl-prev {
+                left: -{$_arrow_size}px
+            }
+            #id-{$id}.arrows-outside .owl-next {
+                right: -{$_arrow_size}px
+            }
+        ";
+
+		// Dots Nav
+		echo "
+		    #id-{$id} .owl-dots .owl-dot span {
+                background-color: {$_nav_color};
+                width: {$_bullet_size}px;
+                height: {$_bullet_size}px;
+            }
+            #id-{$id} .owl-dots .owl-dot.active span,
+            #id-{$id} .owl-dots .owl-dot:hover span {
+                background-color: {$_nav_active_color}
+            }
+		";
+
+		// Post Carousel Slider
+		if ( $slide_type == 'post-carousel' ) {
+
+			echo "
+                #id-{$id} .carousel-slider__post {
+                    height: {$_post_height}px
+                }
+            ";
+		}
+
+		// Product Carousel Slider
+		if ( $slide_type == 'product-carousel' ) {
+			echo "
+		        #id-{$id} .carousel-slider__product h3,
+                #id-{$id} .carousel-slider__product .price {
+                    color: {$_product_title_color};
+                }
+
+                #id-{$id} .carousel-slider__product a.add_to_cart_button,
+                #id-{$id} .carousel-slider__product a.added_to_cart,
+                #id-{$id} .carousel-slider__product a.quick_view,
+                #id-{$id} .carousel-slider__product .onsale {
+                    background-color: {$_product_btn_bg_color};
+                    color: {$_product_btn_text_color};
+                }
+
+                #id-{$id} .carousel-slider__product .star-rating {
+                    color: {$_product_btn_bg_color};
+                }
+		    ";
+		}
+
+		$styles = ob_get_clean();
+
+		return self::minify_css( $styles, $newline );
 	}
 
 	/**
@@ -195,7 +283,7 @@ abstract class AbstractView {
 
 		$outer_classes = array(
 			'carousel-slider-outer',
-			'carousel-slider-' . $this->slider_type(),
+			'carousel-slider-' . $this->get_slider()->get_type(),
 			'carousel-slider-' . $id
 		);
 
@@ -205,7 +293,7 @@ abstract class AbstractView {
 		id='id-" . $id . "' 
 		class='" . $class . "' 
 		data-owl_options='" . $options . "'
-		data-slide-type='" . $this->slider_type() . "'>";
+		data-slide-type='" . $this->get_slider()->get_type() . "'>";
 
 		return $html;
 	}
@@ -259,34 +347,47 @@ abstract class AbstractView {
 		return implode( ' ', $class );
 	}
 
-	/********************************************************************************
-	 * General Settings
-	 *******************************************************************************/
-
 	/**
-	 * Get slider type
+	 * Minify CSS
 	 *
-	 * @return mixed
-	 */
-	protected function slider_type() {
-		return $this->get_slider()->get_type();
-	}
-
-	/**
-	 * Get slider image size
+	 * @param string $content
+	 * @param bool $newline
 	 *
 	 * @return string
 	 */
-	protected function image_size() {
-		return $this->get_slider()->get_image_size();
-	}
+	protected static function minify_css( $content = '', $newline = true ) {
+		// Strip comments
+		$content = preg_replace( '!/\*[^*]*\*+([^/][^*]*\*+)*/!', '', $content );
+		// remove leading & trailing whitespace
+		$content = preg_replace( '/^\s*/m', '', $content );
+		$content = preg_replace( '/\s*$/m', '', $content );
 
-	/**
-	 * Check if lazy load enabled
-	 *
-	 * @return bool
-	 */
-	protected function lazy_load_image() {
-		return $this->get_slider()->get_lazy_load_image();
+		// replace newlines with a single space
+		$content = preg_replace( '/\s+/', ' ', $content );
+
+		// remove whitespace around meta characters
+		// inspired by stackoverflow.com/questions/15195750/minify-compress-css-with-regex
+		$content = preg_replace( '/\s*([\*$~^|]?+=|[{};,>~]|!important\b)\s*/', '$1', $content );
+		$content = preg_replace( '/([\[(:])\s+/', '$1', $content );
+		$content = preg_replace( '/\s+([\]\)])/', '$1', $content );
+		$content = preg_replace( '/\s+(:)(?![^\}]*\{)/', '$1', $content );
+
+		// whitespace around + and - can only be stripped inside some pseudo-
+		// classes, like `:nth-child(3+2n)`
+		// not in things like `calc(3px + 2px)`, shorthands like `3px -2px`, or
+		// selectors like `div.weird- p`
+		$pseudos = array( 'nth-child', 'nth-last-child', 'nth-last-of-type', 'nth-of-type' );
+		$content = preg_replace( '/:(' . implode( '|', $pseudos ) . ')\(\s*([+-]?)\s*(.+?)\s*([+-]?)\s*(.*?)\s*\)/',
+			':$1($2$3$4$5)', $content );
+
+		// remove semicolon/whitespace followed by closing bracket
+		$content = str_replace( ';}', '}', $content );
+
+		// Add new line after closing bracket
+		if ( $newline ) {
+			$content = str_replace( '}', '}' . PHP_EOL, $content );
+		}
+
+		return trim( $content );
 	}
 }

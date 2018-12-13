@@ -87,7 +87,7 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return string
 	 */
-	protected function get_content_width( $default = null ) {
+	public function get_content_width( $default = null ) {
 		return $this->get_content_settings( 'content_width', $default );
 	}
 
@@ -99,7 +99,7 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array|string
 	 */
-	protected function get_content_padding( $key = null, $default = null ) {
+	public function get_content_padding( $key = null, $default = null ) {
 		$padding = (array) $this->get_content_settings( 'slide_padding', $default );
 
 		if ( empty( $key ) ) {
@@ -120,7 +120,7 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return string
 	 */
-	protected function get_slider_height( $default = null ) {
+	public function get_slider_height( $default = null ) {
 		return $this->get_content_settings( 'slide_height', $default );
 	}
 

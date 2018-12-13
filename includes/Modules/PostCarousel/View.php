@@ -73,9 +73,9 @@ class View extends AbstractView {
 
 		$permalink = esc_url( get_permalink( $post ) );
 
-		if ( $this->lazy_load_image() ) {
+		if ( $this->get_slider()->get_lazy_load_image() ) {
 			$thumbnail_id = get_post_thumbnail_id( $post );
-			$image_src    = wp_get_attachment_image_src( $thumbnail_id, $this->image_size() );
+			$image_src    = wp_get_attachment_image_src( $thumbnail_id, $this->get_slider()->get_image_size() );
 
 			$html = '<a href="' . $permalink . '" class="post-thumbnail">';
 			$html .= '<img class="owl-lazy" data-src="' . $image_src[0] . '"/>';
@@ -84,7 +84,7 @@ class View extends AbstractView {
 			return $html;
 		}
 
-		$post_thumbnail = get_the_post_thumbnail( $post, $this->image_size(), array(
+		$post_thumbnail = get_the_post_thumbnail( $post, $this->get_slider()->get_image_size(), array(
 			'alt' => the_title_attribute( array( 'echo' => false ) )
 		) );
 
@@ -234,7 +234,7 @@ class View extends AbstractView {
 			$args = array_merge( $args, array( 'post__in' => $post_in ) );
 		}
 
-		// Get posts by post catagories IDs
+		// Get posts by post categories IDs
 		if ( $query_type == 'post_categories' ) {
 			$post_categories = get_post_meta( $id, '_post_categories', true );
 			$args            = array_merge( $args, array( 'cat' => $post_categories ) );

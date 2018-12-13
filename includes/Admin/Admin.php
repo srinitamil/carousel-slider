@@ -10,6 +10,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Admin {
 
+	const POST_TYPE = 'carousels';
+
 	private static $instance = null;
 
 	/**
@@ -31,8 +33,8 @@ class Admin {
 	public function __construct() {
 
 		add_action( 'init', array( $this, 'carousel_post_type' ) );
-		add_filter( 'manage_edit-carousels_columns', array( $this, 'columns_head' ) );
-		add_filter( 'manage_carousels_posts_custom_column', array( $this, 'columns_content' ), 10, 2 );
+		add_filter( 'manage_edit-' . self::POST_TYPE . '_columns', array( $this, 'columns_head' ) );
+		add_filter( 'manage_' . self::POST_TYPE . '_posts_custom_column', array( $this, 'columns_content' ), 10, 2 );
 		add_action( 'save_post', array( $this, 'save_meta_box' ) );
 		add_action( 'wp_ajax_carousel_slider_save_images', array( $this, 'save_images' ) );
 
@@ -49,23 +51,23 @@ class Admin {
 	 */
 	public function carousel_post_type() {
 		$labels = array(
-			'name'               => _x( 'Slides', 'Post Type General Name', 'carousel-slider' ),
-			'singular_name'      => _x( 'Slide', 'Post Type Singular Name', 'carousel-slider' ),
+			'name'               => _x( 'Sliders', 'Post Type General Name', 'carousel-slider' ),
+			'singular_name'      => _x( 'Slider', 'Post Type Singular Name', 'carousel-slider' ),
 			'menu_name'          => __( 'Carousel Slider', 'carousel-slider' ),
-			'parent_item_colon'  => __( 'Parent Slide:', 'carousel-slider' ),
-			'all_items'          => __( 'All Slides', 'carousel-slider' ),
-			'view_item'          => __( 'View Slide', 'carousel-slider' ),
-			'add_new_item'       => __( 'Add New Slide', 'carousel-slider' ),
+			'parent_item_colon'  => __( 'Parent Slider:', 'carousel-slider' ),
+			'all_items'          => __( 'All Sliders', 'carousel-slider' ),
+			'view_item'          => __( 'View Slider', 'carousel-slider' ),
+			'add_new_item'       => __( 'Add New Slider', 'carousel-slider' ),
 			'add_new'            => __( 'Add New', 'carousel-slider' ),
-			'edit_item'          => __( 'Edit Slide', 'carousel-slider' ),
-			'update_item'        => __( 'Update Slide', 'carousel-slider' ),
-			'search_items'       => __( 'Search Slide', 'carousel-slider' ),
+			'edit_item'          => __( 'Edit Slider', 'carousel-slider' ),
+			'update_item'        => __( 'Update Slider', 'carousel-slider' ),
+			'search_items'       => __( 'Search Slider', 'carousel-slider' ),
 			'not_found'          => __( 'Not found', 'carousel-slider' ),
 			'not_found_in_trash' => __( 'Not found in Trash', 'carousel-slider' ),
 		);
 		$args   = array(
-			'label'               => __( 'Slide', 'carousel-slider' ),
-			'description'         => __( 'The easiest way to create carousel slide', 'carousel-slider' ),
+			'label'               => __( 'Slider', 'carousel-slider' ),
+			'description'         => __( 'The easiest way to create carousel slider', 'carousel-slider' ),
 			'labels'              => $labels,
 			'supports'            => array( 'title' ),
 			'hierarchical'        => false,
@@ -84,7 +86,7 @@ class Admin {
 			'capability_type'     => 'post',
 		);
 
-		register_post_type( 'carousels', $args );
+		register_post_type( self::POST_TYPE, $args );
 	}
 
 	/**
@@ -96,11 +98,16 @@ class Admin {
 	 * @return mixed
 	 */
 	public function post_row_actions( $actions, $post ) {
-		if ( $post->post_type != 'carousels' ) {
+		if ( $post->post_type != self::POST_TYPE ) {
 			return $actions;
 		}
 
-		unset( $actions['view'] );
+		$preview_link    = add_query_arg( array(
+			'carousel_slider' => true,
+			'slider_id'       => $post->ID,
+			'preview'         => true,
+		), site_url( '/' ) );
+		$actions['view'] = '<a href="' . esc_url( $preview_link ) . '">' . __( 'Preview', 'carousel-slider' ) . '</a>';
 		unset( $actions['inline hide-if-no-js'] );
 
 		return $actions;

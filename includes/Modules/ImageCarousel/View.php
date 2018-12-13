@@ -69,15 +69,15 @@ class View extends AbstractView {
 	 */
 	protected function get_image( $post ) {
 		$image_alt_text = trim( strip_tags( get_post_meta( $post->ID, '_wp_attachment_image_alt', true ) ) );
-		if ( $this->lazy_load_image() ) {
-			$image_src = wp_get_attachment_image_src( $post->ID, $this->image_size() );
+		if ( $this->get_slider()->get_lazy_load_image() ) {
+			$image_src = wp_get_attachment_image_src( $post->ID, $this->get_slider()->get_image_size() );
 			$image     = sprintf( '<img class="owl-lazy" data-src="%1$s" width="%2$s" height="%3$s" alt="%4$s" />',
 				$image_src[0], $image_src[1], $image_src[2], $image_alt_text );
 
 			return $image;
 		}
 
-		return wp_get_attachment_image( $post->ID, $this->image_size(), false, array( 'alt' => $image_alt_text ) );
+		return wp_get_attachment_image( $post->ID, $this->get_slider()->get_image_size(), false, array( 'alt' => $image_alt_text ) );
 	}
 
 	/**

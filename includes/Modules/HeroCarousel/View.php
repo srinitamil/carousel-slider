@@ -37,18 +37,18 @@ class View extends AbstractView {
 		$_html = '';
 
 		$element                   = "#id-{$id} .carousel-slider-hero__cell";
-		$this->style[ $element ][] = array( 'property' => 'height', 'value' => $this->slide_height() );
+		$this->style[ $element ][] = array( 'property' => 'height', 'value' => $slider->get_slider_height() );
 
 		$element                   = "#id-{$id} .cell_content";
-		$this->style[ $element ][] = array( 'property' => 'max-width', 'value' => $this->content_width() );
+		$this->style[ $element ][] = array( 'property' => 'max-width', 'value' => $slider->get_content_width() );
 
-		foreach ( $slides as $slide_id => $slide ) {
+		foreach ( $slides as $slide_index => $slide ) {
 
 			$html = '';
 
 			$_link_type  = $slide->get_link_type();
 			$_slide_link = $slide->get_full_slide_link();
-			$class       = "carousel-slider-cell-{$id}-{$slide_id}";
+			$class       = "carousel-slider-cell-{$id}-{$slide_index}";
 
 			$cell_class = "carousel-slider-hero__cell {$class}";
 			if ( 'full' == $_link_type && $_slide_link ) {
@@ -88,9 +88,9 @@ class View extends AbstractView {
 			}
 
 			if ( $slider->get_lazy_load_image() ) {
-				$html .= '<div class="' . $_slide_bg_class . ' owl-lazy" data-src="' . $_img_src['src'] . '" id="slide-item-' . $id . '-' . $slide_id . '"></div>';
+				$html .= '<div class="' . $_slide_bg_class . ' owl-lazy" data-src="' . $_img_src['src'] . '" id="slide-item-' . $id . '-' . $slide_index . '"></div>';
 			} else {
-				$html .= '<div class="' . $_slide_bg_class . '" id="slide-item-' . $id . '-' . $slide_id . '"></div>';
+				$html .= '<div class="' . $_slide_bg_class . '" id="slide-item-' . $id . '-' . $slide_index . '"></div>';
 			}
 
 			// Cell Inner
@@ -104,18 +104,12 @@ class View extends AbstractView {
 				$_cell_inner_class .= ' carousel-slider--v-position-middle carousel-slider--text-center';
 			}
 
-			$slide_padding   = $this->slide_padding();
-			$_padding_top    = isset( $slide_padding['top'] ) ? esc_attr( $slide_padding['top'] ) : '1rem';
-			$_padding_right  = isset( $slide_padding['right'] ) ? esc_attr( $slide_padding['right'] ) : '3rem';
-			$_padding_bottom = isset( $slide_padding['bottom'] ) ? esc_attr( $slide_padding['bottom'] ) : '1rem';
-			$_padding_left   = isset( $slide_padding['left'] ) ? esc_attr( $slide_padding['left'] ) : '3rem';
-
 			$element                 = "#id-{$id} .{$class} .cell_inner";
 			$this->style[ $element ] = array(
-				array( 'property' => 'padding-top', 'value' => $_padding_top ),
-				array( 'property' => 'padding-right', 'value' => $_padding_right ),
-				array( 'property' => 'padding-bottom', 'value' => $_padding_bottom ),
-				array( 'property' => 'padding-left', 'value' => $_padding_left ),
+				array( 'property' => 'padding-top', 'value' => $slider->get_content_padding( 'top', '1rem' ) ),
+				array( 'property' => 'padding-right', 'value' => $slider->get_content_padding( 'right', '3rem' ) ),
+				array( 'property' => 'padding-bottom', 'value' => $slider->get_content_padding( 'bottom', '1rem' ) ),
+				array( 'property' => 'padding-left', 'value' => $slider->get_content_padding( 'left', '3rem' ) ),
 			);
 
 			$html .= '<div class="' . $_cell_inner_class . '">';
@@ -152,9 +146,42 @@ class View extends AbstractView {
 				$_btn_1_size   = $slide->get_button_one_size();
 				if ( $slide->has_button_one() ) {
 					$_btn_1_class = 'button cs-hero-button';
-					$_btn_1_class .= ' cs-hero-button-' . $slide_id . '-1';
+					$_btn_1_class .= ' cs-hero-button-' . $slide_index . '-1';
 					$_btn_1_class .= ' cs-hero-button-' . $_btn_1_type;
 					$_btn_1_class .= ' cs-hero-button-' . $_btn_1_size;
+
+					$element_button = "#id-{$id} .cs-hero-button-{$slide_index}-1";
+					if ( 'stroke' == $_btn_1_type ) {
+						$this->style[ $element_button ]            = array(
+							array( 'property' => 'background-color', 'value' => 'transparent' ),
+							array( 'property' => 'border-color', 'value' => $slide->get_button_one_background_color() ),
+							array( 'property' => 'border-style', 'value' => "solid" ),
+							array( 'property' => 'border-width', 'value' => $slide->get_button_one_border_width() ),
+							array( 'property' => 'border-radius', 'value' => $slide->get_button_one_border_radius() ),
+							array( 'property' => 'color', 'value' => $slide->get_button_one_background_color() ),
+						);
+						$this->style[ $element_button . ':hover' ] = array(
+							array(
+								'property' => 'background-color',
+								'value'    => $slide->get_button_one_background_color()
+							),
+							array( 'property' => 'border-color', 'value' => $slide->get_button_one_background_color() ),
+							array( 'property' => 'color', 'value' => $slide->get_button_one_color() ),
+						);
+					}
+					if ( 'stroke' != $_btn_1_type ) {
+						$this->style[ $element_button ] = array(
+							array(
+								'property' => 'background-color',
+								'value'    => $slide->get_button_one_background_color()
+							),
+							array( 'property' => 'border-color', 'value' => $slide->get_button_one_background_color() ),
+							array( 'property' => 'border-style', 'value' => "solid" ),
+							array( 'property' => 'border-width', 'value' => $slide->get_button_one_border_width() ),
+							array( 'property' => 'border-radius', 'value' => $slide->get_button_one_border_radius() ),
+							array( 'property' => 'color', 'value' => $slide->get_button_one_color() ),
+						);
+					}
 
 					$html .= '<span class="carousel-slider-hero__cell__button__one">';
 					$html .= '<a class="' . $_btn_1_class . '" href="' .
@@ -170,9 +197,42 @@ class View extends AbstractView {
 				$_btn_2_type   = $slide->get_button_two_type();
 				if ( $slide->has_button_two() ) {
 					$_btn_2_class = 'button cs-hero-button';
-					$_btn_2_class .= ' cs-hero-button-' . $slide_id . '-2';
+					$_btn_2_class .= ' cs-hero-button-' . $slide_index . '-2';
 					$_btn_2_class .= ' cs-hero-button-' . $_btn_2_type;
 					$_btn_2_class .= ' cs-hero-button-' . $_btn_2_size;
+
+					$element_button = "#id-{$id} .cs-hero-button-{$slide_index}-2";
+					if ( 'stroke' == $_btn_2_type ) {
+						$this->style[ $element_button ]            = array(
+							array( 'property' => 'background-color', 'value' => 'transparent' ),
+							array( 'property' => 'border-color', 'value' => $slide->get_button_two_background_color() ),
+							array( 'property' => 'border-style', 'value' => "solid" ),
+							array( 'property' => 'border-width', 'value' => $slide->get_button_two_border_width() ),
+							array( 'property' => 'border-radius', 'value' => $slide->get_button_two_border_radius() ),
+							array( 'property' => 'color', 'value' => $slide->get_button_two_background_color() ),
+						);
+						$this->style[ $element_button . ':hover' ] = array(
+							array(
+								'property' => 'background-color',
+								'value'    => $slide->get_button_two_background_color()
+							),
+							array( 'property' => 'border-color', 'value' => $slide->get_button_two_background_color() ),
+							array( 'property' => 'color', 'value' => $slide->get_button_two_color() ),
+						);
+					}
+					if ( 'stroke' != $_btn_2_type ) {
+						$this->style[ $element_button ] = array(
+							array(
+								'property' => 'background-color',
+								'value'    => $slide->get_button_two_background_color()
+							),
+							array( 'property' => 'border-color', 'value' => $slide->get_button_two_background_color() ),
+							array( 'property' => 'border-style', 'value' => "solid" ),
+							array( 'property' => 'border-width', 'value' => $slide->get_button_two_border_width() ),
+							array( 'property' => 'border-radius', 'value' => $slide->get_button_two_border_radius() ),
+							array( 'property' => 'color', 'value' => $slide->get_button_two_color() ),
+						);
+					}
 
 					$html .= '<span class="carousel-slider-hero__cell__button__two">';
 					$html .= '<a class="' . $_btn_2_class . '" href="' . $_btn_2_url . '" target="' . $_btn_2_target . '">' . esc_attr( $_btn_2_text ) . "</a>";
@@ -191,7 +251,7 @@ class View extends AbstractView {
 				$html .= '</div>'; // .carousel-slider-hero__cell
 			}
 
-			$_html .= apply_filters( 'carousel_slider_content', $html, $slide_id, $slide );
+			$_html .= apply_filters( 'carousel_slider_content', $html, $slide_index, $slide );
 		}
 
 		$__html = $this->slider_wrapper_start();
@@ -207,161 +267,26 @@ class View extends AbstractView {
 	 * @return string
 	 */
 	protected function slider_wrapper_start() {
-		$id      = $this->get_slider_id();
+		/** @var Slider $slider */
+		$slider  = $this->get_slider();
 		$class   = $this->get_slider_class();
 		$options = wp_json_encode( $this->owl_options() );
 
 		$outer_classes = array(
 			'carousel-slider-outer',
-			'carousel-slider-' . $this->slider_type(),
-			'carousel-slider-' . $id
+			'carousel-slider-' . $slider->get_type(),
+			'carousel-slider-' . $slider->get_id()
 		);
 
-		$html = '<div class="' . implode( ' ', $outer_classes ) . '">';
-		$html .= '<style type="text/css">' . PHP_EOL;
-		$html .= $this->dynamic_style( true ) . PHP_EOL;
+		$html = '<div class="' . implode( ' ', $outer_classes ) . '">' . PHP_EOL;
+		$html .= '<style type="text/css">';
+		$html .= $this->dynamic_style();
 		$html .= $this->get_style();
 		$html .= '</style>' . PHP_EOL;
-		$html .= "<div id='id-" . $id . "' class='" . $class . "' data-owl_options='" . $options . "'
-		data-animation='" . $this->content_animation() . "' data-slide-type='" . $this->slider_type() . "'>";
+		$html .= "<div id='id-" . $slider->get_id() . "' class='" . $class . "' data-owl_options='" . $options . "'
+		data-animation='" . $slider->get_content_animation() . "' data-slide-type='" . $slider->get_type() . "'>";
 
 		return $html;
-	}
-
-	/**
-	 * Get slider content
-	 *
-	 * @return array
-	 */
-	protected function content_slider() {
-		return $this->get_meta( '_content_slider' );
-	}
-
-	/**
-	 * Get slider settings
-	 *
-	 * @param string $key
-	 * @param mixed $default
-	 *
-	 * @return mixed
-	 */
-	protected function slider_settings( $key = null, $default = null ) {
-		$settings = $this->get_meta( '_content_slider_settings' );
-
-		if ( empty( $key ) ) {
-			return $settings;
-		}
-
-		return isset( $settings[ $key ] ) ? $settings[ $key ] : $default;
-	}
-
-	/**
-	 * Get slider content animation
-	 *
-	 * @param string $default
-	 *
-	 * @return string
-	 */
-	protected function content_animation( $default = null ) {
-		return $this->slider_settings( 'content_animation', $default );
-	}
-
-	/**
-	 * Get content max width
-	 *
-	 * @param string $default
-	 *
-	 * @return string
-	 */
-	protected function content_width( $default = null ) {
-		return $this->slider_settings( 'content_width', $default );
-	}
-
-	/**
-	 * Get slider height
-	 *
-	 * @param string $default
-	 *
-	 * @return string
-	 */
-	protected function slide_height( $default = null ) {
-		return $this->slider_settings( 'slide_height', $default );
-	}
-
-	/**
-	 * Get slide padding
-	 *
-	 * @param string $key
-	 * @param array|string $default
-	 *
-	 * @return array|string
-	 */
-	protected function slide_padding( $key = null, $default = null ) {
-		$padding = (array) $this->slider_settings( 'slide_padding', $default );
-
-		if ( empty( $key ) ) {
-			return $padding;
-		}
-
-		if ( ! in_array( $key, array( 'top', 'right', 'bottom', 'left' ) ) ) {
-			return '';
-		}
-
-		return isset( $padding[ $key ] ) ? $padding[ $key ] : $default;
-	}
-
-	/**
-	 * Get content setting
-	 *
-	 * @param array $slide
-	 * @param string $key
-	 * @param mixed $default
-	 *
-	 * @return mixed
-	 */
-	protected function get_content_setting( $slide, $key, $default = null ) {
-		return isset( $slide[ $key ] ) ? $slide[ $key ] : $default;
-	}
-
-	/**
-	 * Get link type
-	 *
-	 * @param array $slide
-	 *
-	 * @return null|string
-	 */
-	private function link_type( $slide ) {
-		$valid     = array( 'full', 'button' );
-		$link_type = $this->get_content_setting( $slide, 'link_type', 'full' );
-
-		return in_array( $link_type, $valid ) ? $link_type : 'full';
-	}
-
-	/**
-	 * Get slide target
-	 *
-	 * @param array $slide
-	 *
-	 * @return null|string
-	 */
-	private function link_target( $slide ) {
-		$valid       = array( '_self', '_blank' );
-		$link_target = $this->get_content_setting( $slide, 'link_target', '_self' );
-
-		return in_array( $link_target, $valid ) ? $link_target : '_self';
-	}
-
-	/**
-	 * Get slide link
-	 *
-	 * @param array $slide
-	 *
-	 * @return string
-	 */
-	private function slide_link( $slide ) {
-		$slide_link = $this->get_content_setting( $slide, 'slide_link' );
-
-		return Utils::is_url( $slide_link ) ? esc_url( $slide_link ) : '';
 	}
 
 	/**
@@ -393,7 +318,7 @@ class View extends AbstractView {
 
 				$final_css .= $property . ':' . $value . ';';
 			}
-			$final_css .= '}' . PHP_EOL;
+			$final_css .= '}';
 		}
 
 		return empty( $final_css ) ? '' : $final_css;

@@ -1,0 +1,35 @@
+@import "../variables";
+
+.mdl-tabs--vertical {
+	display: flex;
+	flex-direction: row;
+
+	.mdl-tabs__tab-bar {
+		flex-direction: column;
+		padding-bottom: 2rem;
+		height: inherit;
+		border-bottom: none;
+		border-right: 1px solid $tab-border-color;
+	}
+
+	.mdl-tabs__tab {
+		box-sizing: border-box;
+		letter-spacing: 2px;
+		text-align: left;
+		width: 100%;
+	}
+
+	&.is-upgraded .mdl-tabs__tab.is-active {
+		border-right: 2px solid $tab-highlight-color;
+
+		&:after {
+			content: inherit;
+			height: 0;
+		}
+	}
+
+	.mdl-tabs__panel,
+	.mdl-tabs__panel.is-active {
+		padding: 0 2rem;
+	}
+}

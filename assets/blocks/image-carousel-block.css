@@ -1,0 +1,23 @@
+.carousel-slider-container {
+    position: relative;
+}
+
+.carousel-slider-overlay {
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+}
+
+img.carousel-slider-block-logo {
+    width: 48px;
+    height: 48px;
+    display: inline-block;
+}
+
+.carousel-slider-block-title{
+    display: inline-block;
+    line-height: 1.2;
+    margin: 0 0 10px !important;
+}

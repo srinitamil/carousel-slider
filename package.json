@@ -1,27 +1,56 @@
 {
-  "name": "carousel-slider",
-  "version": "2.0.0",
-  "description": "The Easiest Way to Create SEO friendly Image, Logo, Video, Post and WooCommerce Product Carousel.",
-  "author": {
-    "name": "Sayful Islam",
-    "email": "sayful.islam001@gmail.com",
-    "url": "https://profiles.wordpress.org/sayful"
-  },
-  "license": "GPL-3.0-only",
-  "devDependencies": {
-    "gulp": "^3.9.1",
-    "gulp-autoprefixer": "^4.0.0",
-    "gulp-concat": "^2.6.1",
-    "gulp-file": "^0.4.0",
-    "gulp-livereload": "^3.8.1",
-    "gulp-sass": "^3.1.0",
-    "gulp-sourcemaps": "^2.6.1",
-    "gulp-uglify": "^3.0.0",
-    "rollup": "^0.62.0",
-    "rollup-plugin-buble": "^0.19.2"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sayful1/carousel-slider.git"
-  }
+	"name": "carousel-slider",
+	"version": "2.0.0",
+	"description": "The Easiest Way to Create SEO friendly Image, Logo, Video, Post and WooCommerce Product Carousel.",
+	"author": {
+		"name": "Sayful Islam",
+		"email": "sayful.islam001@gmail.com",
+		"url": "https://profiles.wordpress.org/sayful"
+	},
+	"license": "GPL-3.0-only",
+	"scripts": {
+		"dev": "cross-env NODE_ENV=development webpack --watch --progress --hide-modules",
+		"build": "cross-env NODE_ENV=production webpack --progress --hide-modules"
+	},
+	"dependencies": {
+		"vue": "^2.5.17",
+		"vue-router": "^3.0.1"
+	},
+	"browserslist": [
+		"> 1%",
+		"last 2 versions",
+		"not ie <= 8"
+	],
+	"devDependencies": {
+		"gulp": "^3.9.1",
+		"gulp-autoprefixer": "^4.0.0",
+		"gulp-concat": "^2.6.1",
+		"gulp-file": "^0.4.0",
+		"gulp-livereload": "^3.8.1",
+		"gulp-sass": "^3.1.0",
+		"gulp-sourcemaps": "^2.6.1",
+		"gulp-uglify": "^3.0.0",
+		"rollup": "^0.62.0",
+		"rollup-plugin-buble": "^0.19.2",
+		"autoprefixer": "^9.3.1",
+		"babel-core": "^6.26.0",
+		"babel-loader": "^7.1.2",
+		"babel-preset-env": "^1.6.0",
+		"babel-preset-stage-3": "^6.24.1",
+		"cross-env": "^5.0.5",
+		"css-loader": "^0.28.7",
+		"extract-text-webpack-plugin": "^3.0.2",
+		"file-loader": "^1.1.4",
+		"node-sass": "^4.5.3",
+		"optimize-css-assets-webpack-plugin": "^3.2.0",
+		"postcss-loader": "^3.0.0",
+		"sass-loader": "^6.0.6",
+		"vue-loader": "^13.0.5",
+		"vue-template-compiler": "^2.4.4",
+		"webpack": "^3.6.0"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/sayful1/carousel-slider.git"
+	}
 }

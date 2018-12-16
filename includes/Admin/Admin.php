@@ -22,9 +22,53 @@ class Admin {
 	public static function init() {
 		if ( is_null( self::$instance ) ) {
 			self::$instance = new self();
+
+			add_action( 'admin_menu', array( self::$instance, 'add_menu' ) );
 		}
 
 		return self::$instance;
+	}
+
+	/**
+	 * Add top level menu
+	 */
+	public static function add_menu() {
+		global $submenu;
+		$capability = 'manage_options';
+		$slug       = 'carousel-slider';
+
+		$hook = add_menu_page( __( 'Carousel Slider', 'carousel-slider' ), __( 'Carousel Slider', 'carousel-slider' ),
+			$capability, $slug, array( self::$instance, 'menu_page_callback' ), 'dashicons-slides', 6 );
+
+		$menus = array(
+			array( 'title' => __( 'All Sliders', 'carousel-slider' ), 'slug' => '#/' ),
+			array( 'title' => __( 'Settings', 'carousel-slider' ), 'slug' => '#/settings' ),
+			array( 'title' => __( 'Documentation', 'carousel-slider' ), 'slug' => '#/documentation' ),
+		);
+
+		if ( current_user_can( $capability ) ) {
+			foreach ( $menus as $menu ) {
+				$submenu[ $slug ][] = array( $menu['title'], $capability, 'admin.php?page=' . $slug . $menu['slug'] );
+			}
+		}
+
+		add_action( 'load-' . $hook, array( self::$instance, 'init_hooks' ) );
+	}
+
+	public static function menu_page_callback() {
+		echo '<div class="wrap"><div id="carousel-slider-admin"></div></div>';
+	}
+
+	/**
+	 * Load required styles and scripts
+	 */
+	public static function init_hooks() {
+		wp_enqueue_style( 'carousel-slider-admin-vue' );
+		wp_enqueue_script( 'carousel-slider-admin-vue' );
+		wp_localize_script( 'carousel-slider-admin-vue', 'carouselSliderSettings', array(
+			'root'  => esc_url_raw( rest_url( 'carousel-slider/v1' ) ),
+			'nonce' => wp_create_nonce( 'wp_rest' )
+		) );
 	}
 
 	/**
@@ -143,12 +187,12 @@ class Admin {
 
 			case 'usage':
 				?>
-                <input type="text" onmousedown="this.clicked = 1;"
-                       onfocus="if (!this.clicked) this.select(); else this.clicked = 2;"
-                       onclick="if (this.clicked === 2) this.select(); this.clicked = 0;"
-                       value="[carousel_slide id='<?php echo $post_id; ?>']"
-                       style="background-color: #f1f1f1;min-width: 250px;padding: 5px 8px;"
-                >
+				<input type="text" onmousedown="this.clicked = 1;"
+				       onfocus="if (!this.clicked) this.select(); else this.clicked = 2;"
+				       onclick="if (this.clicked === 2) this.select(); this.clicked = 0;"
+				       value="[carousel_slide id='<?php echo $post_id; ?>']"
+				       style="background-color: #f1f1f1;min-width: 250px;padding: 5px 8px;"
+				>
 				<?php
 				break;
 

@@ -41,15 +41,21 @@ class Script {
 	 */
 	public function register_styles() {
 		$styles = array(
-			'carousel-slider'       => array(
+			'carousel-slider'           => array(
 				'src'        => CAROUSEL_SLIDER_ASSETS . '/css/style.css',
 				'dependency' => array(),
 				'version'    => CAROUSEL_SLIDER_VERSION,
 				'media'      => 'all',
 			),
-			'carousel-slider-admin' => array(
+			'carousel-slider-admin'     => array(
 				'src'        => CAROUSEL_SLIDER_ASSETS . '/css/admin.css',
 				'dependency' => array( 'wp-color-picker' ),
+				'version'    => CAROUSEL_SLIDER_VERSION,
+				'media'      => 'all',
+			),
+			'carousel-slider-admin-vue' => array(
+				'src'        => CAROUSEL_SLIDER_ASSETS . '/css/admin-vue.css',
+				'dependency' => array(),
 				'version'    => CAROUSEL_SLIDER_VERSION,
 				'media'      => 'all',
 			),
@@ -67,25 +73,25 @@ class Script {
 		$suffix = ( defined( "SCRIPT_DEBUG" ) && SCRIPT_DEBUG ) ? '' : '.min';
 
 		$scripts = array(
-			'select2'               => array(
+			'select2'                      => array(
 				'src'        => CAROUSEL_SLIDER_ASSETS . '/lib/select2/select2' . $suffix . '.js',
 				'dependency' => array( 'jquery' ),
 				'version'    => '4.0.5',
 				'in_footer'  => true,
 			),
-			'jquery-tiptip'         => array(
+			'jquery-tiptip'                => array(
 				'src'        => CAROUSEL_SLIDER_ASSETS . '/lib/jquery-tiptip/jquery.tipTip' . $suffix . '.js',
 				'dependency' => array( 'jquery' ),
 				'version'    => '1.3',
 				'in_footer'  => true,
 			),
-			'wp-color-picker-alpha' => array(
+			'wp-color-picker-alpha'        => array(
 				'src'        => CAROUSEL_SLIDER_ASSETS . '/lib/wp-color-picker-alpha/wp-color-picker-alpha' . $suffix . '.js',
 				'dependency' => array( 'jquery', 'wp-color-picker' ),
 				'version'    => '2.1.3',
 				'in_footer'  => true,
 			),
-			'carousel-slider-admin' => array(
+			'carousel-slider-admin'        => array(
 				'src'        => CAROUSEL_SLIDER_ASSETS . '/js/admin' . $suffix . '.js',
 				'dependency' => array(
 					'jquery',
@@ -100,24 +106,36 @@ class Script {
 				'version'    => CAROUSEL_SLIDER_VERSION,
 				'in_footer'  => true,
 			),
-			'owl-carousel'          => array(
+			'owl-carousel'                 => array(
 				'src'        => CAROUSEL_SLIDER_ASSETS . '/lib/owl-carousel/owl.carousel' . $suffix . '.js',
 				'dependency' => array( 'jquery' ),
 				'version'    => '2.3.4',
 				'in_footer'  => true,
 			),
-			'magnific-popup'        => array(
+			'magnific-popup'               => array(
 				'src'        => CAROUSEL_SLIDER_ASSETS . '/lib/magnific-popup/jquery.magnific-popup' . $suffix . '.js',
 				'dependency' => array( 'jquery' ),
 				'version'    => '1.1.0',
 				'in_footer'  => true,
 			),
-			'carousel-slider'       => array(
+			'carousel-slider'              => array(
 				'src'        => CAROUSEL_SLIDER_ASSETS . '/js/script' . $suffix . '.js',
 				'dependency' => array( 'jquery', 'owl-carousel', 'magnific-popup' ),
 				'version'    => CAROUSEL_SLIDER_VERSION,
 				'in_footer'  => true,
 			),
+			'carousel-slider-admin-vendor' => array(
+				'src'        => CAROUSEL_SLIDER_ASSETS . '/js/vendor.js',
+				'version'    => CAROUSEL_SLIDER_VERSION,
+				'dependency' => array(),
+				'in_footer'  => true
+			),
+			'carousel-slider-admin-vue'    => array(
+				'src'        => CAROUSEL_SLIDER_ASSETS . '/js/admin-vue.js',
+				'dependency' => array( 'jquery', 'carousel-slider-admin-vendor' ),
+				'version'    => CAROUSEL_SLIDER_VERSION,
+				'in_footer'  => true
+			)
 		);
 
 		foreach ( $scripts as $handle => $script ) {
@@ -169,52 +187,53 @@ class Script {
 			return;
 		}
 		?>
-        <template id="carouselSliderGalleryUrlTemplate" style="display: none;">
-            <div class="carousel_slider-fields">
-                <label class="setting">
-                    <span class="name"><?php esc_html_e( 'URL', 'carousel-slider' ); ?></span>
-                    <input type="url" name="_images_urls[url][]" value="" autocomplete="off">
-                </label>
-                <label class="setting">
-                    <span class="name"><?php esc_html_e( 'Title', 'carousel-slider' ); ?></span>
-                    <input type="text" name="_images_urls[title][]" value="" autocomplete="off">
-                </label>
-                <label class="setting">
-                    <span class="name"><?php esc_html_e( 'Caption', 'carousel-slider' ); ?></span>
-                    <textarea name="_images_urls[caption][]"></textarea>
-                </label>
-                <label class="setting">
-                    <span class="name"><?php esc_html_e( 'Alt Text', 'carousel-slider' ); ?></span>
-                    <input type="text" name="_images_urls[alt][]" value="" autocomplete="off">
-                </label>
-                <label class="setting">
-                    <span class="name"><?php esc_html_e( 'Link To URL', 'carousel-slider' ); ?></span>
-                    <input type="text" name="_images_urls[link_url][]" value="" autocomplete="off">
-                </label>
-                <div class="actions">
-                    <span><span class="dashicons dashicons-move"></span></span>
-                    <span class="add_row"><span class="dashicons dashicons-plus-alt"></span></span>
-                    <span class="delete_row"><span class="dashicons dashicons-trash"></span></span>
-                </div>
-            </div>
-        </template>
-        <svg width="1" height="1" style="display: none;">
-            <symbol id="icon-trash" viewBox="0 0 20 20">
-                <path d="M12 4h3c0.55 0 1 0.45 1 1v1h-13v-1c0-0.55 0.45-1 1-1h3c0.23-1.14 1.29-2 2.5-2s2.27 0.86 2.5 2zM8 4h3c-0.21-0.58-0.85-1-1.5-1s-1.29 0.42-1.5 1zM4 7h11v10c0 0.55-0.45 1-1 1h-9c-0.55 0-1-0.45-1-1v-10zM7 16v-7h-1v7h1zM10 16v-7h-1v7h1zM13 16v-7h-1v7h1z"></path>
-            </symbol>
-            <symbol id="icon-angle-down" viewBox="0 0 20 20">
-                <path d="M5 6l5 5 5-5 2 1-7 7-7-7z"></path>
-            </symbol>
-            <symbol id="icon-angle-up" viewBox="0 0 20 20">
-                <path d="M15 14l-5-5-5 5-2-1 7-7 7 7z"></path>
-            </symbol>
-            <symbol id="icon-angle-down-alt" viewBox="0 0 20 20">
-                <path d="M9 2h2v12l4-4 2 1-7 7-7-7 2-1 4 4v-12z"></path>
-            </symbol>
-            <symbol id="icon-angle-up-alt" viewBox="0 0 20 20">
-                <path d="M11 18h-2v-12l-4 4-2-1 7-7 7 7-2 1-4-4v12z"></path>
-            </symbol>
-        </svg>
+		<template id="carouselSliderGalleryUrlTemplate" style="display: none;">
+			<div class="carousel_slider-fields">
+				<label class="setting">
+					<span class="name"><?php esc_html_e( 'URL', 'carousel-slider' ); ?></span>
+					<input type="url" name="_images_urls[url][]" value="" autocomplete="off">
+				</label>
+				<label class="setting">
+					<span class="name"><?php esc_html_e( 'Title', 'carousel-slider' ); ?></span>
+					<input type="text" name="_images_urls[title][]" value="" autocomplete="off">
+				</label>
+				<label class="setting">
+					<span class="name"><?php esc_html_e( 'Caption', 'carousel-slider' ); ?></span>
+					<textarea name="_images_urls[caption][]"></textarea>
+				</label>
+				<label class="setting">
+					<span class="name"><?php esc_html_e( 'Alt Text', 'carousel-slider' ); ?></span>
+					<input type="text" name="_images_urls[alt][]" value="" autocomplete="off">
+				</label>
+				<label class="setting">
+					<span class="name"><?php esc_html_e( 'Link To URL', 'carousel-slider' ); ?></span>
+					<input type="text" name="_images_urls[link_url][]" value="" autocomplete="off">
+				</label>
+				<div class="actions">
+					<span><span class="dashicons dashicons-move"></span></span>
+					<span class="add_row"><span class="dashicons dashicons-plus-alt"></span></span>
+					<span class="delete_row"><span class="dashicons dashicons-trash"></span></span>
+				</div>
+			</div>
+		</template>
+		<svg width="1" height="1" style="display: none;">
+			<symbol id="icon-trash" viewBox="0 0 20 20">
+				<path
+					d="M12 4h3c0.55 0 1 0.45 1 1v1h-13v-1c0-0.55 0.45-1 1-1h3c0.23-1.14 1.29-2 2.5-2s2.27 0.86 2.5 2zM8 4h3c-0.21-0.58-0.85-1-1.5-1s-1.29 0.42-1.5 1zM4 7h11v10c0 0.55-0.45 1-1 1h-9c-0.55 0-1-0.45-1-1v-10zM7 16v-7h-1v7h1zM10 16v-7h-1v7h1zM13 16v-7h-1v7h1z"></path>
+			</symbol>
+			<symbol id="icon-angle-down" viewBox="0 0 20 20">
+				<path d="M5 6l5 5 5-5 2 1-7 7-7-7z"></path>
+			</symbol>
+			<symbol id="icon-angle-up" viewBox="0 0 20 20">
+				<path d="M15 14l-5-5-5 5-2-1 7-7 7 7z"></path>
+			</symbol>
+			<symbol id="icon-angle-down-alt" viewBox="0 0 20 20">
+				<path d="M9 2h2v12l4-4 2 1-7 7-7-7 2-1 4 4v-12z"></path>
+			</symbol>
+			<symbol id="icon-angle-up-alt" viewBox="0 0 20 20">
+				<path d="M11 18h-2v-12l-4 4-2-1 7-7 7 7-2 1-4-4v12z"></path>
+			</symbol>
+		</svg>
 		<?php
 	}
 

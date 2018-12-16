@@ -1,0 +1,105 @@
+@import "../variables";
+
+.mdl-slider {
+	max-width: 25em;
+	display: flex;
+	align-items: center;
+
+	.mdl-slider__range {
+		-webkit-appearance: none;
+		background-color: $range-bg-focus-color;
+		height: 5px;
+		padding: 0;
+		transition: background 0.3s;
+		width: 200px;
+
+		&:focus {
+			box-shadow: none;
+			outline: none;
+		}
+
+		&:hover {
+			background-color: $range-bg-color;
+		}
+
+		&::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			background-color: $range-color;
+			border-radius: 50%;
+			height: 15px;
+			width: 15px;
+		}
+
+		&::-webkit-slider-thumb {
+			-webkit-appearance: none;
+			width: 15px;
+			height: 15px;
+			border: none;
+			border-radius: 50%;
+			background-color: $range-color;
+		}
+
+		&::-moz-range-thumb {
+			width: 15px;
+			height: 15px;
+			border: none;
+			border-radius: 50%;
+			background-color: $range-color;
+		}
+
+		&::-ms-thumb {
+			width: 15px;
+			height: 15px;
+			border-radius: 50%;
+			border: 0;
+			background-color: $range-color;
+		}
+
+		&::-moz-range-track {
+			border: inherit;
+			background: transparent;
+		}
+
+		&::-ms-track {
+			border: inherit;
+			color: transparent;
+			background: transparent;
+		}
+
+		&::-ms-fill-lower,
+		&::-ms-fill-upper {
+			background: transparent;
+		}
+
+		&::-ms-tooltip {
+			display: none;
+		}
+	}
+
+	.mdl-slider__input-container {
+		padding: 0 10px;
+
+		.mdl-slider__input {
+			width: 4em;
+		}
+	}
+
+	.mdl-slider__reset {
+		display: inline-flex;
+		float: left;
+
+		&-icon {
+			padding: 4px;
+		}
+	}
+}
+
+.mdl-slider__reset-icon {
+	.mdl-button--colored & {
+		fill: unquote("rgb(#{$color-primary})");
+	}
+
+	.mdl-button--accent & {
+		fill: unquote("rgb(#{$color-accent})");
+	}
+}

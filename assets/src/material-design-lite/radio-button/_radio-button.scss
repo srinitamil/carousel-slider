@@ -1,0 +1,26 @@
+@import "../variables";
+
+.mdl-radio-button {
+	display: inline-flex;
+
+	.mdl-radio-button__input {
+		display: none;
+	}
+
+	.mdl-radio-button__label {
+		background: rgba(0, 0, 0, .05);
+		color: #555;
+		margin: 0;
+		padding: 0.5em 1em;
+		font-size: 14px;
+		flex-grow: 0;
+		text-align: center;
+	}
+
+	&.is-checked {
+		.mdl-radio-button__label {
+			background-color: $radio-color;
+			color: #fff;
+		}
+	}
+}

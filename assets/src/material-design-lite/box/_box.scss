@@ -1,0 +1,37 @@
+$black: hsl(0, 0%, 4%) !default;
+$white: hsl(0, 0%, 100%) !default;
+$blue: hsl(217, 71%, 53%) !default;
+
+$box-color: hsl(0, 0%, 29%) !default;
+$box-background-color: $white !default;
+$box-radius: 6px !default;
+$box-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px rgba($black, 0.1) !default;
+$box-padding: 1.25rem !default;
+
+$box-link-hover-shadow: 0 2px 3px rgba($black, 0.1), 0 0 0 1px $blue !default;
+$box-link-active-shadow: inset 0 1px 2px rgba($black, 0.2), 0 0 0 1px $blue !default;
+
+.box {
+	background-color: $box-background-color;
+	border-radius: $box-radius;
+	box-shadow: $box-shadow;
+	color: $box-color;
+	display: block;
+	padding: $box-padding;
+
+	&:not(:last-child) {
+		margin-bottom: 1.5rem;
+	}
+}
+
+a.box {
+	&:hover,
+	&:focus {
+
+		box-shadow: $box-link-hover-shadow;
+	}
+
+	&:active {
+		box-shadow: $box-link-active-shadow;
+	}
+}

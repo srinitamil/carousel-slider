@@ -1,6 +1,6 @@
 <template>
 	<div class="carousel-slider-list-page">
-		<h1 class="wp-heading-inline">Documentation</h1>
+		<h1 class="wp-heading-inline">Help</h1>
 		<div class="clear"></div>
 
 		<div class="cs-columns">

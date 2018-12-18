@@ -1,5 +1,9 @@
 <template>
-	<button class="mdl-button mdl-js-button" :class="getClass" :disabled="disabled" @click="$emit('click')">
+	<button class="mdl-button mdl-js-button"
+			:class="getClass"
+			:disabled="disabled"
+			@click="$emit('click', $event)"
+	>
 		<slot></slot>
 	</button>
 </template>

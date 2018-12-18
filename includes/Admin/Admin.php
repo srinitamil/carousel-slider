@@ -43,7 +43,7 @@ class Admin {
 		$menus = array(
 			array( 'title' => __( 'All Sliders', 'carousel-slider' ), 'slug' => '#/' ),
 			array( 'title' => __( 'Settings', 'carousel-slider' ), 'slug' => '#/settings' ),
-			array( 'title' => __( 'Documentation', 'carousel-slider' ), 'slug' => '#/documentation' ),
+			array( 'title' => __( 'Help', 'carousel-slider' ), 'slug' => '#/help' ),
 		);
 
 		if ( current_user_can( $capability ) ) {

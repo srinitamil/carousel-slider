@@ -66,8 +66,34 @@ class Admin {
 		wp_enqueue_style( 'carousel-slider-admin-vue' );
 		wp_enqueue_script( 'carousel-slider-admin-vue' );
 		wp_localize_script( 'carousel-slider-admin-vue', 'carouselSliderSettings', array(
-			'root'  => esc_url_raw( rest_url( 'carousel-slider/v1' ) ),
-			'nonce' => wp_create_nonce( 'wp_rest' )
+			'root'        => esc_url_raw( rest_url( 'carousel-slider/v1' ) ),
+			'nonce'       => wp_create_nonce( 'wp_rest' ),
+			'sliderTypes' => Utils::get_slide_types( false ),
+			'columns'     => array(
+				'title'      => [ 'label' => __( 'Slider Title', 'carousel-slider' ) ],
+				'sliderType' => [ 'label' => __( 'Slider Type', 'carousel-slider' ) ],
+				'shortcode'  => [ 'label' => __( 'Shortcode', 'carousel-slider' ) ],
+			),
+			'actions'     => array(
+				'publish' => array(
+					array( 'key' => 'edit', 'label' => __( 'Edit', 'carousel-slider' ) ),
+					array( 'key' => 'view', 'label' => __( 'Preview', 'carousel-slider' ) ),
+					array( 'key' => 'trash', 'label' => __( 'Trash', 'carousel-slider' ) ),
+				),
+				'trash'   => array(
+					array( 'key' => 'restore', 'label' => __( 'Restore', 'carousel-slider' ) ),
+					array( 'key' => 'delete', 'label' => __( 'Delete Permanently', 'carousel-slider' ) ),
+				),
+			),
+			'bulkActions' => array(
+				'publish' => array(
+					array( 'key' => 'trash', 'label' => __( 'Move to Trash', 'carousel-slider' ) ),
+				),
+				'trash'   => array(
+					array( 'key' => 'restore', 'label' => __( 'Restore', 'carousel-slider' ) ),
+					array( 'key' => 'delete', 'label' => __( 'Delete Permanently', 'carousel-slider' ) ),
+				),
+			),
 		) );
 	}
 

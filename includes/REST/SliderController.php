@@ -50,6 +50,13 @@ class SliderController extends ApiController {
 				'args'     => $this->create_item_args(),
 			),
 		) );
+		register_rest_route( $namespace, '/sliders/batch', array(
+			array(
+				'methods'  => \WP_REST_Server::DELETABLE,
+				'callback' => array( $this, 'delete_items' ),
+				'args'     => $this->delete_items_args(),
+			),
+		) );
 		register_rest_route( $namespace, '/sliders/(?P<id>\d+)', array(
 			array(
 				'methods'  => \WP_REST_Server::READABLE,
@@ -63,6 +70,7 @@ class SliderController extends ApiController {
 			array(
 				'methods'  => \WP_REST_Server::DELETABLE,
 				'callback' => array( $this, 'delete_item' ),
+				'args'     => $this->delete_item_args(),
 			),
 		) );
 	}
@@ -80,7 +88,10 @@ class SliderController extends ApiController {
 				__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
 		}
 
-		$args = array(
+		$post_status = $request->get_param( 'post_status' );
+		$post_status = in_array( $post_status, array( 'publish', 'trash' ) ) ? $post_status : 'publish';
+		$args        = array(
+			'post_status'    => $post_status,
 			'posts_per_page' => $request->get_param( 'per_page' ),
 		);
 
@@ -182,7 +193,8 @@ class SliderController extends ApiController {
 	 * @return \WP_Error|\WP_REST_Response Response object on success, or WP_Error object on failure.
 	 */
 	public function delete_item( $request ) {
-		$id = (int) $request->get_param( 'id' );
+		$id    = (int) $request->get_param( 'id' );
+		$force = $request->get_param( 'force' );
 
 		if ( ! current_user_can( 'publish_pages', $id ) ) {
 			return $this->respond_forbidden( 'rest_forbidden_context',
@@ -196,12 +208,35 @@ class SliderController extends ApiController {
 				__( 'The requested slider was not found.', 'carousel-slider' ) );
 		}
 
-		if ( ! $slider->delete() ) {
+		if ( in_array( $force, array( 'false', false ), true ) ) {
+			$result = $slider->trash();
+		} else {
+			$result = $slider->delete();
+		}
+
+		if ( ! $result ) {
 			return $this->respond_internal_server_error( 'rest_cannot_delete',
 				__( 'There was an error deleting the slider.', 'carousel-slider' ) );
 		}
 
 		return $this->respond_ok();
+	}
+
+	/**
+	 * Deletes one item from the collection.
+	 *
+	 * @param \WP_REST_Request $request Full data about the request.
+	 *
+	 * @return \WP_Error|\WP_REST_Response Response object on success, or WP_Error object on failure.
+	 */
+	public function delete_items( $request ) {
+		$ids   = (int) $request->get_param( 'ids' );
+		$force = $request->get_param( 'force' );
+
+		if ( ! current_user_can( 'publish_pages' ) ) {
+			return $this->respond_forbidden( 'rest_forbidden_context',
+				__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
+		}
 	}
 
 	/**
@@ -422,5 +457,42 @@ class SliderController extends ApiController {
 		);
 
 		return $args;
+	}
+
+	/**
+	 * Delete item args
+	 *
+	 * @return array
+	 */
+	private function delete_item_args() {
+		return array(
+			'force' => array(
+				'description' => esc_html__( 'Whether to bypass trash and force deletion.', 'carousel-slider' ),
+				'type'        => 'boolean',
+				'required'    => false,
+				'default'     => false,
+			),
+		);
+	}
+
+	/**
+	 * Delete items args
+	 *
+	 * @return array
+	 */
+	private function delete_items_args() {
+		return array(
+			'ids'   => array(
+				'description' => esc_html__( 'List of ids to be deleted.', 'carousel-slider' ),
+				'type'        => 'array',
+				'required'    => true,
+			),
+			'force' => array(
+				'description' => esc_html__( 'Whether to bypass trash and force deletion.', 'carousel-slider' ),
+				'type'        => 'boolean',
+				'required'    => false,
+				'default'     => false,
+			),
+		);
 	}
 }

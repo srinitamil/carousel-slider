@@ -530,7 +530,7 @@ class AbstractSlider implements \JsonSerializable {
 			'posts_per_page' => - 1,
 			'offset'         => 0,
 			'orderby'        => 'ID',
-			'order'          => 'ASC',
+			'order'          => 'DESC',
 		);
 
 		$args = wp_parse_args( $args, $defaults );
@@ -643,7 +643,7 @@ class AbstractSlider implements \JsonSerializable {
 	 * @return bool
 	 */
 	public function trash() {
-		if ( wp_delete_post( $this->get_id(), false ) ) {
+		if ( wp_trash_post( $this->get_id() ) ) {
 			return true;
 		}
 

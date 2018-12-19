@@ -66,15 +66,16 @@ class Admin {
 		wp_enqueue_style( 'carousel-slider-admin-vue' );
 		wp_enqueue_script( 'carousel-slider-admin-vue' );
 		wp_localize_script( 'carousel-slider-admin-vue', 'carouselSliderSettings', array(
-			'root'        => esc_url_raw( rest_url( 'carousel-slider/v1' ) ),
-			'nonce'       => wp_create_nonce( 'wp_rest' ),
-			'sliderTypes' => Utils::get_slide_types( false ),
-			'columns'     => array(
+			'root'         => esc_url_raw( rest_url( 'carousel-slider/v1' ) ),
+			'nonce'        => wp_create_nonce( 'wp_rest' ),
+			'sliderTypes'  => Utils::get_slide_types( false ),
+			'countSliders' => static::count_sliders(),
+			'columns'      => array(
 				array( 'key' => 'title', 'label' => __( 'Slider Title', 'carousel-slider' ) ),
 				array( 'key' => 'slider-type', 'label' => __( 'Slider Type', 'carousel-slider' ) ),
 				array( 'key' => 'shortcode', 'label' => __( 'Shortcode', 'carousel-slider' ) ),
 			),
-			'actions'     => array(
+			'actions'      => array(
 				'publish' => array(
 					array( 'key' => 'edit', 'label' => __( 'Edit', 'carousel-slider' ) ),
 					array( 'key' => 'view', 'label' => __( 'Preview', 'carousel-slider' ) ),
@@ -85,7 +86,7 @@ class Admin {
 					array( 'key' => 'delete', 'label' => __( 'Delete Permanently', 'carousel-slider' ) ),
 				),
 			),
-			'bulkActions' => array(
+			'bulkActions'  => array(
 				'publish' => array(
 					array( 'key' => 'trash', 'label' => __( 'Move to Trash', 'carousel-slider' ) ),
 				),
@@ -114,6 +115,23 @@ class Admin {
 		// Add custom link to media gallery
 		add_filter( "attachment_fields_to_edit", array( $this, "attachment_fields_to_edit" ), null, 2 );
 		add_filter( "attachment_fields_to_save", array( $this, "attachment_fields_to_save" ), null, 2 );
+	}
+
+	/**
+	 * Get sliders counts
+	 *
+	 * @return array
+	 */
+	private static function count_sliders() {
+		$counts   = array();
+		$_sliders = wp_count_posts( self::POST_TYPE );
+		foreach ( $_sliders as $status => $count ) {
+			if ( in_array( $status, array( 'publish', 'trash' ) ) ) {
+				$counts[ $status ] = intval( $count );
+			}
+		}
+
+		return $counts;
 	}
 
 	/**

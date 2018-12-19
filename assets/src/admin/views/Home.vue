@@ -1,6 +1,18 @@
 <template>
 	<div class="carousel-slider-list-page">
 		<h1 class="wp-heading-inline">Sliders</h1>
+		<div class="clear"></div>
+
+		<ul class="status-lists">
+			<li class="publish">
+				<a href="#" :class="{current: postStatus === 'publish'}" @click="changeStatus('publish')">Published
+					<span class="count">({{counts.publish}})</span></a>
+			</li>
+			<li class="trash">
+				<a href="#" :class="{current: postStatus === 'trash'}" @click="changeStatus('trash')">Trash
+					<span class="count">({{counts.trash}})</span></a>
+			</li>
+		</ul>
 
 		<list-table
 				:columns="columns"
@@ -48,6 +60,7 @@
 				columns: [],
 				actions: [],
 				bulkActions: [],
+				counts: {},
 			}
 		},
 		mounted() {
@@ -56,6 +69,7 @@
 			this.columns = settings.columns;
 			this.actions = settings.actions.publish;
 			this.bulkActions = settings.bulkActions.publish;
+			this.counts = settings.countSliders;
 			this.getItems();
 		},
 		methods: {
@@ -68,6 +82,18 @@
 			closeModal() {
 				this.modalActive = false;
 			},
+			changeStatus(status) {
+				let settings = window.carouselSliderSettings;
+				this.postStatus = status;
+				if ('trash' === this.postStatus) {
+					this.actions = settings.actions.trash;
+					this.bulkActions = settings.bulkActions.trash;
+				} else {
+					this.actions = settings.actions.publish;
+					this.bulkActions = settings.bulkActions.publish;
+				}
+				this.getItems();
+			},
 			getItems() {
 				let $ = window.jQuery, self = this;
 				$.ajax({
@@ -75,25 +101,71 @@
 					method: 'GET',
 					data: {
 						per_page: 20,
+						post_status: self.postStatus,
 					},
 					success: function (response) {
 						if (response.data) {
 							self.rows = response.data;
 						}
+					},
+					error: function () {
+						self.rows = [];
+					}
+				});
+			},
+			trashItem(item) {
+				let $ = window.jQuery, self = this;
+				$.ajax({
+					url: carouselSliderSettings.root + '/sliders/' + item.id,
+					method: 'DELETE',
+					data: {
+						force: false,
+					},
+					success: function () {
+						self.$delete(self.rows, self.rows.indexOf(item));
+						self.counts.publish -= 1;
+						self.counts.trash += 1;
+					}
+				})
+			},
+			deleteItem(item) {
+				let $ = window.jQuery, self = this;
+				$.ajax({
+					url: carouselSliderSettings.root + '/sliders/' + item.id,
+					method: 'DELETE',
+					data: {
+						force: true,
+					},
+					success: function () {
+						self.$delete(self.rows, self.rows.indexOf(item));
+						self.counts.trash -= 1;
 					}
 				})
 			},
 			onActionClick(action, row) {
 				if ('edit' === action) {
 				} else if ('trash' === action) {
-					if (confirm('Are you sure to delete permanently?')) {
+					if (confirm('Are you sure to move this item to trash?')) {
+						this.trashItem(row);
+					}
+				} else if ('restore' === action) {
+					if (confirm('Are you sure to restore this item?')) {
+					}
+				} else if ('delete' === action) {
+					if (confirm('Are you sure to delete this item permanently?')) {
+						this.deleteItem(row);
 					}
 				}
 			},
 			onBulkAction(action, items) {
-				if ('delete' === action) {
+				if ('trash' === action) {
+					if (confirm('Are you sure to trash all selected items?')) {
+					}
+				} else if ('delete' === action) {
 					if (confirm('Are you sure to delete all selected items permanently?')) {
-
+					}
+				} else if ('restore' === action) {
+					if (confirm('Are you sure to restore all selected items?')) {
 					}
 				}
 			}
@@ -108,6 +180,40 @@
 			bottom: 20px;
 			right: 20px;
 			z-index: 100;
+		}
+
+		.status-lists {
+			list-style: none;
+			margin: 8px 0;
+			padding: 0;
+			font-size: 13px;
+			float: left;
+			color: #666;
+
+			li {
+				display: inline-block;
+				margin: 0;
+				padding: 0;
+				white-space: nowrap;
+
+				a {
+					line-height: 1.5;
+					margin-right: .5em;
+					padding-right: .5em;
+					text-decoration: none;
+					border-right: 1px solid #666;
+
+					&.current {
+						font-weight: 600;
+						color: #000;
+					}
+
+				}
+
+				&:last-child a {
+					border-right: none;
+				}
+			}
 		}
 	}
 </style>

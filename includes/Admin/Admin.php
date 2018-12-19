@@ -70,9 +70,9 @@ class Admin {
 			'nonce'       => wp_create_nonce( 'wp_rest' ),
 			'sliderTypes' => Utils::get_slide_types( false ),
 			'columns'     => array(
-				'title'      => [ 'label' => __( 'Slider Title', 'carousel-slider' ) ],
-				'sliderType' => [ 'label' => __( 'Slider Type', 'carousel-slider' ) ],
-				'shortcode'  => [ 'label' => __( 'Shortcode', 'carousel-slider' ) ],
+				array( 'key' => 'title', 'label' => __( 'Slider Title', 'carousel-slider' ) ),
+				array( 'key' => 'slider-type', 'label' => __( 'Slider Type', 'carousel-slider' ) ),
+				array( 'key' => 'shortcode', 'label' => __( 'Shortcode', 'carousel-slider' ) ),
 			),
 			'actions'     => array(
 				'publish' => array(

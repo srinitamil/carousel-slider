@@ -11,7 +11,7 @@
 				@action:click="onActionClick"
 				@bulk:click="onBulkAction"
 		>
-			<template slot="sliderType" slot-scope="data">
+			<template slot="slider-type" slot-scope="data">
 				<span>{{sliderTypes[data.row.type]}}</span>
 			</template>
 			<template slot="shortcode" slot-scope="data">
@@ -45,7 +45,7 @@
 				sliderType: 'image-carousel',
 				postStatus: 'publish',
 				rows: [],
-				columns: {},
+				columns: [],
 				actions: [],
 				bulkActions: [],
 			}

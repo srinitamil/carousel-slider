@@ -57,19 +57,15 @@
 			<thead>
 			<tr>
 				<td v-if="showCb" class="manage-column column-cb check-column">
-					<input type="checkbox" v-model="selectAll">
+					<label class="screen-reader-text" for="cb-select-all-1">Select All</label>
+					<input id="cb-select-all-1" type="checkbox" v-model="selectAll">
 				</td>
-				<th v-for="(value, key) in columns" :class="[ 'manage-column', key,
-            { 'sortable': isSortable(value) },
-            { 'sorted': isSorted(key) },
-            { 'asc': isSorted(key) && sortOrder === 'asc' },
-            { 'desc': isSorted(key) && sortOrder === 'desc' }
-          ]">
-					<template v-if="!isSortable(value)">
-						{{ value.label }}
+				<th v-for="column in columns" :class="getHeadColumnClass(column.key, column)">
+					<template v-if="!isSortable(column)">
+						{{ column.label }}
 					</template>
-					<a href="#" v-else @click.prevent="handleSortBy(key)">
-						<span>{{ value.label }}</span>
+					<a href="#" v-else @click.prevent="handleSortBy(column.key)">
+						<span>{{ column.label }}</span>
 						<span class="sorting-indicator"></span>
 					</a>
 				</th>
@@ -78,9 +74,11 @@
 			<tfoot>
 			<tr>
 				<td v-if="showCb" class="manage-column column-cb check-column">
-					<input type="checkbox" v-model="selectAll">
+					<label class="screen-reader-text" for="cb-select-all-2">Select All</label>
+					<input id="cb-select-all-2" type="checkbox" v-model="selectAll">
 				</td>
-				<th v-for="(value, key) in columns" :class="['manage-column', key]">{{ value.label }}
+				<th v-for="column in columns" :class="getHeadColumnClass(column.key, column)">
+					{{ column.label }}
 				</th>
 			</tr>
 			</tfoot>
@@ -90,19 +88,24 @@
 					<th scope="row" class="check-column" v-if="showCb">
 						<input type="checkbox" name="item[]" :value="row[index]" v-model="checkedItems">
 					</th>
-					<td v-for="(value, key) in columns" :class="['manage-column', key]">
-						<slot :name="key" :row="row">
-							{{ row[key] }}
+					<td v-for="column in columns" :class="getBodyColumnClass(column.key, row)"
+						:data-colname="column.label">
+
+						<slot :name="column.key" :row="row">
+							{{ row[column.key] }}
 						</slot>
 
-						<div v-if="actionColumn === key && hasActions" class="row-actions">
+						<div v-if="actionColumn === column.key && hasActions" class="row-actions">
 							<slot name="row-actions" :row="row">
-                  <span v-for="action in actions" :class="action.key">
-                    <a href="#" @click.prevent="actionClicked(action.key, row)">{{ action.label }}</a>
-                    <template v-if="!hideActionSeparator(action.key)"> | </template>
-                  </span>
+                  				<span v-for="action in actions" :class="action.key">
+                    				<a href="#" @click.prevent="actionClicked(action.key, row)">{{ action.label }}</a>
+									<template v-if="!hideActionSeparator(action.key)"> | </template>
+                  				</span>
 							</slot>
 						</div>
+						<button type="button" class="toggle-row" v-if="actionColumn === column.key && hasActions">
+							<span class="screen-reader-text">Show more details</span>
+						</button>
 					</td>
 				</tr>
 			</template>
@@ -161,9 +164,11 @@
 
 		props: {
 			columns: {
-				type: Object,
+				type: Array,
 				required: true,
-				default: {},
+				default: function () {
+					return [];
+				},
 			},
 			rows: {
 				type: Array, // String, Number, Boolean, Function, Object, Array
@@ -313,6 +318,26 @@
 		},
 
 		methods: {
+
+			getHeadColumnClass(key, value) {
+				return [
+					'manage-column',
+					'manage-' + key,
+					{'column-primary': this.actionColumn === key},
+					{'sortable': this.isSortable(value)},
+					{'sorted': this.isSorted(key)},
+					{'asc': this.isSorted(key) && this.sortOrder === 'asc'},
+					{'desc': this.isSorted(key) && this.sortOrder === 'desc'}
+				]
+			},
+
+			getBodyColumnClass(key, item) {
+				return [
+					'manage-column',
+					'manage-' + key,
+					{'column-primary': this.actionColumn === key},
+				]
+			},
 
 			hideActionSeparator(action) {
 				return action === this.actions[this.actions.length - 1].key;

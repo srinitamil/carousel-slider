@@ -50,13 +50,6 @@ class SliderController extends ApiController {
 				'args'     => $this->create_item_args(),
 			),
 		) );
-		register_rest_route( $namespace, '/sliders/batch', array(
-			array(
-				'methods'  => \WP_REST_Server::DELETABLE,
-				'callback' => array( $this, 'delete_items' ),
-				'args'     => $this->delete_items_args(),
-			),
-		) );
 		register_rest_route( $namespace, '/sliders/(?P<id>\d+)', array(
 			array(
 				'methods'  => \WP_REST_Server::READABLE,
@@ -220,23 +213,6 @@ class SliderController extends ApiController {
 		}
 
 		return $this->respond_ok();
-	}
-
-	/**
-	 * Deletes one item from the collection.
-	 *
-	 * @param \WP_REST_Request $request Full data about the request.
-	 *
-	 * @return \WP_Error|\WP_REST_Response Response object on success, or WP_Error object on failure.
-	 */
-	public function delete_items( $request ) {
-		$ids   = (int) $request->get_param( 'ids' );
-		$force = $request->get_param( 'force' );
-
-		if ( ! current_user_can( 'publish_pages' ) ) {
-			return $this->respond_forbidden( 'rest_forbidden_context',
-				__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
-		}
 	}
 
 	/**

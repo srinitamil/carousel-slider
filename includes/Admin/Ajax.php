@@ -2,6 +2,8 @@
 
 namespace CarouselSlider\Admin;
 
+use CarouselSlider\Abstracts\AbstractSlider;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
@@ -20,9 +22,115 @@ class Ajax {
 			self::$instance = new self();
 
 			add_action( 'wp_ajax_add_content_slide', array( self::$instance, 'add_slide_template' ) );
+			add_action( 'wp_ajax_carousel_slider_restore_slider', array( self::$instance, 'restore_slider' ) );
+			add_action( 'wp_ajax_carousel_slider_restore_sliders', array( self::$instance, 'restore_sliders' ) );
+			add_action( 'wp_ajax_carousel_slider_delete_sliders', array( self::$instance, 'delete_sliders' ) );
 		}
 
 		return self::$instance;
+	}
+
+	/**
+	 * Restore trashed slider
+	 */
+	public function restore_slider() {
+		$id = isset( $_POST['id'] ) ? intval( $_POST['id'] ) : 0;
+
+		$slider = new AbstractSlider( $id );
+
+		if ( ! $slider->get_id() ) {
+			$response = array(
+				'success' => false,
+				'code'    => 'no_item_found',
+				'message' => __( 'The requested slider was not found.', 'carousel-slider' ),
+
+			);
+			$this->send_json( $response, 404 );
+		}
+
+		if ( ! $slider->restore() ) {
+			$response = array(
+				'success' => false,
+				'code'    => 'cannot_restore',
+				'message' => __( 'There was an error restoring the slider.', 'carousel-slider' ),
+
+			);
+			$this->send_json( $response, 500 );
+		}
+
+		$response = array( 'success' => true );
+		$this->send_json( $response, 200 );
+	}
+
+	/**
+	 * Restore sliders
+	 */
+	public function restore_sliders() {
+		$ids = isset( $_POST['ids'] ) && is_array( $_POST['ids'] ) ? $_POST['ids'] : array();
+		$ids = array_map( 'intval', $ids );
+
+		if ( count( $ids ) < 1 ) {
+			$response = array(
+				'success' => false,
+				'code'    => 'no_item_found',
+				'message' => __( 'The requested slider was not found.', 'carousel-slider' ),
+
+			);
+			$this->send_json( $response, 422 );
+		}
+
+		$success = 0;
+		foreach ( $ids as $id ) {
+			$slider = new AbstractSlider( $id );
+			if ( $slider->restore() ) {
+				$success += 1;
+			}
+		}
+
+		$response = array(
+			'success' => true,
+			'status'  => array( 'success' => $success, 'fail' => count( $ids ) - $success )
+		);
+		$this->send_json( $response, 200 );
+	}
+
+	/**
+	 * Delete sliders
+	 */
+	public function delete_sliders() {
+		$ids   = isset( $_POST['ids'] ) && is_array( $_POST['ids'] ) ? $_POST['ids'] : array();
+		$force = isset( $_POST['force'] ) ? $_POST['force'] : false;
+
+		$ids = array_map( 'intval', $ids );
+		if ( count( $ids ) < 1 ) {
+			$response = array(
+				'success' => false,
+				'code'    => 'no_item_found',
+				'message' => __( 'The requested slider was not found.', 'carousel-slider' ),
+
+			);
+			$this->send_json( $response, 422 );
+		}
+
+		$success = 0;
+		foreach ( $ids as $id ) {
+			$slider = new AbstractSlider( $id );
+			if ( in_array( $force, array( true, 'true' ), true ) ) {
+				$result = $slider->delete();
+			} else {
+				$result = $slider->trash();
+			}
+
+			if ( $result ) {
+				$success += 1;
+			}
+		}
+
+		$response = array(
+			'success' => true,
+			'status'  => array( 'success' => $success, 'fail' => count( $ids ) - $success )
+		);
+		$this->send_json( $response, 200 );
 	}
 
 	/**
@@ -249,7 +357,7 @@ class Ajax {
 	/**
 	 * Send json response with status code
 	 *
-	 * @param string $response
+	 * @param mixed $response
 	 * @param int $status_code
 	 */
 	private function send_json( $response, $status_code = 200 ) {

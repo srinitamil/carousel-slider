@@ -9,7 +9,7 @@ function isProduction() {
 	return process.env.NODE_ENV === 'production';
 }
 
-let devtool = '#eval-source-map';
+let devtool = '#source-map'; //'#eval-source-map';
 let appName = '[name].js';
 let entryPoints = {
 	'admin-vue': './assets/src/admin/main.js',

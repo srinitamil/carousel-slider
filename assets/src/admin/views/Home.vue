@@ -128,6 +128,22 @@
 					}
 				})
 			},
+			restoreItem(item) {
+				let $ = window.jQuery, self = this;
+				$.ajax({
+					url: ajaxurl,
+					method: 'POST',
+					data: {
+						action: 'carousel_slider_restore_slider',
+						id: item.id,
+					},
+					success: function () {
+						self.$delete(self.rows, self.rows.indexOf(item));
+						self.counts.publish += 1;
+						self.counts.trash -= 1;
+					}
+				})
+			},
 			deleteItem(item) {
 				let $ = window.jQuery, self = this;
 				$.ajax({
@@ -150,6 +166,7 @@
 					}
 				} else if ('restore' === action) {
 					if (confirm('Are you sure to restore this item?')) {
+						this.restoreItem(row);
 					}
 				} else if ('delete' === action) {
 					if (confirm('Are you sure to delete this item permanently?')) {
@@ -160,15 +177,73 @@
 			onBulkAction(action, items) {
 				if ('trash' === action) {
 					if (confirm('Are you sure to trash all selected items?')) {
+						this.trashItems(items);
 					}
 				} else if ('delete' === action) {
 					if (confirm('Are you sure to delete all selected items permanently?')) {
+						this.deleteItems(items);
 					}
 				} else if ('restore' === action) {
 					if (confirm('Are you sure to restore all selected items?')) {
+						this.restoreItems(items);
 					}
 				}
-			}
+			},
+			trashItems(items) {
+				let $ = window.jQuery, self = this;
+				$.ajax({
+					url: ajaxurl,
+					method: 'POST',
+					data: {
+						action: 'carousel_slider_delete_sliders',
+						ids: items,
+						force: false,
+					},
+					success: function (response) {
+						if (response.status.success) {
+							self.counts.publish -= response.status.success;
+							self.counts.trash += response.status.success;
+						}
+						self.getItems();
+					}
+				});
+			},
+			deleteItems(items) {
+				let $ = window.jQuery, self = this;
+				$.ajax({
+					url: ajaxurl,
+					method: 'POST',
+					data: {
+						action: 'carousel_slider_delete_sliders',
+						ids: items,
+						force: true,
+					},
+					success: function (response) {
+						if (response.status.success) {
+							self.counts.trash -= response.status.success;
+						}
+						self.getItems();
+					}
+				});
+			},
+			restoreItems(items) {
+				let $ = window.jQuery, self = this;
+				$.ajax({
+					url: ajaxurl,
+					method: 'POST',
+					data: {
+						action: 'carousel_slider_restore_sliders',
+						ids: items,
+					},
+					success: function (response) {
+						if (response.status.success) {
+							self.counts.publish += response.status.success;
+							self.counts.trash -= response.status.success;
+						}
+						self.getItems();
+					}
+				});
+			},
 		}
 	}
 </script>

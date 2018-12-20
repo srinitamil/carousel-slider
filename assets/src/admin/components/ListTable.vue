@@ -29,30 +29,37 @@
 				<span class="displaying-num">{{ itemsTotal }} items</span>
 
 				<span class="pagination-links" v-if="hasPagination">
-          <span v-if="disableFirst" class="tablenav-pages-navspan" aria-hidden="true">&laquo;</span>
-          <a v-else href="#" class="first-page" @click.prevent="goToPage(1);"><span
-				  aria-hidden="true">&laquo;</span></a>
+          			<span v-if="disableFirst" class="tablenav-pages-navspan" aria-hidden="true">&laquo;</span>
+				  	<a v-else href="#" class="first-page" @click.prevent="goToPage(1)">
+						<span aria-hidden="true">&laquo;</span>
+					</a>
 
-          <span v-if="disablePrev" class="tablenav-pages-navspan" aria-hidden="true">&lsaquo;</span>
-          <a v-else href="#" class="prev-page" @click.prevent="goToPage(currentPage - 1);"><span aria-hidden="true">&lsaquo;</span></a>
+          			<span v-if="disablePrev" class="tablenav-pages-navspan" aria-hidden="true">&lsaquo;</span>
+          			<a v-else href="#" class="prev-page" @click.prevent="goToPage(currentPage - 1)">
+			  			<span aria-hidden="true">&lsaquo;</span>
+		  			</a>
 
-          <span class="paging-input">
-            <span class="tablenav-paging-text">
-              <input class="current-page" type="text" name="paged" :value="currentPage" aria-describedby="table-paging"
-					 size="1" @keyup.enter="goToCustomPage"/> of
-              <span class='total-pages'>{{ totalPages }}</span>
-            </span>
-          </span>
+          			<span class="paging-input">
+            			<span class="tablenav-paging-text">
+              				<input class="current-page" type="text" name="paged" :value="currentPage"
+								   aria-describedby="table-paging" size="1" @keyup.enter="goToCustomPage"/> of
+              			<span class='total-pages'>{{ totalPages }}</span>
+            			</span>
+          			</span>
 
-          <span v-if="disableNext" class="tablenav-pages-navspan" aria-hidden="true">&rsaquo;</span>
-          <a v-else href="#" class="next-page" @click.prevent="goToPage(currentPage + 1);"><span aria-hidden="true">&rsaquo;</span></a>
+          			<span v-if="disableNext" class="tablenav-pages-navspan" aria-hidden="true">&rsaquo;</span>
+					<a v-else href="#" class="next-page" @click.prevent="goToPage(currentPage + 1)">
+			  			<span aria-hidden="true">&rsaquo;</span>
+		  			</a>
 
-          <span v-if="disableLast" class="tablenav-pages-navspan" aria-hidden="true">&raquo;</span>
-          <a v-else href="#" class="last-page" @click.prevent="goToPage(totalPages)"><span
-				  aria-hidden="true">&raquo;</span></a>
-        </span>
+          			<span v-if="disableLast" class="tablenav-pages-navspan" aria-hidden="true">&raquo;</span>
+          				<a v-else href="#" class="last-page" @click.prevent="goToPage(totalPages)">
+							<span aria-hidden="true">&raquo;</span>
+						</a>
+        			</span>
+				</div>
 			</div>
-		</div>
+
 		<table :class="tableClass">
 			<thead>
 			<tr>
@@ -88,7 +95,7 @@
 					<th scope="row" class="check-column" v-if="showCb">
 						<input type="checkbox" name="item[]" :value="row[index]" v-model="checkedItems">
 					</th>
-					<td v-for="column in columns" :class="getBodyColumnClass(column.key, row)"
+					<td v-for="column in columns" :class="getBodyColumnClass(column.key)"
 						:data-colname="column.label">
 
 						<slot :name="column.key" :row="row">
@@ -116,8 +123,7 @@
 		</table>
 		<div class="tablenav bottom">
 			<div class="alignleft actions bulkactions" v-if="hasBulkActions">
-				<label for="bulk-action-selector-top" class="screen-reader-text">Select bulk action</label>
-
+				<label for="bulk-action-selector-bottom" class="screen-reader-text">Select bulk action</label>
 				<select name="action" id="bulk-action-selector-bottom" v-model="bulkLocal">
 					<option value="-1">Bulk Actions</option>
 					<option v-for="action in bulkActions" :value="action.key">{{ action.label }}</option>
@@ -132,11 +138,13 @@
 
 				<span class="pagination-links" v-if="hasPagination">
           <span v-if="disableFirst" class="tablenav-pages-navspan" aria-hidden="true">&laquo;</span>
-          <a v-else href="#" class="first-page" @click.prevent="goToPage(1);"><span
+          <a v-else href="#" class="first-page" @click.prevent="goToPage(1)"><span
 				  aria-hidden="true">&laquo;</span></a>
 
           <span v-if="disablePrev" class="tablenav-pages-navspan" aria-hidden="true">&lsaquo;</span>
-          <a v-else href="#" class="prev-page" @click.prevent="goToPage(currentPage - 1);"><span aria-hidden="true">&lsaquo;</span></a>
+          <a v-else href="#" class="prev-page" @click.prevent="goToPage(currentPage - 1)">
+			  <span aria-hidden="true">&lsaquo;</span>
+		  </a>
 
           <span class="paging-input">
             <span class="tablenav-paging-text">
@@ -146,7 +154,7 @@
           </span>
 
           <span v-if="disableNext" class="tablenav-pages-navspan" aria-hidden="true">&rsaquo;</span>
-          <a v-else href="#" class="next-page" @click.prevent="goToPage(currentPage + 1);"><span aria-hidden="true">&rsaquo;</span></a>
+          <a v-else href="#" class="next-page" @click.prevent="goToPage(currentPage + 1)"><span aria-hidden="true">&rsaquo;</span></a>
 
           <span v-if="disableLast" class="tablenav-pages-navspan" aria-hidden="true">&raquo;</span>
           <a v-else href="#" class="last-page" @click.prevent="goToPage(totalPages)"><span
@@ -331,7 +339,7 @@
 				]
 			},
 
-			getBodyColumnClass(key, item) {
+			getBodyColumnClass(key) {
 				return [
 					'manage-column',
 					'manage-' + key,

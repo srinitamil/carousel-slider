@@ -1,12 +1,16 @@
 <template>
 	<div class="carousel-slider-app">
 		<router-view></router-view>
+		<mdl-snackbar></mdl-snackbar>
 	</div>
 </template>
 
 <script>
+	import mdlSnackbar from '../material-design-lite/snackbar/mdlSnackbar.vue';
+
 	export default {
-		name: 'App'
+		name: 'App',
+		components: {mdlSnackbar}
 	}
 </script>
 

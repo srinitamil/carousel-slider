@@ -56,6 +56,12 @@ class Admin {
 	}
 
 	public static function menu_page_callback() {
+		$setting = SliderSetting::init();
+		$data    = array(
+			'sections' => $setting->get_sections(),
+			'fields'   => $setting->get_fields(),
+		);
+		echo '<script type="text/javascript">window.CAROUSEL_SLIDER_SETTINGS = ' . wp_json_encode( $data ) . '</script>';
 		echo '<div class="wrap"><div id="carousel-slider-admin"></div></div>';
 	}
 
@@ -95,6 +101,7 @@ class Admin {
 					array( 'key' => 'delete', 'label' => __( 'Delete Permanently', 'carousel-slider' ) ),
 				),
 			),
+			'sections'     => array()
 		) );
 	}
 

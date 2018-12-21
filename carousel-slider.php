@@ -172,11 +172,12 @@ if ( ! class_exists( 'Carousel_Slider' ) ) {
 			$this->container['preview']   = \CarouselSlider\Display\Preview::init();
 
 			if ( $this->is_request( 'admin' ) ) {
-				$this->container['admin']      = \CarouselSlider\Admin\Admin::init();
-				$this->container['metabox']    = \CarouselSlider\Admin\MetaBox::init();
-				$this->container['vc-element'] = \CarouselSlider\Admin\VisualComposerElement::init();
-				$this->container['doc']        = \CarouselSlider\Admin\Documentation::init();
-				$this->container['admin-ajax'] = \CarouselSlider\Admin\Ajax::init();
+				$this->container['slider-settings'] = \CarouselSlider\Admin\SliderSetting::init();
+				$this->container['admin']           = \CarouselSlider\Admin\Admin::init();
+				$this->container['metabox']         = \CarouselSlider\Admin\MetaBox::init();
+				$this->container['vc-element']      = \CarouselSlider\Admin\VisualComposerElement::init();
+				$this->container['doc']             = \CarouselSlider\Admin\Documentation::init();
+				$this->container['admin-ajax']      = \CarouselSlider\Admin\Ajax::init();
 			}
 
 			if ( $this->is_request( 'frontend' ) ) {
@@ -272,9 +273,9 @@ if ( ! class_exists( 'Carousel_Slider' ) ) {
 			$error .= sprintf( __( 'The Carousel Slider plugin requires PHP version %s or greater.',
 				'carousel-slider' ), $this->min_php );
 			?>
-            <div class="error">
-                <p><?php printf( $error ); ?></p>
-            </div>
+			<div class="error">
+				<p><?php printf( $error ); ?></p>
+			</div>
 			<?php
 		}
 

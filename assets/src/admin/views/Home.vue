@@ -160,6 +160,7 @@
 			},
 			onActionClick(action, row) {
 				if ('edit' === action) {
+					window.location.href = "#/" + row.id;
 				} else if ('trash' === action) {
 					if (confirm('Are you sure to move this item to trash?')) {
 						this.trashItem(row);

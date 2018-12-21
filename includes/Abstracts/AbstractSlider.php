@@ -337,6 +337,9 @@ class AbstractSlider implements \JsonSerializable {
 		if ( ! empty( $slide_by ) && false !== strpos( 'page', $slide_by ) ) {
 			return 'page';
 		}
+		if ( in_array( $slide_by, array( 0, '0', 'zero' ), true ) ) {
+			return 'page';
+		}
 
 		return intval( $slide_by );
 	}

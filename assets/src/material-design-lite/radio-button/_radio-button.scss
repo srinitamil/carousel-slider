@@ -2,6 +2,7 @@
 
 .mdl-radio-button {
 	display: inline-flex;
+	flex-grow: 1;
 
 	.mdl-radio-button__input {
 		display: none;
@@ -13,8 +14,8 @@
 		margin: 0;
 		padding: 0.5em 1em;
 		font-size: 14px;
-		flex-grow: 0;
 		text-align: center;
+		width: 100%;
 	}
 
 	&.is-checked {

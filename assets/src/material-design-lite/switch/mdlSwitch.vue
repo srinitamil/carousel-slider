@@ -1,5 +1,6 @@
 <template>
-	<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect">
+	<label class="mdl-switch mdl-js-switch mdl-js-ripple-effect is-upgraded"
+		   :class="{'is-checked':shouldBeChecked}">
 		<input type="checkbox" class="mdl-switch__input"
 			   :checked="shouldBeChecked"
 			   :value="value"
@@ -26,7 +27,7 @@
 		},
 		props: {
 			modelValue: {default: false},
-			value: {type: String, default: 'on'},
+			value: {default: 'on'},
 			trueValue: {default: true},
 			falseValue: {default: false},
 			disabled: {type: Boolean, default: false},

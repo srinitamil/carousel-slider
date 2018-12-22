@@ -15,7 +15,14 @@
 			<accordion v-for="section in sections" :title="section.title" :key="section.id">
 				<template v-for="field in fields" v-if="field.section === section.id">
 					<div class="carousel-slider-control__field" :data-type="field.type">
-						<label class="carousel-slider-control__label" :for="field.id">{{field.label}}</label>
+						<label class="carousel-slider-control__label" :for="field.id">
+							{{field.label}}
+							<template v-if="field.description">
+								<mdl-tooltip :large="true">
+									<div v-html="field.description"></div>
+								</mdl-tooltip>
+							</template>
+						</label>
 						<template v-if="'select' === field.type">
 							<select :id="field.id" v-model="slider[field.id]" class="carousel-slider-control__input">
 								<option v-for="(choice, key) in field.choices" :value="key">{{choice}}</option>
@@ -59,10 +66,11 @@
 	import mdlSwitch from '../../material-design-lite/switch/mdlSwitch.vue';
 	import mdlRadioButton from '../../material-design-lite/radio-button/mdlRadioButton.vue';
 	import mdlFab from '../../material-design-lite/button/mdlFab.vue';
+	import mdlTooltip from '../../material-design-lite/tooltip/mdlTooltip.vue';
 
 	export default {
 		name: "Slider",
-		components: {Accordion, mdlSlider, mdlSwitch, mdlRadioButton, ColorPicker, mdlFab},
+		components: {Accordion, mdlSlider, mdlSwitch, mdlRadioButton, ColorPicker, mdlFab, mdlTooltip},
 		data() {
 			return {
 				id: 0,
@@ -132,6 +140,14 @@
 			right: 20px;
 			z-index: 100;
 		}
+
+		.mdl-tooltip--icon {
+			svg {
+				width: 16px;
+				height: 16px;
+				fill: #555d66;
+			}
+		}
 	}
 
 	.carousel-slider-control {
@@ -180,17 +196,15 @@
 	}
 
 	.carousel-slider-content {
-		float: left;
 		display: block;
-		width: calc(100% - 320px);
+		width: 100%;
 	}
 
 	.carousel-slider-sidebar {
-		margin: 0 0 20px 20px;
-		width: 300px;
+		margin: 20px 0 0;
+		width: 100%;
 		background: white;
 		min-height: 75vh;
-		float: right;
 	}
 
 	.mdl-radio-button-container {
@@ -198,6 +212,19 @@
 
 		.mdl-radio-button:not(:last-child) {
 			border-right: 1px solid rgba(#000, .45);
+		}
+	}
+
+	@media (min-width: 782px) {
+		.carousel-slider-content {
+			float: left;
+			width: calc(100% - 320px);
+		}
+
+		.carousel-slider-sidebar {
+			margin: 0 0 20px 20px;
+			width: 300px;
+			float: right;
 		}
 	}
 </style>

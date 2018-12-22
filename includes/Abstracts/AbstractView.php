@@ -2,8 +2,6 @@
 
 namespace CarouselSlider\Abstracts;
 
-use CarouselSlider\Supports\Utils;
-
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }

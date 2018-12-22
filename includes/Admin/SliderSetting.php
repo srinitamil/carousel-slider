@@ -353,6 +353,7 @@ class SliderSetting {
 			'id'       => '',
 			'title'    => '',
 			'priority' => 100,
+			'active'   => false,
 		) );
 
 		return $this;

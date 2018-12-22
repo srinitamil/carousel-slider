@@ -41,6 +41,11 @@
 <style lang="scss">
 	.carousel-slider-accordion {
 		border-top: 1px solid #e2e4e7;
+		background-color: #fff;
+
+		&:not(:last-child) {
+			margin-bottom: 15px;
+		}
 
 		&:last-child {
 			border-bottom: 1px solid #e2e4e7;

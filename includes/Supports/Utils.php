@@ -294,7 +294,7 @@ class Utils {
 			}
 		}
 
-		$sizes = array_merge( $sizes, array( 'full' => 'original uploaded image' ) );
+		$sizes = array_merge( $sizes, array( 'full' => 'full' ) );
 
 		if ( $key_only ) {
 			return array_keys( $sizes );

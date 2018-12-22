@@ -113,7 +113,7 @@ class SliderController extends ApiController {
 				__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
 		}
 
-		$slider = new AbstractSlider( $id );
+		$slider = Utils::get_slider( $id );
 
 		if ( ! $slider->get_id() ) {
 			return $this->respond_not_found( 'rest_no_item_found',

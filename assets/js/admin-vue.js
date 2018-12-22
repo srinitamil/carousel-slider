@@ -1794,6 +1794,7 @@ if (false) {(function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__material_design_lite_radio_button_mdlRadioButton_vue__ = __webpack_require__(79);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__material_design_lite_button_mdlFab_vue__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__material_design_lite_tooltip_mdlTooltip_vue__ = __webpack_require__(82);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__material_design_lite_button_mdlButton_vue__ = __webpack_require__(15);
 //
 //
 //
@@ -1855,6 +1856,7 @@ if (false) {(function () {
 //
 //
 //
+
 
 
 
@@ -1866,23 +1868,43 @@ if (false) {(function () {
 
 /* harmony default export */ __webpack_exports__["a"] = ({
 	name: "Slider",
-	components: { Accordion: __WEBPACK_IMPORTED_MODULE_0__components_Accordion_vue__["a" /* default */], mdlSlider: __WEBPACK_IMPORTED_MODULE_2__material_design_lite_slider_mdlSlider_vue__["a" /* default */], mdlSwitch: __WEBPACK_IMPORTED_MODULE_3__material_design_lite_switch_mdlSwitch_vue__["a" /* default */], mdlRadioButton: __WEBPACK_IMPORTED_MODULE_4__material_design_lite_radio_button_mdlRadioButton_vue__["a" /* default */], ColorPicker: __WEBPACK_IMPORTED_MODULE_1__components_ColorPicker_vue__["a" /* default */], mdlFab: __WEBPACK_IMPORTED_MODULE_5__material_design_lite_button_mdlFab_vue__["a" /* default */], mdlTooltip: __WEBPACK_IMPORTED_MODULE_6__material_design_lite_tooltip_mdlTooltip_vue__["a" /* default */] },
+	components: { Accordion: __WEBPACK_IMPORTED_MODULE_0__components_Accordion_vue__["a" /* default */], mdlSlider: __WEBPACK_IMPORTED_MODULE_2__material_design_lite_slider_mdlSlider_vue__["a" /* default */], mdlSwitch: __WEBPACK_IMPORTED_MODULE_3__material_design_lite_switch_mdlSwitch_vue__["a" /* default */], mdlRadioButton: __WEBPACK_IMPORTED_MODULE_4__material_design_lite_radio_button_mdlRadioButton_vue__["a" /* default */], ColorPicker: __WEBPACK_IMPORTED_MODULE_1__components_ColorPicker_vue__["a" /* default */], mdlFab: __WEBPACK_IMPORTED_MODULE_5__material_design_lite_button_mdlFab_vue__["a" /* default */], mdlTooltip: __WEBPACK_IMPORTED_MODULE_6__material_design_lite_tooltip_mdlTooltip_vue__["a" /* default */], mdlButton: __WEBPACK_IMPORTED_MODULE_7__material_design_lite_button_mdlButton_vue__["a" /* default */] },
 	data: function data() {
 		return {
 			id: 0,
 			slider: {},
 			sections: [],
-			fields: []
+			fields: [],
+			modules: []
 		};
 	},
 	mounted: function mounted() {
 		var settings = window.CAROUSEL_SLIDER_SETTINGS;
-		this.sections = settings.sections;
-		this.fields = settings.fields;
+		this.sections = settings.general_settings.sections;
+		this.fields = settings.general_settings.fields;
+		this.modules = settings.modules_settings;
 		this.id = parseInt(this.$route.params.id);
 		this.getItem();
 	},
 
+	computed: {
+		_sections: function _sections() {
+			if (typeof this.slider.type !== "undefined") {
+				var sections = this.modules[this.slider.type]['sections'];
+
+				return sections.concat(this.sections);
+			}
+			return this.sections;
+		},
+		_fields: function _fields() {
+			if (typeof this.slider.type !== "undefined") {
+				var fields = this.modules[this.slider.type]['fields'];
+
+				return fields.concat(this.fields);
+			}
+			return this.fields;
+		}
+	},
 	methods: {
 		getItem: function getItem() {
 			var $ = window.jQuery,
@@ -2201,7 +2223,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MaterialTooltip_js__ = __webpack_require__(109);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MaterialTooltip_js__ = __webpack_require__(84);
 //
 //
 //
@@ -2261,7 +2283,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(2);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__App_vue__ = __webpack_require__(30);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__routers_js__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_admin_menu_fix_js__ = __webpack_require__(86);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_admin_menu_fix_js__ = __webpack_require__(87);
 
 
 
@@ -4978,7 +5000,7 @@ if (false) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Slider_vue__ = __webpack_require__(20);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_07801d0a_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Slider_vue__ = __webpack_require__(85);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_07801d0a_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Slider_vue__ = __webpack_require__(86);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
@@ -5966,7 +5988,7 @@ if (false) {
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_mdlTooltip_vue__ = __webpack_require__(26);
 /* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_51ab436e_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mdlTooltip_vue__ = __webpack_require__(84);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_51ab436e_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mdlTooltip_vue__ = __webpack_require__(85);
 var disposed = false
 function injectStyle (ssrContext) {
   if (disposed) return
@@ -6023,6 +6045,173 @@ if (false) {(function () {
 
 /***/ }),
 /* 84 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MaterialTooltip; });
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @license
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+var MaterialTooltip = function () {
+	/**
+  * Class constructor for Tooltip MDL component.
+  * Implements MDL component design pattern defined at:
+  * https://github.com/jasonmayes/mdl-component-design-pattern
+  *
+  * @constructor
+  * @param {HTMLElement} element The element that will be upgraded.
+  */
+	function MaterialTooltip(element) {
+		_classCallCheck(this, MaterialTooltip);
+
+		this.element_ = element;
+
+		/**
+   * Store constants in one place so they can be updated easily.
+   *
+   * @enum {string | number}
+   * @private
+   */
+		MaterialTooltip.prototype.Constant_ = {};
+
+		/**
+   * Store strings for class names defined by this component that are used in
+   * JavaScript. This allows us to simply change it in one place should we
+   * decide to modify at a later date.
+   *
+   * @enum {string}
+   * @private
+   */
+		MaterialTooltip.prototype.CssClasses_ = {
+			IS_ACTIVE: 'is-active',
+			BOTTOM: 'mdl-tooltip--bottom',
+			LEFT: 'mdl-tooltip--left',
+			RIGHT: 'mdl-tooltip--right',
+			TOP: 'mdl-tooltip--top'
+		};
+
+		// Initialize instance.
+		this.init();
+	}
+
+	/**
+  * Handle mouseenter for tooltip.
+  *
+  * @param {Event} event The event that fired.
+  * @private
+  */
+
+
+	_createClass(MaterialTooltip, [{
+		key: 'handleMouseEnter_',
+		value: function handleMouseEnter_(event) {
+			var props = event.target.getBoundingClientRect();
+			var left = props.left + props.width / 2;
+			var top = props.top + props.height / 2;
+			var marginLeft = -1 * (this.element_.offsetWidth / 2);
+			var marginTop = -1 * (this.element_.offsetHeight / 2);
+
+			if (this.element_.classList.contains(this.CssClasses_.LEFT) || this.element_.classList.contains(this.CssClasses_.RIGHT)) {
+				left = props.width / 2;
+				if (top + marginTop < 0) {
+					this.element_.style.top = '0';
+					this.element_.style.marginTop = '0';
+				} else {
+					this.element_.style.top = top + 'px';
+					this.element_.style.marginTop = marginTop + 'px';
+				}
+			} else {
+				if (left + marginLeft < 0) {
+					this.element_.style.left = '0';
+					this.element_.style.marginLeft = '0';
+				} else {
+					this.element_.style.left = left + 'px';
+					this.element_.style.marginLeft = marginLeft + 'px';
+				}
+			}
+
+			if (this.element_.classList.contains(this.CssClasses_.TOP)) {
+				this.element_.style.top = props.top - this.element_.offsetHeight - 10 + 'px';
+			} else if (this.element_.classList.contains(this.CssClasses_.RIGHT)) {
+				this.element_.style.left = props.left + props.width + 10 + 'px';
+			} else if (this.element_.classList.contains(this.CssClasses_.LEFT)) {
+				this.element_.style.left = props.left - this.element_.offsetWidth - 10 + 'px';
+			} else {
+				this.element_.style.top = props.top + props.height + 10 + 'px';
+			}
+
+			this.element_.classList.add(this.CssClasses_.IS_ACTIVE);
+		}
+
+		/**
+   * Hide tooltip on mouseleave or scroll
+   *
+   * @private
+   */
+
+	}, {
+		key: 'hideTooltip_',
+		value: function hideTooltip_() {
+			this.element_.classList.remove(this.CssClasses_.IS_ACTIVE);
+		}
+
+		/**
+   * Initialize element.
+   */
+
+	}, {
+		key: 'init',
+		value: function init() {
+
+			if (this.element_) {
+				var forElId = this.element_.getAttribute('for') || this.element_.getAttribute('data-mdl-for');
+
+				if (forElId) {
+					this.forElement_ = document.getElementById(forElId);
+				}
+
+				if (this.forElement_) {
+					// It's left here because it prevents accidental text selection on Android
+					if (!this.forElement_.hasAttribute('tabindex')) {
+						this.forElement_.setAttribute('tabindex', '0');
+					}
+
+					this.boundMouseEnterHandler = this.handleMouseEnter_.bind(this);
+					this.boundMouseLeaveAndScrollHandler = this.hideTooltip_.bind(this);
+					this.forElement_.addEventListener('mouseenter', this.boundMouseEnterHandler, false);
+					this.forElement_.addEventListener('touchend', this.boundMouseEnterHandler, false);
+					this.forElement_.addEventListener('mouseleave', this.boundMouseLeaveAndScrollHandler, false);
+					window.addEventListener('scroll', this.boundMouseLeaveAndScrollHandler, true);
+					window.addEventListener('touchstart', this.boundMouseLeaveAndScrollHandler);
+				}
+			}
+		}
+	}]);
+
+	return MaterialTooltip;
+}();
+
+
+
+/***/ }),
+/* 85 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6086,7 +6275,7 @@ if (false) {
 }
 
 /***/ }),
-/* 85 */
+/* 86 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6148,12 +6337,15 @@ var render = function() {
       _c(
         "div",
         { staticClass: "carousel-slider-sidebar" },
-        _vm._l(_vm.sections, function(section) {
+        _vm._l(_vm._sections, function(section) {
           return _c(
             "accordion",
-            { key: section.id, attrs: { title: section.title } },
+            {
+              key: section.id,
+              attrs: { title: section.title, active: section.active }
+            },
             [
-              _vm._l(_vm.fields, function(field) {
+              _vm._l(_vm._fields, function(field) {
                 return field.section === section.id
                   ? [
                       _c(
@@ -6377,7 +6569,7 @@ if (false) {
 }
 
 /***/ }),
-/* 86 */
+/* 87 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6414,195 +6606,6 @@ function menuFix(slug) {
 }
 
 /* harmony default export */ __webpack_exports__["a"] = (menuFix);
-
-/***/ }),
-/* 87 */,
-/* 88 */,
-/* 89 */,
-/* 90 */,
-/* 91 */,
-/* 92 */,
-/* 93 */,
-/* 94 */,
-/* 95 */,
-/* 96 */,
-/* 97 */,
-/* 98 */,
-/* 99 */,
-/* 100 */,
-/* 101 */,
-/* 102 */,
-/* 103 */,
-/* 104 */,
-/* 105 */,
-/* 106 */,
-/* 107 */,
-/* 108 */,
-/* 109 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MaterialTooltip; });
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * @license
- * Copyright 2015 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-var MaterialTooltip = function () {
-	/**
-  * Class constructor for Tooltip MDL component.
-  * Implements MDL component design pattern defined at:
-  * https://github.com/jasonmayes/mdl-component-design-pattern
-  *
-  * @constructor
-  * @param {HTMLElement} element The element that will be upgraded.
-  */
-	function MaterialTooltip(element) {
-		_classCallCheck(this, MaterialTooltip);
-
-		this.element_ = element;
-
-		/**
-   * Store constants in one place so they can be updated easily.
-   *
-   * @enum {string | number}
-   * @private
-   */
-		MaterialTooltip.prototype.Constant_ = {};
-
-		/**
-   * Store strings for class names defined by this component that are used in
-   * JavaScript. This allows us to simply change it in one place should we
-   * decide to modify at a later date.
-   *
-   * @enum {string}
-   * @private
-   */
-		MaterialTooltip.prototype.CssClasses_ = {
-			IS_ACTIVE: 'is-active',
-			BOTTOM: 'mdl-tooltip--bottom',
-			LEFT: 'mdl-tooltip--left',
-			RIGHT: 'mdl-tooltip--right',
-			TOP: 'mdl-tooltip--top'
-		};
-
-		// Initialize instance.
-		this.init();
-	}
-
-	/**
-  * Handle mouseenter for tooltip.
-  *
-  * @param {Event} event The event that fired.
-  * @private
-  */
-
-
-	_createClass(MaterialTooltip, [{
-		key: 'handleMouseEnter_',
-		value: function handleMouseEnter_(event) {
-			var props = event.target.getBoundingClientRect();
-			var left = props.left + props.width / 2;
-			var top = props.top + props.height / 2;
-			var marginLeft = -1 * (this.element_.offsetWidth / 2);
-			var marginTop = -1 * (this.element_.offsetHeight / 2);
-
-			if (this.element_.classList.contains(this.CssClasses_.LEFT) || this.element_.classList.contains(this.CssClasses_.RIGHT)) {
-				left = props.width / 2;
-				if (top + marginTop < 0) {
-					this.element_.style.top = '0';
-					this.element_.style.marginTop = '0';
-				} else {
-					this.element_.style.top = top + 'px';
-					this.element_.style.marginTop = marginTop + 'px';
-				}
-			} else {
-				if (left + marginLeft < 0) {
-					this.element_.style.left = '0';
-					this.element_.style.marginLeft = '0';
-				} else {
-					this.element_.style.left = left + 'px';
-					this.element_.style.marginLeft = marginLeft + 'px';
-				}
-			}
-
-			if (this.element_.classList.contains(this.CssClasses_.TOP)) {
-				this.element_.style.top = props.top - this.element_.offsetHeight - 10 + 'px';
-			} else if (this.element_.classList.contains(this.CssClasses_.RIGHT)) {
-				this.element_.style.left = props.left + props.width + 10 + 'px';
-			} else if (this.element_.classList.contains(this.CssClasses_.LEFT)) {
-				this.element_.style.left = props.left - this.element_.offsetWidth - 10 + 'px';
-			} else {
-				this.element_.style.top = props.top + props.height + 10 + 'px';
-			}
-
-			this.element_.classList.add(this.CssClasses_.IS_ACTIVE);
-		}
-
-		/**
-   * Hide tooltip on mouseleave or scroll
-   *
-   * @private
-   */
-
-	}, {
-		key: 'hideTooltip_',
-		value: function hideTooltip_() {
-			this.element_.classList.remove(this.CssClasses_.IS_ACTIVE);
-		}
-
-		/**
-   * Initialize element.
-   */
-
-	}, {
-		key: 'init',
-		value: function init() {
-
-			if (this.element_) {
-				var forElId = this.element_.getAttribute('for') || this.element_.getAttribute('data-mdl-for');
-
-				if (forElId) {
-					this.forElement_ = document.getElementById(forElId);
-				}
-
-				if (this.forElement_) {
-					// It's left here because it prevents accidental text selection on Android
-					if (!this.forElement_.hasAttribute('tabindex')) {
-						this.forElement_.setAttribute('tabindex', '0');
-					}
-
-					this.boundMouseEnterHandler = this.handleMouseEnter_.bind(this);
-					this.boundMouseLeaveAndScrollHandler = this.hideTooltip_.bind(this);
-					this.forElement_.addEventListener('mouseenter', this.boundMouseEnterHandler, false);
-					this.forElement_.addEventListener('touchend', this.boundMouseEnterHandler, false);
-					this.forElement_.addEventListener('mouseleave', this.boundMouseLeaveAndScrollHandler, false);
-					window.addEventListener('scroll', this.boundMouseLeaveAndScrollHandler, true);
-					window.addEventListener('touchstart', this.boundMouseLeaveAndScrollHandler);
-				}
-			}
-		}
-	}]);
-
-	return MaterialTooltip;
-}();
-
-
 
 /***/ })
 ],[27]);

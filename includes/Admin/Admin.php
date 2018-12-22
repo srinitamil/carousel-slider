@@ -2,6 +2,8 @@
 
 namespace CarouselSlider\Admin;
 
+use CarouselSlider\Abstracts\AbstractSetting;
+use CarouselSlider\SettingManager;
 use CarouselSlider\Supports\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -58,9 +60,24 @@ class Admin {
 	public static function menu_page_callback() {
 		$setting = SliderSetting::init();
 		$data    = array(
-			'sections' => $setting->get_sections(),
-			'fields'   => $setting->get_fields(),
+			'general_settings' => array(
+				'sections' => $setting->get_sections(),
+				'fields'   => $setting->get_fields(),
+			),
+			'modules_settings' => array(),
 		);
+		$modules = SettingManager::init();
+		foreach ( $modules as $module => $className ) {
+			$class = new $className;
+			if ( ! $class instanceof AbstractSetting ) {
+				continue;
+			}
+			$class->register_settings();
+			$data['modules_settings'][ $module ] = array(
+				'sections' => $class->get_sections(),
+				'fields'   => $class->get_fields(),
+			);
+		}
 		echo '<script type="text/javascript">window.CAROUSEL_SLIDER_SETTINGS = ' . wp_json_encode( $data ) . '</script>';
 		echo '<div class="wrap"><div id="carousel-slider-admin"></div></div>';
 	}

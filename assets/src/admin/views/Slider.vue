@@ -12,8 +12,8 @@
 			</div>
 		</div>
 		<div class="carousel-slider-sidebar">
-			<accordion v-for="section in sections" :title="section.title" :key="section.id">
-				<template v-for="field in fields" v-if="field.section === section.id">
+			<accordion v-for="section in _sections" :title="section.title" :key="section.id" :active="section.active">
+				<template v-for="field in _fields" v-if="field.section === section.id">
 					<div class="carousel-slider-control__field" :data-type="field.type">
 						<label class="carousel-slider-control__label" :for="field.id">
 							{{field.label}}
@@ -51,9 +51,9 @@
 		</div>
 		<mdl-fab @click="saveSlider">
 			<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-				<path fill="none" d="M0 0h24v24H0V0z"/>
+				<path fill="none" d="M0 0h24v24H0V0z"></path>
 				<path fill="white"
-					  d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm2 16H5V5h11.17L19 7.83V19zm-7-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zM6 6h9v4H6z"/>
+					  d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm2 16H5V5h11.17L19 7.83V19zm-7-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zM6 6h9v4H6z"></path>
 			</svg>
 		</mdl-fab>
 	</div>
@@ -67,24 +67,45 @@
 	import mdlRadioButton from '../../material-design-lite/radio-button/mdlRadioButton.vue';
 	import mdlFab from '../../material-design-lite/button/mdlFab.vue';
 	import mdlTooltip from '../../material-design-lite/tooltip/mdlTooltip.vue';
+	import mdlButton from '../../material-design-lite/button/mdlButton.vue';
 
 	export default {
 		name: "Slider",
-		components: {Accordion, mdlSlider, mdlSwitch, mdlRadioButton, ColorPicker, mdlFab, mdlTooltip},
+		components: {Accordion, mdlSlider, mdlSwitch, mdlRadioButton, ColorPicker, mdlFab, mdlTooltip, mdlButton},
 		data() {
 			return {
 				id: 0,
 				slider: {},
 				sections: [],
 				fields: [],
+				modules: [],
 			}
 		},
 		mounted() {
 			let settings = window.CAROUSEL_SLIDER_SETTINGS;
-			this.sections = settings.sections;
-			this.fields = settings.fields;
+			this.sections = settings.general_settings.sections;
+			this.fields = settings.general_settings.fields;
+			this.modules = settings.modules_settings;
 			this.id = parseInt(this.$route.params.id);
 			this.getItem();
+		},
+		computed: {
+			_sections() {
+				if (typeof this.slider.type !== "undefined") {
+					let sections = this.modules[this.slider.type]['sections'];
+
+					return sections.concat(this.sections);
+				}
+				return this.sections;
+			},
+			_fields() {
+				if (typeof this.slider.type !== "undefined") {
+					let fields = this.modules[this.slider.type]['fields'];
+
+					return fields.concat(this.fields);
+				}
+				return this.fields;
+			}
 		},
 		methods: {
 			getItem() {
@@ -148,13 +169,18 @@
 				fill: #555d66;
 			}
 		}
+
+		.mdl-tooltip--container {
+			margin-left: 4px;
+		}
 	}
 
 	.carousel-slider-control {
 		&__field {
 			&:not(:last-child) {
 				margin-bottom: 15px;
-				// padding-bottom: 15px;
+				padding-bottom: 15px;
+				border-bottom: 1px solid rgba(#000, 0.12);
 			}
 		}
 
@@ -168,6 +194,8 @@
 		&__label {
 			color: rgba(#000, .85);
 			margin-bottom: 10px;
+			display: flex;
+			align-items: center;
 		}
 
 		&__input {
@@ -203,8 +231,6 @@
 	.carousel-slider-sidebar {
 		margin: 20px 0 0;
 		width: 100%;
-		background: white;
-		min-height: 75vh;
 	}
 
 	.mdl-radio-button-container {

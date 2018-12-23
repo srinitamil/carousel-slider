@@ -3,6 +3,7 @@
 namespace CarouselSlider\REST;
 
 use CarouselSlider\Abstracts\AbstractSlider;
+use CarouselSlider\Modules\ImageCarousel\Slider as ImageCarouselSlider;
 use CarouselSlider\Supports\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -162,7 +163,18 @@ class SliderController extends ApiController {
 				__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
 		}
 
-		$slider = new AbstractSlider( $id );
+		$type       = $request->get_param( 'type' );
+		$valid_type = Utils::get_slide_types();
+		if ( ! in_array( $type, $valid_type ) ) {
+			return $this->respond_unprocessable_entity( 'rest_invalid_slider_type',
+				__( 'Slider type is not registered.', 'carousel-slider' ) );
+		}
+
+		if ( 'image-carousel' == $type ) {
+			$slider = new ImageCarouselSlider( $id );
+		} else {
+			$slider = new AbstractSlider( $id );
+		}
 
 		if ( ! $slider->get_id() ) {
 			return $this->respond_not_found( 'rest_no_item_found',

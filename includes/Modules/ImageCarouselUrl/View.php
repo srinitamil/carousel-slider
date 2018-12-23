@@ -2,20 +2,22 @@
 
 namespace CarouselSlider\Modules\ImageCarouselUrl;
 
-use CarouselSlider\Modules\ImageCarousel\View as ImageCarouselView;
+use CarouselSlider\Abstracts\AbstractView;
 use CarouselSlider\Supports\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
 
-class View extends ImageCarouselView {
+class View extends AbstractView {
 
 	/**
 	 * Render element.
 	 * Generates the final HTML on the frontend.
 	 */
 	public function render() {
+		/** @var Slider $slider */
+		$slider       = $this->get_slider();
 		$_images_urls = $this->images_urls();
 		$images_count = count( $_images_urls );
 
@@ -27,12 +29,12 @@ class View extends ImageCarouselView {
 
 			$html = '<div class="carousel-slider__item">';
 
-			$image        = $this->get_image( $imageInfo );
-			$full_caption = $this->get_attachment_caption( $imageInfo );
+			$image        = $this->get_image( $slider, $imageInfo );
+			$full_caption = $this->get_attachment_caption( $slider, $imageInfo );
 			$content      = $image . $full_caption;
 
 			if ( Utils::is_url( $imageInfo['link_url'] ) ) {
-				$html .= '<a href="' . $imageInfo['link_url'] . '" target="' . $this->image_target() . '">' . $content . '</a>';
+				$html .= '<a href="' . $imageInfo['link_url'] . '" target="' . $slider->get_image_target() . '">' . $content . '</a>';
 			} else {
 				$html .= $content;
 			}
@@ -48,23 +50,24 @@ class View extends ImageCarouselView {
 	}
 
 	/**
+	 * @param Slider $slider
 	 * @param array $imageInfo
 	 *
 	 * @return string
 	 */
-	protected function get_attachment_caption( $imageInfo ) {
+	protected function get_attachment_caption( $slider, $imageInfo ) {
 		$title   = sprintf( '<h4 class="title">%1$s</h4>', $imageInfo['title'] );
 		$caption = sprintf( '<p class="caption">%1$s</p>', $imageInfo['caption'] );
 
-		if ( $this->show_attachment_title() && $this->show_attachment_caption() ) {
+		if ( $slider->show_image_title() && $slider->show_image_caption() ) {
 			return '<div class="carousel-slider__caption">' . $title . $caption . '</div>';
 		}
 
-		if ( $this->show_attachment_title() ) {
+		if ( $slider->show_image_title() ) {
 			return '<div class="carousel-slider__caption">' . $title . '</div>';
 		}
 
-		if ( $this->show_attachment_caption() ) {
+		if ( $slider->show_image_caption() ) {
 			return '<div class="carousel-slider__caption">' . $caption . '</div>';
 		}
 
@@ -72,12 +75,13 @@ class View extends ImageCarouselView {
 	}
 
 	/**
+	 * @param Slider $slider
 	 * @param array $imageInfo
 	 *
 	 * @return string
 	 */
-	protected function get_image( $imageInfo ) {
-		if ( $this->get_slider()->get_lazy_load_image() ) {
+	protected function get_image( $slider, $imageInfo ) {
+		if ( $slider->get_lazy_load_image() ) {
 			return '<img class="owl-lazy" data-src="' . $imageInfo['url'] . '" alt="' . $imageInfo['alt'] . '" />';
 		}
 

@@ -132,7 +132,12 @@ class Script {
 			),
 			'carousel-slider-admin-vue'    => array(
 				'src'        => CAROUSEL_SLIDER_ASSETS . '/js/admin-vue.js',
-				'dependency' => array( 'jquery', 'carousel-slider-admin-vendor', 'wp-color-picker-alpha' ),
+				'dependency' => array(
+					'jquery',
+					'owl-carousel',
+					'carousel-slider-admin-vendor',
+					'wp-color-picker-alpha',
+				),
 				'version'    => CAROUSEL_SLIDER_VERSION,
 				'in_footer'  => true
 			)

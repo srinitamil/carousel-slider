@@ -376,10 +376,7 @@ var MaterialRipple = function () {
 
 
 /***/ }),
-/* 2 */,
-/* 3 */,
-/* 4 */,
-/* 5 */
+/* 2 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -435,6 +432,9 @@ if (false) {(function () {
 
 
 /***/ }),
+/* 3 */,
+/* 4 */,
+/* 5 */,
 /* 6 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -1473,7 +1473,7 @@ var MaterialButton = function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__button_mdlButton_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__button_mdlButton_vue__ = __webpack_require__(2);
 //
 //
 //
@@ -1795,7 +1795,7 @@ var MaterialButton = function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__material_design_lite_radio_button_mdlRadioButton_vue__ = __webpack_require__(83);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__material_design_lite_button_mdlFab_vue__ = __webpack_require__(12);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__material_design_lite_tooltip_mdlTooltip_vue__ = __webpack_require__(86);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__material_design_lite_button_mdlButton_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__material_design_lite_button_mdlButton_vue__ = __webpack_require__(2);
 //
 //
 //
@@ -1956,8 +1956,17 @@ var MaterialButton = function () {
 			return 1;
 		},
 		saveSlider: function saveSlider() {
-			this.$root.$emit('show-snackbar', {
-				message: 'Data hes been saved!'
+			var $ = jQuery,
+			    self = this;
+			$.ajax({
+				url: window.carouselSliderSettings.root + '/sliders/' + self.slider.id,
+				method: 'PUT',
+				data: self.slider,
+				success: function success(response) {
+					self.$root.$emit('show-snackbar', {
+						message: 'Data hes been saved!'
+					});
+				}
 			});
 		}
 	}
@@ -2050,7 +2059,7 @@ var MaterialButton = function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__material_design_lite_button_mdlButton_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__material_design_lite_button_mdlButton_vue__ = __webpack_require__(2);
 //
 //
 //
@@ -2253,7 +2262,7 @@ var MaterialButton = function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__button_mdlButton_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__button_mdlButton_vue__ = __webpack_require__(2);
 //
 //
 //
@@ -2498,7 +2507,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__App_vue__ = __webpack_require__(31);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__routers_js__ = __webpack_require__(38);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_admin_menu_fix_js__ = __webpack_require__(91);
@@ -2924,7 +2933,7 @@ if (false) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_Home_vue__ = __webpack_require__(39);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_Settings_vue__ = __webpack_require__(59);

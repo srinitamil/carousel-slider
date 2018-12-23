@@ -156,9 +156,17 @@
 				return 1;
 			},
 			saveSlider() {
-				this.$root.$emit('show-snackbar', {
-					message: 'Data hes been saved!',
-				})
+				let $ = jQuery, self = this;
+				$.ajax({
+					url: window.carouselSliderSettings.root + '/sliders/' + self.slider.id,
+					method: 'PUT',
+					data: self.slider,
+					success: function (response) {
+						self.$root.$emit('show-snackbar', {
+							message: 'Data hes been saved!',
+						})
+					}
+				});
 			}
 		}
 	}

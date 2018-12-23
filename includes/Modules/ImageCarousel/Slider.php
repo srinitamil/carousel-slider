@@ -75,6 +75,25 @@ class Slider extends AbstractSlider {
 	}
 
 	/**
+	 * Get slider items
+	 *
+	 * @return SliderItem[]
+	 */
+	public function get_items() {
+		$images  = array();
+		$_images = get_posts( array(
+			'post_type'      => 'attachment',
+			'post__in'       => $this->get_images_ids(),
+			'posts_per_page' => - 1
+		) );
+		foreach ( $_images as $image ) {
+			$images[] = new SliderItem( $image );
+		}
+
+		return $images;
+	}
+
+	/**
 	 * Get images
 	 *
 	 * @return array

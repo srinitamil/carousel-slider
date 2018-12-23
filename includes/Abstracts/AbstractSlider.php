@@ -312,7 +312,7 @@ class AbstractSlider implements \JsonSerializable {
 	 * @return string
 	 */
 	public function get_arrow_position() {
-		$arrow_position = $this->get_prop( '_arrow_position' );
+		$arrow_position = $this->get_prop( 'arrow_position' );
 
 		return in_array( $arrow_position, array( 'inside', 'outside' ) ) ? $arrow_position : 'outside';
 	}
@@ -382,7 +382,7 @@ class AbstractSlider implements \JsonSerializable {
 	 * @return string
 	 */
 	public function get_dots_position() {
-		$arrow_position = $this->get_prop( 'bullet_position' );
+		$arrow_position = $this->get_prop( 'dots_position' );
 
 		return in_array( $arrow_position, array( 'left', 'center', 'right' ) ) ? $arrow_position : 'center';
 	}
@@ -393,7 +393,7 @@ class AbstractSlider implements \JsonSerializable {
 	 * @return string
 	 */
 	public function get_dots_shape() {
-		$arrow_position = $this->get_prop( 'bullet_shape' );
+		$arrow_position = $this->get_prop( 'dots_shape' );
 
 		return in_array( $arrow_position, array( 'square', 'circle' ) ) ? $arrow_position : 'circle';
 	}

@@ -22,7 +22,7 @@ class Setting extends AbstractSetting {
 		) );
 		$settings = array(
 			array(
-				'id'          => 'images',
+				'id'          => 'images_ids',
 				'type'        => 'gallery',
 				'section'     => 'image_carousel',
 				'label'       => esc_html__( 'Carousel Images', 'carousel-slider' ),

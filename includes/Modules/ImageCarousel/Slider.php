@@ -21,6 +21,7 @@ class Slider extends AbstractSlider {
 		$data['show_image_caption'] = $this->show_image_caption();
 		$data['show_lightbox']      = $this->show_lightbox();
 		$data['image_target']       = $this->get_image_target();
+		$data['images_ids']         = $this->get_images_ids();
 		$data['images']             = $this->get_images();
 
 		return $data;

@@ -86,6 +86,7 @@ class Admin {
 	 * Load required styles and scripts
 	 */
 	public static function init_hooks() {
+		wp_enqueue_media();
 		wp_enqueue_style( 'carousel-slider-admin-vue' );
 		wp_enqueue_script( 'carousel-slider-admin-vue' );
 		wp_localize_script( 'carousel-slider-admin-vue', 'carouselSliderSettings', array(

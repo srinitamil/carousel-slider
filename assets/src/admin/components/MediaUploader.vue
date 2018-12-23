@@ -1,6 +1,14 @@
 <template>
-	<div>
-		<button class="button media-uploader-button">{{buttonText}}</button>
+	<div class="media-gallery-container">
+		<div class="media-gallery-status-status">
+			<template v-if="has_image">
+				<span class="media-gallery-status-title">{{count_images}} Images Selected</span>
+				<span class="media-gallery-clear" @click="clearImages">(Clear)</span>
+			</template>
+			<template v-if="!has_image">
+				<span class="media-gallery-status-title">No Images Selected</span>
+			</template>
+		</div>
 		<div class="media-gallery-preview" :class="{'has-items': ids.length}" v-if="multiple">
 			<div class="media-gallery-list">
 				<div class="media-gallery-list--item" v-for="image in thumbnails">
@@ -18,18 +26,24 @@
 				</div>
 			</div>
 		</template>
+		<div class="media-gallery-button">
+			<mdl-button @click="openMediaFrame" type="raised" color="default">{{buttonText}}</mdl-button>
+		</div>
 	</div>
 </template>
 
 <script>
+	import mdlButton from '../../material-design-lite/button/mdlButton.vue';
+
 	export default {
 		name: "MediaUploader",
+		components: {mdlButton},
 		props: {
-			buttonText: {type: String, default: 'Add Image'},
+			buttonText: {type: String, default: 'Add Images'},
 			multiple: {type: Boolean, default: false},
-			modalTitle: {type: String, default: 'Add Image'},
-			modalButtonText: {type: String, default: 'Add image'},
-			value: {type: [String, Number], default: ''},
+			modalTitle: {type: String, default: 'Add Images'},
+			modalButtonText: {type: String, default: 'Add images'},
+			value: {type: Array, default: []},
 		},
 		data() {
 			return {
@@ -39,9 +53,11 @@
 			}
 		},
 		computed: {
-			formatted_value() {
-				let value = parseInt(this.value);
-				return [value];
+			count_images() {
+				return this.value.length;
+			},
+			has_image() {
+				return this.count_images > 0;
 			},
 			images_ids() {
 				if (!this.multiple) {
@@ -51,10 +67,16 @@
 			},
 			thumbnails() {
 				return this.images.map((image) => {
-					if (image.thumbnail) {
+					if (typeof image.thumbnail.source_url !== "undefined") {
+						return image.thumbnail.source_url;
+					}
+					if (typeof image.thumbnail.url !== "undefined") {
 						return image.thumbnail.url;
 					}
-					if (image.full) {
+					if (typeof image.full.source_url !== "undefined") {
+						return image.full.source_url;
+					}
+					if (typeof image.full.url !== "undefined") {
 						return image.full.url;
 					}
 				});
@@ -62,29 +84,49 @@
 		},
 		mounted() {
 			if (this.value) {
-				this.getImages(this.formatted_value);
+				this.ids = this.value;
+				this.getImages(this.value);
 			}
-			let self = this, button = self.$el.querySelector('.media-uploader-button');
-			button.addEventListener('click', function (event) {
-				event.preventDefault();
-				// Accepts an optional object hash to override default values.
-				let frame = new wp.media({
+		},
+		methods: {
+			loadImages(ids) {
+				if (!ids) {
+					return false;
+				}
+				let shortcode = new wp.shortcode({
+					tag: 'gallery',
+					attrs: {ids: ids},
+					type: 'single'
+				});
+
+				let attachments = wp.media.gallery.attachments(shortcode);
+
+				let selection = new wp.media.model.Selection(attachments.models, {
+					props: attachments.props.toJSON(),
+					multiple: true
+				});
+
+				selection.gallery = attachments.gallery;
+
+				selection.more().done(function () {
+					// Break ties with the query.
+					selection.props.set({query: false});
+					selection.unmirror();
+					selection.props.unset('orderby');
+				});
+
+				return selection;
+			},
+			openMediaFrame() {
+				let self = this, frame;
+				let options = {
 					frame: 'select',
 					title: self.modalTitle,
 					multiple: self.multiple,
+					button: {text: self.modalButtonText}
+				};
 
-					library: {
-						order: 'ASC',
-						orderby: 'title',
-						type: 'image',
-						search: null,
-						uploadedTo: null
-					},
-
-					button: {
-						text: self.modalButtonText
-					}
-				});
+				frame = new wp.media(options).open();
 
 				frame.on('select', function () {
 
@@ -100,16 +142,10 @@
 					self.images = sizes;
 					self.$emit('input', self.images_ids);
 				});
-
-				// Open the modal.
-				frame.open();
-			});
-		},
-		methods: {
+			},
 			getImage(imageId) {
 				let wpApiSettings = window.wpApiSettings, $ = window.jQuery, self = this;
 				let url = wpApiSettings.root + wpApiSettings.versionString + 'media/' + imageId;
-				let nonce = wpApiSettings.nonce;
 				$.ajax({
 					url: url,
 					method: 'GET',
@@ -123,7 +159,6 @@
 			getImages(include) {
 				let wpApiSettings = window.wpApiSettings, $ = window.jQuery, self = this;
 				let url = wpApiSettings.root + wpApiSettings.versionString + 'media';
-				let nonce = wpApiSettings.nonce;
 
 				$.ajax({
 					url: url,
@@ -131,16 +166,44 @@
 					data: {
 						include: include,
 					},
-					success: function (response) {
-						console.log(response);
+					success: function (images) {
+						images.forEach((element) => {
+							if (typeof element.media_details.sizes != "undefined") {
+								self.images.push(element.media_details.sizes);
+							} else {
+								self.images.push({full: {url: element.source_url}});
+							}
+						});
 					}
 				});
+			},
+			clearImages() {
+				if (confirm('Are you sure?')) {
+					this.ids = [];
+					this.images = [];
+					this.$emit('input', []);
+				}
 			}
 		}
 	}
 </script>
 
 <style lang="scss">
+	.media-gallery {
+		&-button {
+			margin-top: 15px;
+
+			.mdl-button {
+				width: 100%;
+			}
+		}
+
+		&-clear {
+			color: #b01b1b;
+			cursor: pointer;
+		}
+	}
+
 	.media-gallery-preview {
 		display: flex;
 		flex-wrap: wrap;

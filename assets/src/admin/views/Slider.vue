@@ -15,7 +15,7 @@
 			<accordion v-for="section in _sections" :title="section.title" :key="section.id" :active="section.active">
 				<template v-for="field in _fields" v-if="field.section === section.id">
 					<div class="carousel-slider-control__field" :data-type="field.type">
-						<label class="carousel-slider-control__label" :for="field.id">
+						<label class="carousel-slider-control__label" :for="field.id" v-if="'gallery' !== field.type">
 							{{field.label}}
 							<template v-if="field.description">
 								<mdl-tooltip :large="true">
@@ -45,6 +45,9 @@
 								</mdl-radio-button>
 							</div>
 						</template>
+						<template v-if="'gallery' === field.type">
+							<media-uploader v-model="slider[field.id]" :multiple="true"></media-uploader>
+						</template>
 					</div>
 				</template>
 			</accordion>
@@ -62,6 +65,7 @@
 <script>
 	import Accordion from '../components/Accordion.vue';
 	import ColorPicker from '../components/ColorPicker.vue';
+	import MediaUploader from '../components/MediaUploader.vue';
 	import mdlSlider from '../../material-design-lite/slider/mdlSlider.vue';
 	import mdlSwitch from '../../material-design-lite/switch/mdlSwitch.vue';
 	import mdlRadioButton from '../../material-design-lite/radio-button/mdlRadioButton.vue';
@@ -71,7 +75,17 @@
 
 	export default {
 		name: "Slider",
-		components: {Accordion, mdlSlider, mdlSwitch, mdlRadioButton, ColorPicker, mdlFab, mdlTooltip, mdlButton},
+		components: {
+			Accordion,
+			mdlSlider,
+			mdlSwitch,
+			mdlRadioButton,
+			ColorPicker,
+			mdlFab,
+			mdlTooltip,
+			mdlButton,
+			MediaUploader
+		},
 		data() {
 			return {
 				id: 0,

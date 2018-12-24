@@ -22,13 +22,46 @@ class Setting extends AbstractSetting {
 		) );
 		$settings = array(
 			array(
-				'id'          => 'images_urls',
-				'type'        => 'repeater',
-				'section'     => 'image_carousel_url',
-				'label'       => esc_html__( 'Slider items', 'carousel-slider' ),
-				'button_text' => esc_html__( 'Add item', 'carousel-slider' ),
-				'default'     => array(),
-				'priority'    => 10,
+				'id'            => 'images_urls',
+				'type'          => 'repeater',
+				'section'       => 'image_carousel_url',
+				'label'         => esc_html__( 'Slider items', 'carousel-slider' ),
+				'button_text'   => esc_html__( 'Add item', 'carousel-slider' ),
+				'default'       => array(),
+				'priority'      => 10,
+				'primary_field' => 'title',
+				'fields'        => array(
+					array(
+						'id'       => 'url',
+						'type'     => 'url',
+						'label'    => esc_html__( 'Image URL', 'carousel-slider' ),
+						'priority' => 10,
+					),
+					array(
+						'id'       => 'title',
+						'type'     => 'text',
+						'label'    => esc_html__( 'Image Title', 'carousel-slider' ),
+						'priority' => 20,
+					),
+					array(
+						'id'       => 'caption',
+						'type'     => 'text',
+						'label'    => esc_html__( 'Image Caption', 'carousel-slider' ),
+						'priority' => 20,
+					),
+					array(
+						'id'       => 'alt',
+						'type'     => 'text',
+						'label'    => esc_html__( 'Image Alt Text', 'carousel-slider' ),
+						'priority' => 20,
+					),
+					array(
+						'id'       => 'link_url',
+						'type'     => 'url',
+						'label'    => esc_html__( 'Image Link to (URL)', 'carousel-slider' ),
+						'priority' => 20,
+					),
+				),
 			),
 			array(
 				'id'          => 'show_image_title',

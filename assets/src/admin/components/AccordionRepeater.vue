@@ -1,7 +1,7 @@
 <template>
 	<div class="carousel-slider-toggle" :class="{'is-opened':isActive}">
-		<div class="carousel-slider-toggle__heading" @click="isActive = !isActive">
-			<span class="carousel-slider-toggle__title">{{title}}</span>
+		<div class="carousel-slider-toggle__heading">
+			<span class="carousel-slider-toggle__title" @click="isActive = !isActive">{{title}}</span>
 			<span class="carousel-slider-toggle__icons">
 				<span class="carousel-slider-toggle__icons-copy" @click="clickCopy">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
@@ -93,6 +93,8 @@
 			white-space: nowrap;
 			overflow: hidden;
 			text-overflow: ellipsis;
+			display: flex;
+			flex-grow: 1;
 		}
 
 		&__icons {

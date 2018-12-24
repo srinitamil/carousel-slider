@@ -24,14 +24,15 @@
 							</template>
 						</label>
 						<template v-if="'repeater' === field.type">
-							<accordion-repeater title="Reapiter Reapiter Reapiter Reapiter">
-								Content test
-							</accordion-repeater>
-							<template v-for="repeater in slider[field.id]">
-								<accordion-repeater title="Item 1">
-									Content test
-								</accordion-repeater>
-							</template>
+							<draggable v-model="slider[field.id]">
+								<template v-for="(item, index) in slider[field.id]">
+									<accordion-repeater :title="getItemTitle(item, field)" :key="index + 1"
+														@click:clear="clearItem(item, slider[field.id])"
+														@click:copy="copyItem(item, slider[field.id])">
+										{{item}}
+									</accordion-repeater>
+								</template>
+							</draggable>
 							<div class="media-gallery-button">
 								<mdl-button type="raised" color="default"
 											@click="addRepeaterItem(field, slider[field.id])">{{field.button_text}}
@@ -78,6 +79,7 @@
 </template>
 
 <script>
+	import draggable from 'vuedraggable';
 	import Accordion from '../components/Accordion.vue';
 	import AccordionRepeater from '../components/AccordionRepeater.vue';
 	import ColorPicker from '../components/ColorPicker.vue';
@@ -92,6 +94,7 @@
 	export default {
 		name: "Slider",
 		components: {
+			draggable,
 			Accordion,
 			AccordionRepeater,
 			mdlSlider,
@@ -178,15 +181,36 @@
 					url: window.carouselSliderSettings.root + '/sliders/' + self.slider.id,
 					method: 'PUT',
 					data: self.slider,
-					success: function (response) {
+					success: function () {
 						self.$root.$emit('show-snackbar', {
 							message: 'Data hes been saved!',
-						})
+						});
 					}
 				});
 			},
+			getItemTitle(item, field) {
+				let primary_field = field.fields[0].id;
+				if (typeof field.primary_field !== "undefined") {
+					primary_field = field.primary_field;
+				}
+				let title = item[primary_field];
+
+				return title;
+			},
 			addRepeaterItem(field, options) {
 				console.log(field, options);
+				let _ids = {};
+				field.fields.map((el) => {
+					_ids[el.id] = '';
+				});
+				options.push(_ids);
+			},
+			copyItem(item, items) {
+				let index = items.indexOf(item) + 1;
+				items.splice(index, 0, item);
+			},
+			clearItem(item, items) {
+				this.$delete(items, items.indexOf(item));
 			}
 		}
 	}

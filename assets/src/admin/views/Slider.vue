@@ -29,7 +29,12 @@
 									<accordion-repeater :title="getItemTitle(item, field)" :key="index + 1"
 														@click:clear="clearItem(item, slider[field.id])"
 														@click:copy="copyItem(item, slider[field.id])">
-										{{item}}
+										<template v-for="_field in field.fields">
+											<template v-if="isTextfield(_field.type)">
+												<mdl-textfield :type="_field.type" :label="_field.label"
+															   v-model="item[_field.id]"></mdl-textfield>
+											</template>
+										</template>
 									</accordion-repeater>
 								</template>
 							</draggable>
@@ -90,6 +95,7 @@
 	import mdlFab from '../../material-design-lite/button/mdlFab.vue';
 	import mdlTooltip from '../../material-design-lite/tooltip/mdlTooltip.vue';
 	import mdlButton from '../../material-design-lite/button/mdlButton.vue';
+	import mdlTextfield from '../../material-design-lite/textfield/mdlTextfield.vue';
 
 	export default {
 		name: "Slider",
@@ -104,6 +110,7 @@
 			mdlFab,
 			mdlTooltip,
 			mdlButton,
+			mdlTextfield,
 			MediaUploader
 		},
 		data() {
@@ -142,6 +149,11 @@
 			}
 		},
 		methods: {
+			isTextfield(type) {
+				let valid = ['text', 'number', 'url'];
+
+				return valid.indexOf(type) !== -1;
+			},
 			getItem() {
 				let $ = window.jQuery, self = this;
 				$.ajax({

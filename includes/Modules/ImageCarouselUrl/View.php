@@ -33,7 +33,9 @@ class View extends AbstractView {
 			$full_caption = $this->get_attachment_caption( $slider, $imageInfo );
 			$content      = $image . $full_caption;
 
-			if ( Utils::is_url( $imageInfo['link_url'] ) ) {
+			if ( $slider->show_lightbox() ) {
+				$html .= '<a href="' . esc_url( $imageInfo['url'] ) . '" class="magnific-popup">' . $content . '</a>';
+			} elseif ( Utils::is_url( $imageInfo['link_url'] ) ) {
 				$html .= '<a href="' . $imageInfo['link_url'] . '" target="' . $slider->get_image_target() . '">' . $content . '</a>';
 			} else {
 				$html .= $content;

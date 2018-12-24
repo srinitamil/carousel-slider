@@ -4,6 +4,7 @@ namespace CarouselSlider\REST;
 
 use CarouselSlider\Abstracts\AbstractSlider;
 use CarouselSlider\Modules\ImageCarousel\Slider as ImageCarouselSlider;
+use CarouselSlider\Modules\ImageCarouselUrl\Slider as ImageCarouselUrlSlider;
 use CarouselSlider\Supports\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -172,6 +173,8 @@ class SliderController extends ApiController {
 
 		if ( 'image-carousel' == $type ) {
 			$slider = new ImageCarouselSlider( $id );
+		} elseif ( 'image-carousel-url' == $type ) {
+			$slider = new ImageCarouselUrlSlider( $id );
 		} else {
 			$slider = new AbstractSlider( $id );
 		}

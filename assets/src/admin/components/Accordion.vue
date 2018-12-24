@@ -11,7 +11,7 @@
 				</svg>
 			</span>
 		</div>
-		<div class="carousel-slider-accordion__panel">
+		<div class="carousel-slider-accordion__panel" :class="{'is-panel-opened':isActive}">
 			<slot></slot>
 		</div>
 	</div>
@@ -85,7 +85,7 @@
 		&__panel {
 			display: none;
 
-			.is-opened & {
+			&.is-panel-opened {
 				padding: 15px;
 				display: block;
 			}

@@ -20,6 +20,7 @@ class Slider extends AbstractSlider {
 		$data['show_image_caption'] = $this->show_image_caption();
 		$data['show_lightbox']      = $this->show_lightbox();
 		$data['image_target']       = $this->get_image_target();
+		$data['images_urls']        = $this->get_image_urls();
 		$data['images']             = $this->get_images();
 
 		return $data;
@@ -64,12 +65,21 @@ class Slider extends AbstractSlider {
 	}
 
 	/**
+	 * Get image urls
+	 *
+	 * @return array
+	 */
+	public function get_image_urls() {
+		return $this->get_prop( 'images_urls' );
+	}
+
+	/**
 	 * Get images
 	 *
 	 * @return array
 	 */
 	public function get_images() {
-		$_urls = $this->get_prop( 'images_urls' );
+		$_urls = $this->get_image_urls();
 		$urls  = array();
 		foreach ( $_urls as $url ) {
 			@list( $width, $height ) = array( '', '' );

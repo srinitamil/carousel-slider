@@ -30,6 +30,7 @@ class SettingManager extends Collection {
 	 */
 	public function __construct() {
 		$this->set( 'image-carousel', 'CarouselSlider\\Modules\\ImageCarousel\\Setting' );
+		$this->set( 'image-carousel-url', 'CarouselSlider\\Modules\\ImageCarouselUrl\\Setting' );
 
 		/**
 		 * Give other plugin option to add their own action(s)

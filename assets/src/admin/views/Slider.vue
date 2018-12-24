@@ -23,6 +23,21 @@
 								</mdl-tooltip>
 							</template>
 						</label>
+						<template v-if="'repeater' === field.type">
+							<accordion-repeater title="Reapiter Reapiter Reapiter Reapiter">
+								Content test
+							</accordion-repeater>
+							<template v-for="repeater in slider[field.id]">
+								<accordion-repeater title="Item 1">
+									Content test
+								</accordion-repeater>
+							</template>
+							<div class="media-gallery-button">
+								<mdl-button type="raised" color="default"
+											@click="addRepeaterItem(field, slider[field.id])">{{field.button_text}}
+								</mdl-button>
+							</div>
+						</template>
 						<template v-if="'select' === field.type">
 							<select :id="field.id" v-model="slider[field.id]" class="carousel-slider-control__input">
 								<option v-for="(choice, key) in field.choices" :value="key">{{choice}}</option>
@@ -64,6 +79,7 @@
 
 <script>
 	import Accordion from '../components/Accordion.vue';
+	import AccordionRepeater from '../components/AccordionRepeater.vue';
 	import ColorPicker from '../components/ColorPicker.vue';
 	import MediaUploader from '../components/MediaUploader.vue';
 	import mdlSlider from '../../material-design-lite/slider/mdlSlider.vue';
@@ -77,6 +93,7 @@
 		name: "Slider",
 		components: {
 			Accordion,
+			AccordionRepeater,
 			mdlSlider,
 			mdlSwitch,
 			mdlRadioButton,
@@ -167,6 +184,9 @@
 						})
 					}
 				});
+			},
+			addRepeaterItem(field, options) {
+				console.log(field, options);
 			}
 		}
 	}

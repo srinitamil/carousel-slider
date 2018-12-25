@@ -45,6 +45,9 @@
 												<mdl-textfield :type="_field.type" :label="_field.label"
 															   v-model="item[_field.id]"></mdl-textfield>
 											</template>
+											<template v-if="'background' === _field.type">
+												<background v-model="item[_field.id]"></background>
+											</template>
 										</template>
 									</accordion-repeater>
 								</template>
@@ -101,12 +104,13 @@
 <script>
 	import draggable from 'vuedraggable';
 	import Accordion from '../components/Accordion.vue';
-	import ImageCarousel from '../components/ImageCarousel.vue';
-	import ImageCarouselUrl from '../components/ImageCarouselUrl.vue';
-	import VideoCarousel from '../components/VideoCarousel.vue';
+	import ImageCarousel from '../components/sliders/ImageCarousel.vue';
+	import ImageCarouselUrl from '../components/sliders/ImageCarouselUrl.vue';
+	import VideoCarousel from '../components/sliders/VideoCarousel.vue';
 	import AccordionRepeater from '../components/AccordionRepeater.vue';
-	import ColorPicker from '../components/ColorPicker.vue';
-	import MediaUploader from '../components/MediaUploader.vue';
+	import ColorPicker from '../components/fields/ColorPicker.vue';
+	import MediaUploader from '../components/fields/MediaUploader.vue';
+	import Background from '../components/fields/Background.vue';
 	import mdlSlider from '../../material-design-lite/slider/mdlSlider.vue';
 	import mdlSwitch from '../../material-design-lite/switch/mdlSwitch.vue';
 	import mdlRadioButton from '../../material-design-lite/radio-button/mdlRadioButton.vue';
@@ -133,6 +137,7 @@
 			ImageCarousel,
 			ImageCarouselUrl,
 			VideoCarousel,
+			Background,
 		},
 		data() {
 			return {

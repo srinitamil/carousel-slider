@@ -34,6 +34,7 @@ class SettingManager extends Collection {
 		$this->set( 'video-carousel', 'CarouselSlider\\Modules\\VideoCarousel\\Setting' );
 		$this->set( 'post-carousel', 'CarouselSlider\\Modules\\PostCarousel\\Setting' );
 		$this->set( 'product-carousel', 'CarouselSlider\\Modules\\ProductCarousel\\Setting' );
+		$this->set( 'hero-banner-slider', 'CarouselSlider\\Modules\\HeroCarousel\\Setting' );
 
 		/**
 		 * Give other plugin option to add their own action(s)

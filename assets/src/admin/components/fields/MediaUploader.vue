@@ -33,7 +33,7 @@
 </template>
 
 <script>
-	import mdlButton from '../../material-design-lite/button/mdlButton.vue';
+	import mdlButton from '../../../material-design-lite/button/mdlButton.vue';
 
 	export default {
 		name: "MediaUploader",

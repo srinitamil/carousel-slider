@@ -9,7 +9,7 @@
 </template>
 
 <script>
-	import {carousel} from '../../mixins/carousel.js';
+	import {carousel} from './carousel.js';
 
 	export default {
 		name: "ImageCarouselUrl",

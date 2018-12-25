@@ -22,7 +22,7 @@
 			id: {type: String},
 			type: {type: String, default: 'text'},
 			label: {type: String},
-			value: {type: String},
+			value: {type: [String, Number]},
 			helptext: {type: String},
 			multiline: {type: Boolean, default: false},
 			fullwidth: {type: Boolean, default: false},

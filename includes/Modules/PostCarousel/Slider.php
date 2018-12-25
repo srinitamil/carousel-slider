@@ -139,9 +139,18 @@ class Slider extends AbstractSlider {
 	 * @return array
 	 */
 	public function to_array() {
-		$data           = parent::to_array();
-		$data['height'] = $this->get_height();
-		$data['posts']  = $this->prepare_posts_for_rest();
+		$data               = parent::to_array();
+		$data['posts']      = $this->prepare_posts_for_rest();
+		$data['height']     = $this->get_height();
+		$data['query_type'] = $this->get_query_type();
+		$data['per_page']   = $this->get_per_page();
+		$data['orderby']    = $this->get_orderby();
+		$data['order']      = $this->get_order();
+		$data['post_in']    = $this->get_post_in();
+		$data['categories'] = $this->get_categories();
+		$data['tags']       = $this->get_tags();
+		$data['date_from']  = $this->get_date_from();
+		$data['date_to']    = $this->get_date_to();
 
 		return $data;
 	}
@@ -225,7 +234,7 @@ class Slider extends AbstractSlider {
 				'id'         => $post->ID,
 				'link'       => get_permalink( $post->ID ),
 				'title'      => get_the_title( $post->ID ),
-				'excerpt'    => get_the_excerpt( $post ),
+				// 'excerpt'    => get_the_excerpt( $post ),
 				'author'     => array(
 					'id'     => $author,
 					'name'   => $author_name,
@@ -299,5 +308,23 @@ class Slider extends AbstractSlider {
 		}
 
 		return get_posts( $args );
+	}
+
+	/**
+	 * Get post categories list
+	 *
+	 * @return array
+	 */
+	public static function get_post_categories() {
+		return static::get_terms( 'category' );
+	}
+
+	/**
+	 * Get post tags list
+	 *
+	 * @return array
+	 */
+	public static function get_post_tags() {
+		return static::get_terms( 'post_tag' );
 	}
 }

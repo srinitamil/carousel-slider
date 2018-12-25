@@ -28,6 +28,33 @@ class Slider extends AbstractSlider {
 	 */
 	public static function get_query_types( $key_only = false ) {
 		$types = array(
+			'recent'                  => esc_html__( 'Recent Products', 'carousel-slider' ),
+			'featured'                => esc_html__( 'Featured Products', 'carousel-slider' ),
+			'sale'                    => esc_html__( 'Sale Products', 'carousel-slider' ),
+			'best_selling'            => esc_html__( 'Best-Selling Products', 'carousel-slider' ),
+			'top_rated'               => esc_html__( 'Top Rated Products', 'carousel-slider' ),
+			'product_categories_list' => esc_html__( 'Product Categories List', 'carousel-slider' ),
+			'product_categories'      => esc_html__( 'Products by Categories', 'carousel-slider' ),
+			'product_tags'            => esc_html__( 'Products by Tags', 'carousel-slider' ),
+			'specific_products'       => esc_html__( 'Specific Products', 'carousel-slider' ),
+		);
+
+		if ( $key_only ) {
+			return array_keys( $types );
+		}
+
+		return $types;
+	}
+
+	/**
+	 * Get query types
+	 *
+	 * @param bool $key_only
+	 *
+	 * @return array
+	 */
+	public static function _get_query_types( $key_only = false ) {
+		$types = array(
 			'query_product'      => esc_html__( 'Query Products', 'carousel-slider' ),
 			'product_categories' => esc_html__( 'Product Categories', 'carousel-slider' ),
 			'product_tags'       => esc_html__( 'Product Tags', 'carousel-slider' ),
@@ -48,7 +75,7 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array
 	 */
-	public static function get_product_query_types( $key_only = false ) {
+	public static function _get_product_query_types( $key_only = false ) {
 		$types = array(
 			'featured'                => esc_html__( 'Featured Products', 'carousel-slider' ),
 			'recent'                  => esc_html__( 'Recent Products', 'carousel-slider' ),
@@ -71,13 +98,13 @@ class Slider extends AbstractSlider {
 	 * @return string
 	 */
 	public function get_query_type() {
-		$valid_query_type = static::get_query_types( true );
+		$valid_query_type = static::_get_query_types( true );
 		$query_type       = $this->get_prop( 'query_type' );
 		// Typo mistake, for backup compatibility
 		$query_type = ( 'query_porduct' == $query_type ) ? 'query_product' : $query_type;
 		$query_type = in_array( $query_type, $valid_query_type ) ? $query_type : 'query_product';
 
-		$valid_query = static::get_product_query_types( true );
+		$valid_query = static::_get_product_query_types( true );
 		$query       = $this->get_prop( 'query' );
 		$query       = in_array( $query, $valid_query ) ? $query : 'recent';
 
@@ -160,7 +187,7 @@ class Slider extends AbstractSlider {
 	 * @return bool
 	 */
 	public function show_title() {
-		return $this->is_checked( $this->get_prop( 'title' ) );
+		return $this->is_checked( $this->get_prop( 'show_title' ) );
 	}
 
 	/**
@@ -169,7 +196,7 @@ class Slider extends AbstractSlider {
 	 * @return bool
 	 */
 	public function show_rating() {
-		return $this->is_checked( $this->get_prop( 'rating' ) );
+		return $this->is_checked( $this->get_prop( 'show_rating' ) );
 	}
 
 	/**
@@ -178,7 +205,7 @@ class Slider extends AbstractSlider {
 	 * @return bool
 	 */
 	public function show_price() {
-		return $this->is_checked( $this->get_prop( 'price' ) );
+		return $this->is_checked( $this->get_prop( 'show_price' ) );
 	}
 
 	/**
@@ -187,7 +214,7 @@ class Slider extends AbstractSlider {
 	 * @return bool
 	 */
 	public function show_cart_button() {
-		return $this->is_checked( $this->get_prop( 'cart_button' ) );
+		return $this->is_checked( $this->get_prop( 'show_cart_button' ) );
 	}
 
 	/**
@@ -196,7 +223,7 @@ class Slider extends AbstractSlider {
 	 * @return bool
 	 */
 	public function show_onsale() {
-		return $this->is_checked( $this->get_prop( 'onsale' ) );
+		return $this->is_checked( $this->get_prop( 'show_onsale' ) );
 	}
 
 	/**
@@ -214,7 +241,7 @@ class Slider extends AbstractSlider {
 	 * @return bool
 	 */
 	public function show_quick_view() {
-		return $this->is_checked( $this->get_prop( 'quick_view' ) );
+		return $this->is_checked( $this->get_prop( 'show_quick_view' ) );
 	}
 
 	/**
@@ -251,6 +278,7 @@ class Slider extends AbstractSlider {
 	 */
 	public function to_array() {
 		$data                      = parent::to_array();
+		$data['query_type']        = $this->get_query_type();
 		$data['show_title']        = $this->show_title();
 		$data['show_rating']       = $this->show_rating();
 		$data['show_price']        = $this->show_price();
@@ -261,6 +289,7 @@ class Slider extends AbstractSlider {
 		$data['title_color']       = $this->get_title_color();
 		$data['button_color']      = $this->get_button_color();
 		$data['button_text_color'] = $this->get_button_text_color();
+		$data['per_page']          = $this->get_per_page();
 		$data['products']          = array();
 
 		return $data;
@@ -277,13 +306,13 @@ class Slider extends AbstractSlider {
 		$this->data['tags']              = $this->get_meta( '_product_tags' );
 		$this->data['product_in']        = $this->get_meta( '_product_in' );
 		$this->data['per_page']          = $this->get_meta( '_products_per_page' );
-		$this->data['title']             = $this->get_meta( '_product_title' );
-		$this->data['rating']            = $this->get_meta( '_product_rating' );
-		$this->data['price']             = $this->get_meta( '_product_price' );
-		$this->data['cart_button']       = $this->get_meta( '_product_cart_button' );
-		$this->data['onsale']            = $this->get_meta( '_product_onsale' );
+		$this->data['show_title']        = $this->get_meta( '_product_title' );
+		$this->data['show_rating']       = $this->get_meta( '_product_rating' );
+		$this->data['show_price']        = $this->get_meta( '_product_price' );
+		$this->data['show_cart_button']  = $this->get_meta( '_product_cart_button' );
+		$this->data['show_onsale']       = $this->get_meta( '_product_onsale' );
 		$this->data['wishlist']          = $this->get_meta( '_product_wishlist' );
-		$this->data['quick_view']        = $this->get_meta( '_product_quick_view' );
+		$this->data['show_quick_view']   = $this->get_meta( '_product_quick_view' );
 		$this->data['title_color']       = $this->get_meta( '_product_title_color' );
 		$this->data['button_color']      = $this->get_meta( '_product_button_bg_color' );
 		$this->data['button_text_color'] = $this->get_meta( '_product_button_text_color' );
@@ -315,6 +344,25 @@ class Slider extends AbstractSlider {
 		$keys['button_text_color'] = '_product_button_text_color';
 
 		return $keys;
+	}
+
+
+	/**
+	 * Get product categories list
+	 *
+	 * @return array
+	 */
+	public static function get_product_categories_list() {
+		return static::get_terms( 'product_cat' );
+	}
+
+	/**
+	 * Get product tags list
+	 *
+	 * @return array
+	 */
+	public static function get_product_tags_list() {
+		return static::get_terms( 'product_tag' );
 	}
 
 	/**

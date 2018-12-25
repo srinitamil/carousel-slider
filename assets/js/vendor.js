@@ -98,10 +98,20 @@
 /******/ 	__webpack_require__.oe = function(err) { console.error(err); throw err; };
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 98);
+/******/ 	return __webpack_require__(__webpack_require__.s = 112);
 /******/ })
 /************************************************************************/
 /******/ ({
+
+/***/ 112:
+/***/ (function(module, exports, __webpack_require__) {
+
+__webpack_require__(3);
+__webpack_require__(8);
+module.exports = __webpack_require__(21);
+
+
+/***/ }),
 
 /***/ 21:
 /***/ (function(module, exports, __webpack_require__) {
@@ -523,7 +533,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   }
 
   if (true) {
-    var Sortable = __webpack_require__(69);
+    var Sortable = __webpack_require__(73);
     module.exports = buildDraggable(Sortable);
   } else if (typeof define == "function" && define.amd) {
     define(['sortablejs'], function (Sortable) {
@@ -11632,11 +11642,11 @@ Vue.compile = compileToFunctions;
 
 /* harmony default export */ __webpack_exports__["default"] = (Vue);
 
-/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4), __webpack_require__(5), __webpack_require__(31).setImmediate))
+/* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4), __webpack_require__(5), __webpack_require__(35).setImmediate))
 
 /***/ }),
 
-/***/ 31:
+/***/ 35:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {var scope = (typeof global !== "undefined" && global) ||
@@ -11692,7 +11702,7 @@ exports._unrefActive = exports.active = function(item) {
 };
 
 // setimmediate attaches itself to the global object
-__webpack_require__(32);
+__webpack_require__(36);
 // On some exotic environments, it's not clear which object `setimmediate` was
 // able to install onto.  Search each possibility in the same order as the
 // `setimmediate` library.
@@ -11707,7 +11717,7 @@ exports.clearImmediate = (typeof self !== "undefined" && self.clearImmediate) ||
 
 /***/ }),
 
-/***/ 32:
+/***/ 36:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global, process) {(function (global, undefined) {
@@ -12120,7 +12130,7 @@ module.exports = g;
 
 /***/ }),
 
-/***/ 69:
+/***/ 73:
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_RESULT__;/**!
@@ -16296,16 +16306,6 @@ if (inBrowser && window.Vue) {
 /* harmony default export */ __webpack_exports__["default"] = (VueRouter);
 
 /* WEBPACK VAR INJECTION */}.call(__webpack_exports__, __webpack_require__(4)))
-
-/***/ }),
-
-/***/ 98:
-/***/ (function(module, exports, __webpack_require__) {
-
-__webpack_require__(3);
-__webpack_require__(8);
-module.exports = __webpack_require__(21);
-
 
 /***/ })
 

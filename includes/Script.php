@@ -55,7 +55,7 @@ class Script {
 			),
 			'carousel-slider-admin-vue' => array(
 				'src'        => CAROUSEL_SLIDER_ASSETS . '/css/admin-vue.css',
-				'dependency' => array( 'wp-color-picker' ),
+				'dependency' => array( 'wp-color-picker', 'carousel-slider' ),
 				'version'    => CAROUSEL_SLIDER_VERSION,
 				'media'      => 'all',
 			),

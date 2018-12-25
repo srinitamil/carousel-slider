@@ -10,6 +10,17 @@
 						   spellcheck="true" autocomplete="off">
 				</div>
 			</div>
+			<div class="carousel-slider-preview">
+				<template v-if="slider.type === 'image-carousel'">
+					<image-carousel :options="slider"></image-carousel>
+				</template>
+				<template v-if="slider.type === 'image-carousel-url'">
+					<image-carousel-url :options="slider"></image-carousel-url>
+				</template>
+				<template v-if="slider.type === 'video-carousel'">
+					<video-carousel :options="slider"></video-carousel>
+				</template>
+			</div>
 		</div>
 		<div class="carousel-slider-sidebar">
 			<accordion v-for="section in _sections" :title="section.title" :key="section.id" :active="section.active">
@@ -69,6 +80,10 @@
 						<template v-if="'gallery' === field.type">
 							<media-uploader v-model="slider[field.id]" :multiple="true"></media-uploader>
 						</template>
+						<template v-if="isTextfield(field.type)">
+							<mdl-textfield :type="field.type" :label="field.label"
+										   v-model="slider[field.id]"></mdl-textfield>
+						</template>
 					</div>
 				</template>
 			</accordion>
@@ -86,6 +101,9 @@
 <script>
 	import draggable from 'vuedraggable';
 	import Accordion from '../components/Accordion.vue';
+	import ImageCarousel from '../components/ImageCarousel.vue';
+	import ImageCarouselUrl from '../components/ImageCarouselUrl.vue';
+	import VideoCarousel from '../components/VideoCarousel.vue';
 	import AccordionRepeater from '../components/AccordionRepeater.vue';
 	import ColorPicker from '../components/ColorPicker.vue';
 	import MediaUploader from '../components/MediaUploader.vue';
@@ -111,7 +129,10 @@
 			mdlTooltip,
 			mdlButton,
 			mdlTextfield,
-			MediaUploader
+			MediaUploader,
+			ImageCarousel,
+			ImageCarouselUrl,
+			VideoCarousel,
 		},
 		data() {
 			return {
@@ -150,7 +171,7 @@
 		},
 		methods: {
 			isTextfield(type) {
-				let valid = ['text', 'number', 'url'];
+				let valid = ['text', 'number', 'url', 'date'];
 
 				return valid.indexOf(type) !== -1;
 			},
@@ -210,9 +231,8 @@
 				return title;
 			},
 			addRepeaterItem(field, options) {
-				console.log(field, options);
-				let _ids = {};
-				field.fields.map((el) => {
+				let _ids = {}, fields = field.fields ? field.fields : [];
+				fields.map((el) => {
 					_ids[el.id] = '';
 				});
 				options.push(_ids);
@@ -330,5 +350,13 @@
 			width: 300px;
 			float: right;
 		}
+	}
+
+	.carousel-slider-preview {
+		background: white;
+		margin-top: 20px;
+		min-height: 100px;
+		padding: 15px;
+		width: 100%;
 	}
 </style>

@@ -68,6 +68,46 @@ class AbstractSlider implements \JsonSerializable {
 	}
 
 	/**
+	 * Get terms
+	 *
+	 * @param string $taxonomy
+	 *
+	 * @return array|int|\WP_Error
+	 */
+	public static function get_terms( $taxonomy = 'category' ) {
+		/** @var \WP_Term[] $_terms */
+		$_terms = get_terms( array( 'taxonomy' => $taxonomy, 'hide_empty' => true ) );
+		$terms  = array();
+		foreach ( $_terms as $term ) {
+			$terms[ $term->term_id ] = sprintf( '%s (%s)', $term->name, $term->count );
+		}
+
+		return $terms;
+	}
+
+	/**
+	 * Get posts list for dropdown
+	 *
+	 * @param string $post_type
+	 *
+	 * @return array
+	 */
+	public static function get_posts_list( $post_type = 'post' ) {
+		/** @var \WP_Post[] $_posts */
+		$_posts = get_posts( array(
+			'post_type'      => $post_type,
+			'post_status'    => 'publish',
+			'posts_per_page' => 500
+		) );
+		$posts  = array();
+		foreach ( $_posts as $post ) {
+			$posts[ $post->ID ] = $post->post_title;
+		}
+
+		return $posts;
+	}
+
+	/**
 	 * Represent current class as array
 	 *
 	 * @return array

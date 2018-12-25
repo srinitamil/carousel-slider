@@ -3,7 +3,6 @@
 namespace CarouselSlider\Modules\VideoCarousel;
 
 use CarouselSlider\Abstracts\AbstractSlider;
-use CarouselSlider\Supports\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
@@ -17,10 +16,29 @@ class Slider extends AbstractSlider {
 	 * @return array
 	 */
 	public function to_array() {
-		$data           = parent::to_array();
-		$data['videos'] = $this->get_videos();
+		$data               = parent::to_array();
+		$data['video_urls'] = $this->get_video_urls();
+		$data['videos']     = $this->get_prop( 'videos' );
 
 		return $data;
+	}
+
+	/**
+	 * Get video urls
+	 *
+	 * @return array
+	 */
+	public function get_video_urls() {
+		return $this->get_prop( 'video_urls' );
+	}
+
+	/**
+	 * Get videos
+	 *
+	 * @return array
+	 */
+	public function get_videos() {
+		return $this->get_prop( 'videos' );
 	}
 
 	/**
@@ -28,7 +46,8 @@ class Slider extends AbstractSlider {
 	 */
 	protected function read_slider_data() {
 		parent::read_slider_data();
-		$this->data['video_urls'] = $this->get_meta( '_video_url' );
+		$this->data['video_urls'] = $this->_get_video_urls();
+		$this->data['videos']     = $this->get_videos_from_providers();
 	}
 
 	/**
@@ -44,30 +63,31 @@ class Slider extends AbstractSlider {
 		return $keys;
 	}
 
-	/**
-	 * Get video urls
-	 *
-	 * @return array
-	 */
-	public function get_video_urls() {
-		$_urls = $this->get_prop( 'video_urls' );
+	private function _get_video_urls() {
+		$urls = $this->get_meta( '_video_url' );
 
-		if ( is_string( $_urls ) ) {
-			$_urls = explode( ',', $_urls );
+		// Check for backward compatibility
+		if ( is_string( $urls ) ) {
+			$_urls = explode( ',', $urls );
+			$urls  = array();
+			foreach ( $_urls as $url ) {
+				$urls[]['url'] = $url;
+			}
 		}
 
-		return $_urls;
+		return $urls;
 	}
 
 	/**
 	 *
 	 * @return array
 	 */
-	public function get_videos() {
+	private function get_videos_from_providers() {
 		$video_urls = $this->get_video_urls();
 		$_url       = array();
-		foreach ( $video_urls as $video_url ) {
-			if ( ! Utils::is_url( $video_url ) ) {
+		foreach ( $video_urls as $url ) {
+			$video_url = $url['url'];
+			if ( ! filter_var( $video_url, FILTER_VALIDATE_URL ) ) {
 				continue;
 			}
 			$provider  = '';

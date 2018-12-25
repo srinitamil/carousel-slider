@@ -3,8 +3,6 @@
 namespace CarouselSlider\REST;
 
 use CarouselSlider\Abstracts\AbstractSlider;
-use CarouselSlider\Modules\ImageCarousel\Slider as ImageCarouselSlider;
-use CarouselSlider\Modules\ImageCarouselUrl\Slider as ImageCarouselUrlSlider;
 use CarouselSlider\Supports\Utils;
 
 if ( ! defined( 'ABSPATH' ) ) {
@@ -171,13 +169,7 @@ class SliderController extends ApiController {
 				__( 'Slider type is not registered.', 'carousel-slider' ) );
 		}
 
-		if ( 'image-carousel' == $type ) {
-			$slider = new ImageCarouselSlider( $id );
-		} elseif ( 'image-carousel-url' == $type ) {
-			$slider = new ImageCarouselUrlSlider( $id );
-		} else {
-			$slider = new AbstractSlider( $id );
-		}
+		$slider = Utils::get_slider( $id );
 
 		if ( ! $slider->get_id() ) {
 			return $this->respond_not_found( 'rest_no_item_found',
@@ -457,27 +449,6 @@ class SliderController extends ApiController {
 	 */
 	private function delete_item_args() {
 		return array(
-			'force' => array(
-				'description' => esc_html__( 'Whether to bypass trash and force deletion.', 'carousel-slider' ),
-				'type'        => 'boolean',
-				'required'    => false,
-				'default'     => false,
-			),
-		);
-	}
-
-	/**
-	 * Delete items args
-	 *
-	 * @return array
-	 */
-	private function delete_items_args() {
-		return array(
-			'ids'   => array(
-				'description' => esc_html__( 'List of ids to be deleted.', 'carousel-slider' ),
-				'type'        => 'array',
-				'required'    => true,
-			),
 			'force' => array(
 				'description' => esc_html__( 'Whether to bypass trash and force deletion.', 'carousel-slider' ),
 				'type'        => 'boolean',

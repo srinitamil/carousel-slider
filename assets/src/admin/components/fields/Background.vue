@@ -4,70 +4,87 @@
 		<!-- background-color -->
 		<div class="background-color">
 			<h4>Background Color</h4>
-			<input type="text" data-default-color="" data-alpha="true" :value="value.color"
-				   class="shapla-color-control"/>
+			<color-picker v-model="value.color"></color-picker>
 		</div>
 
 		<!-- background-image -->
 		<div class="background-image">
 			<h4>Background Image</h4>
-			<div class="attachment-media-view background-image-upload">
-				<div class="thumbnail thumbnail-image">
-					<img src="" alt=""/>
+			<background-image v-model="value.image"></background-image>
+		</div>
+
+		<template v-if="has_image">
+
+			<!-- background-overlay-color -->
+			<div class="background-color" v-if="is_enabled('overlay-color')">
+				<h4>Background Overlay</h4>
+				<color-picker v-model="value.overlay_color"></color-picker>
+			</div>
+
+			<!-- background-repeat -->
+			<div class="background-repeat" v-if="is_enabled('repeat')">
+				<h4>Background Repeat</h4>
+				<select class="widefat" v-model="value.repeat">
+					<option v-for="_repeat in background_repeat" :value="_repeat.value" v-html="_repeat.label"></option>
+				</select>
+			</div>
+
+			<!-- background-position -->
+			<div class="background-position" v-if="is_enabled('position')">
+				<h4>Background Position</h4>
+				<select class="widefat" v-model="value.position">
+					<option v-for="_position in background_position" :value="_position.value"
+							v-html="_position.label"></option>
+				</select>
+			</div>
+
+			<!-- background-size -->
+			<div class="background-size" v-if="is_enabled('size')">
+				<h4>Background Size</h4>
+				<div class="buttonset">
+					<template v-for="_size in background_size">
+						<input class="switch-input screen-reader-text" type="radio" v-model="value.size"
+							   :value="_size.value" :id="get_size_id(_size.value)">
+						<label class="switch-label switch-label-off" :for="get_size_id(_size.value)"
+							   v-html="_size.label"></label>
+					</template>
 				</div>
-				<div class="placeholder">No File Selected</div>
-				<div class="actions">
-					<button class="button background-image-upload-remove-button">Remove</button>
-					<button type="button" class="button background-image-upload-button">Select File</button>
+			</div>
+
+			<!-- background-attachment -->
+			<div class="background-attachment" v-if="is_enabled('attachment')">
+				<h4>Background Attachment</h4>
+				<div class="buttonset">
+					<template v-for="_attachment in background_attachment">
+						<input class="switch-input screen-reader-text" type="radio" v-model="value.attachment"
+							   :value="_attachment.value" :id="get_attachment_id(_attachment.value)">
+						<label class="switch-label switch-label-on" :for="get_attachment_id(_attachment.value)"
+							   v-html="_attachment.label"></label>
+					</template>
 				</div>
 			</div>
-		</div>
 
-		<!-- background-repeat -->
-		<div class="background-repeat">
-			<h4>Background Repeat</h4>
-			<select class="widefat">
-				<option v-for="_repeat in background_repeat" :value="_repeat.value" v-html="_repeat.label"></option>
-			</select>
-		</div>
-
-		<!-- background-position -->
-		<div class="background-position">
-			<h4>Background Position</h4>
-			<select class="widefat">
-				<option v-for="_position in background_position" :value="_position.value"
-						v-html="_position.label"></option>
-			</select>
-		</div>
-
-		<!-- background-size -->
-		<div class="background-size">
-			<h4>Background Size</h4>
-			<div class="buttonset">
-				<template v-for="_size in background_size">
-					<input class="switch-input screen-reader-text" type="radio" :value="_size.value">
-					<label class="switch-label switch-label-off" for="" v-html="_size.label"> </label>
-				</template>
+			<!-- background-effect -->
+			<div class="background-effect" v-if="is_enabled('effect')">
+				<h4>Ken Burns Effect</h4>
+				<select class="widefat" v-model="value.effect">
+					<option value="">None</option>
+					<option value="zoom-in">Zoom In</option>
+					<option value="zoom-out">Zoom Out</option>
+				</select>
 			</div>
-		</div>
-
-		<!-- background-attachment -->
-		<div class="background-attachment">
-			<h4>Background Attachment</h4>
-			<div class="buttonset">
-				<template v-for="_attachment in background_attachment">
-					<input class="switch-input screen-reader-text" type="radio" :value="_attachment.value" id="">
-					<label class="switch-label switch-label-on" for="" v-html="_attachment.label"></label>
-				</template>
-			</div>
-		</div>
+		</template>
 
 	</div>
 </template>
 
 <script>
+	import ColorPicker from './ColorPicker.vue';
+	import BackgroundImage from './BackgroundImage.vue';
+
 	export default {
 		name: "Background",
+		components: {ColorPicker, BackgroundImage},
 		props: {
 			value: {
 				type: Object, default: function () {
@@ -78,9 +95,21 @@
 						repeat: 'no-repeat',
 					}
 				}
+			},
+			supports: {
+				type: Array, default: function () {
+					return ['color', 'image', 'position', 'size']
+				}
 			}
 		},
 		computed: {
+			has_image() {
+				if (typeof this.value.image === "undefined") return false;
+				return (typeof this.value.image.src !== "undefined");
+			},
+			id() {
+				return this._uid;
+			},
 			background_attachment() {
 				return [
 					{value: 'fixed', label: 'Fixed'},
@@ -116,6 +145,17 @@
 				];
 			},
 		},
+		methods: {
+			is_enabled(feature) {
+				return -1 !== this.supports.indexOf(feature);
+			},
+			get_attachment_id(attachment) {
+				return 'background_attachment_' + attachment + '_' + this.id;
+			},
+			get_size_id(size) {
+				return 'background_size_' + size + '_' + this.id;
+			},
+		}
 	}
 </script>
 
@@ -123,11 +163,13 @@
 	.carousel-slider-control-background {
 		position: relative;
 
+		.background-image h4,
 		.background-attachment h4,
 		.background-color h4,
 		.background-position h4,
 		.background-repeat h4,
-		.background-size h4 {
+		.background-size h4,
+		.background-effect h4 {
 			margin-bottom: 5px;
 		}
 
@@ -150,17 +192,6 @@
 				background-color: #3498DB;
 				color: #fff;
 			}
-		}
-
-		.placeholder {
-			width: 100%;
-			position: relative;
-			text-align: center;
-			cursor: default;
-			border: 1px dashed #b4b9be;
-			box-sizing: border-box;
-			padding: 9px 0;
-			line-height: 20px;
 		}
 	}
 </style>

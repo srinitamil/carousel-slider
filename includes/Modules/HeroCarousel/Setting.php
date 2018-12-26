@@ -37,12 +37,14 @@ class Setting extends AbstractSetting {
 						'type'        => 'background',
 						'label'       => esc_html__( 'Slide Background', 'carousel-slider' ),
 						'description' => esc_html__( 'Controls the background of the slide.', 'carousel-slider' ),
+						'supports'    => array( 'color', 'image', 'position', 'size', 'effect', 'overlay-color' ),
 						'default'     => array(),
 						'priority'    => 10,
 					),
 				),
 			),
 		);
+
 		$this->set_fields( $fields );
 	}
 }

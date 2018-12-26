@@ -21,7 +21,6 @@
 			element.wpColorPicker({
 				defaultColor: self.defaultColor,
 				change: function (event, ui) {
-					self.$emit('change', ui.color.toString());
 					self.$emit('input', ui.color.toString());
 				},
 			});

@@ -45,9 +45,12 @@
 												<mdl-textfield :type="_field.type" :label="_field.label"
 															   v-model="item[_field.id]"></mdl-textfield>
 											</template>
-											<template v-if="'background' === _field.type">
-												<background v-model="item[_field.id]"></background>
-											</template>
+											<accordion title="Background">
+												<template v-if="'background' === _field.type">
+													<background v-model="item[_field.id]"
+																:supports="_field.supports"></background>
+												</template>
+											</accordion>
 										</template>
 									</accordion-repeater>
 								</template>
@@ -347,12 +350,12 @@
 	@media (min-width: 782px) {
 		.carousel-slider-content {
 			float: left;
-			width: calc(100% - 320px);
+			width: calc(100% - 340px);
 		}
 
 		.carousel-slider-sidebar {
 			margin: 0 0 20px 20px;
-			width: 300px;
+			width: 320px;
 			float: right;
 		}
 	}

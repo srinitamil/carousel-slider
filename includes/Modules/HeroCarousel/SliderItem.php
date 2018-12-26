@@ -199,6 +199,7 @@ class SliderItem implements \JsonSerializable {
 
 		if ( is_array( $img_src ) ) {
 			return array(
+				'id'     => $image_id,
 				'src'    => $img_src[0],
 				'width'  => $img_src[1],
 				'height' => $img_src[2],

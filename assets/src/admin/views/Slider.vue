@@ -45,12 +45,35 @@
 												<mdl-textfield :type="_field.type" :label="_field.label"
 															   v-model="item[_field.id]"></mdl-textfield>
 											</template>
-											<accordion title="Background">
-												<template v-if="'background' === _field.type">
+											<template v-if="'background' === _field.type">
+												<accordion :title="_field.label">
 													<background v-model="item[_field.id]"
 																:supports="_field.supports"></background>
-												</template>
-											</accordion>
+												</accordion>
+											</template>
+											<template v-if="'rich-text' === _field.type">
+												<accordion :title="_field.label">
+													<rich-text v-model="item[_field.id]"
+															   :supports="_field.supports"></rich-text>
+												</accordion>
+											</template>
+											<template v-if="'button-generator' === _field.type">
+												<accordion :title="_field.label">
+													<button-generator v-model="item[_field.id]"
+																	  :supports="_field.supports"></button-generator>
+												</accordion>
+											</template>
+											<template v-if="'radio-button' === _field.type">
+												<div class="carousel-slider-control__field">
+													<label class="carousel-slider-control__label">{{_field.label}}</label>
+													<div class="mdl-radio-button-container">
+														<mdl-radio-button v-for="(value, key) in _field.choices"
+																		  :key="key" v-model="item[_field.id]"
+																		  :value="key"> {{value}}
+														</mdl-radio-button>
+													</div>
+												</div>
+											</template>
 										</template>
 									</accordion-repeater>
 								</template>
@@ -114,6 +137,8 @@
 	import ColorPicker from '../components/fields/ColorPicker.vue';
 	import MediaUploader from '../components/fields/MediaUploader.vue';
 	import Background from '../components/fields/Background.vue';
+	import RichText from '../components/fields/RichText.vue';
+	import ButtonGenerator from '../components/fields/ButtonGenerator.vue';
 	import mdlSlider from '../../material-design-lite/slider/mdlSlider.vue';
 	import mdlSwitch from '../../material-design-lite/switch/mdlSwitch.vue';
 	import mdlRadioButton from '../../material-design-lite/radio-button/mdlRadioButton.vue';
@@ -141,6 +166,8 @@
 			ImageCarouselUrl,
 			VideoCarousel,
 			Background,
+			RichText,
+			ButtonGenerator,
 		},
 		data() {
 			return {

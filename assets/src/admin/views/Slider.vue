@@ -37,7 +37,7 @@
 						<template v-if="'repeater' === field.type">
 							<draggable v-model="slider[field.id]">
 								<template v-for="(item, index) in slider[field.id]">
-									<accordion-repeater :title="getItemTitle(item, field)" :key="index + 1"
+									<accordion-repeater :title="getItemTitle(index, item, field)" :key="index + 1"
 														@click:clear="clearItem(item, slider[field.id])"
 														@click:copy="copyItem(item, slider[field.id])">
 										<template v-for="_field in field.fields">
@@ -256,14 +256,14 @@
 					}
 				});
 			},
-			getItemTitle(item, field) {
+			getItemTitle(index, item, field) {
 				let primary_field = field.fields[0].id;
 				if (typeof field.primary_field !== "undefined") {
 					primary_field = field.primary_field;
 				}
 				let title = item[primary_field];
 
-				return title;
+				return 'Item ' + (index + 1);
 			},
 			addRepeaterItem(field, options) {
 				let _ids = {}, fields = field.fields ? field.fields : [];
@@ -308,12 +308,31 @@
 		}
 	}
 
+	.mdl-slider__reset-icon {
+		box-sizing: border-box;
+		height: 32px;
+		width: 32px;
+	}
+
 	.carousel-slider-control {
 		&__field {
 			&:not(:last-child) {
 				margin-bottom: 15px;
 				padding-bottom: 15px;
 				border-bottom: 1px solid rgba(#000, 0.12);
+			}
+
+			&[data-type="switch"] {
+				display: flex;
+
+				.mdl-switch {
+					width: auto;
+					margin-right: 10px;
+				}
+
+				> * {
+					display: inline-flex;
+				}
 			}
 		}
 

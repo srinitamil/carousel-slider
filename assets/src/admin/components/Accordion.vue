@@ -1,6 +1,7 @@
 <template>
 	<div class="carousel-slider-accordion" :class="{'is-opened':isActive}">
-		<div class="carousel-slider-accordion__heading" @click="isActive = !isActive">
+		<div class="carousel-slider-accordion__heading" :class="{'is-heading-opened':isActive}"
+			 @click="isActive = !isActive">
 			<span class="carousel-slider-accordion__title">{{title}}</span>
 			<span class="carousel-slider-accordion__icon">
 				<svg class="carousel-slider-accordion__arrow" width="24px" height="24px" viewBox="0 0 24 24"
@@ -40,7 +41,7 @@
 
 <style lang="scss">
 	.carousel-slider-accordion {
-		border-top: 1px solid #e2e4e7;
+		//border-top: 1px solid #e2e4e7;
 		background-color: #fff;
 
 		&:not(:last-child) {
@@ -48,7 +49,7 @@
 		}
 
 		&:last-child {
-			border-bottom: 1px solid #e2e4e7;
+			//border-bottom: 1px solid #e2e4e7;
 		}
 
 		&__heading {
@@ -67,7 +68,7 @@
 				background: #f8f9f9;
 			}
 
-			.is-opened & {
+			&.is-heading-opened {
 				background: #f5f5f5;
 			}
 		}

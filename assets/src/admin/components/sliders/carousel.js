@@ -62,6 +62,10 @@ const carousel = {
 					1200: {items: this.options.items_desktop},
 					1500: {items: this.options.items_desktop_large},
 				},
+				navText: [
+					'<svg class="carousel-slider-nav-icon" viewBox="0 0 20 20"><path d="M14 5l-5 5 5 5-1 2-7-7 7-7z"></path></svg>',
+					'<svg class="carousel-slider-nav-icon" viewBox="0 0 20 20"><path d="M6 15l5-5-5-5 1-2 7 7-7 7z"></path></svg>',
+				],
 			};
 		}
 	},

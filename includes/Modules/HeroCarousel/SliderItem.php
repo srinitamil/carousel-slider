@@ -78,16 +78,16 @@ class SliderItem implements \JsonSerializable {
 	public function to_array() {
 		return array(
 			'heading'           => array(
-				'text'      => $this->get_slide_heading(),
-				'font_size' => $this->get_prop( 'heading_font_size' ),
-				'gutter'    => $this->get_prop( 'heading_gutter' ),
-				'color'     => $this->get_prop( 'heading_color' ),
+				'text'          => $this->get_slide_heading(),
+				'font_size'     => $this->get_prop( 'heading_font_size' ),
+				'margin_bottom' => $this->get_prop( 'heading_gutter' ),
+				'color'         => $this->get_prop( 'heading_color' ),
 			),
 			'description'       => array(
-				'text'      => $this->get_slide_description(),
-				'font_size' => $this->get_prop( 'description_font_size' ),
-				'gutter'    => $this->get_prop( 'description_gutter' ),
-				'color'     => $this->get_prop( 'description_color' ),
+				'text'          => $this->get_slide_description(),
+				'font_size'     => $this->get_prop( 'description_font_size' ),
+				'margin_bottom' => $this->get_prop( 'description_gutter' ),
+				'color'         => $this->get_prop( 'description_color' ),
 			),
 			'content_alignment' => $this->get_prop( 'content_alignment' ),
 			'background'        => array(

@@ -44,6 +44,10 @@
 		//border-top: 1px solid #e2e4e7;
 		background-color: #fff;
 
+		.carousel-slider-accordion {
+			border: 1px solid #e2e4e7;
+		}
+
 		&:not(:last-child) {
 			margin-bottom: 15px;
 		}

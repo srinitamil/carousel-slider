@@ -37,6 +37,9 @@
 				<mdl-radio v-model="sliderType" :value="slug">{{label}}</mdl-radio>
 			</p>
 		</mdl-modal>
+		<div class="carousel-slider-spinner" v-show="loading">
+			<mdl-spinner :active="loading"></mdl-spinner>
+		</div>
 	</div>
 </template>
 
@@ -46,12 +49,14 @@
 	import mdlFab from '../../material-design-lite/button/mdlFab.vue';
 	import mdlModal from '../../material-design-lite/modal/mdlModal.vue';
 	import mdlRadio from '../../material-design-lite/radio/mdlRadio.vue';
+	import mdlSpinner from '../../material-design-lite/spinner/mdlSpinner.vue';
 
 	export default {
 		name: "Home",
-		components: {ListTable, mdlFab, mdlModal, mdlRadio, CopyToClipboard},
+		components: {ListTable, mdlFab, mdlModal, mdlRadio, CopyToClipboard, mdlSpinner},
 		data() {
 			return {
+				loading: true,
 				modalActive: false,
 				sliderTypes: {},
 				sliderType: 'image-carousel',
@@ -96,6 +101,7 @@
 			},
 			getItems() {
 				let $ = window.jQuery, self = this;
+				self.loading = true;
 				$.ajax({
 					url: carouselSliderSettings.root + '/sliders',
 					method: 'GET',
@@ -107,14 +113,17 @@
 						if (response.data) {
 							self.rows = response.data;
 						}
+						self.loading = false;
 					},
 					error: function () {
 						self.rows = [];
+						self.loading = false;
 					}
 				});
 			},
 			trashItem(item) {
 				let $ = window.jQuery, self = this;
+				self.loading = true;
 				$.ajax({
 					url: carouselSliderSettings.root + '/sliders/' + item.id,
 					method: 'DELETE',
@@ -125,11 +134,16 @@
 						self.$delete(self.rows, self.rows.indexOf(item));
 						self.counts.publish -= 1;
 						self.counts.trash += 1;
+						self.loading = false;
+					},
+					error: function () {
+						self.loading = false;
 					}
 				})
 			},
 			restoreItem(item) {
 				let $ = window.jQuery, self = this;
+				self.loading = true;
 				$.ajax({
 					url: ajaxurl,
 					method: 'POST',
@@ -141,11 +155,16 @@
 						self.$delete(self.rows, self.rows.indexOf(item));
 						self.counts.publish += 1;
 						self.counts.trash -= 1;
+						self.loading = false;
+					},
+					error: function () {
+						self.loading = false;
 					}
 				})
 			},
 			deleteItem(item) {
 				let $ = window.jQuery, self = this;
+				self.loading = true;
 				$.ajax({
 					url: carouselSliderSettings.root + '/sliders/' + item.id,
 					method: 'DELETE',
@@ -155,6 +174,10 @@
 					success: function () {
 						self.$delete(self.rows, self.rows.indexOf(item));
 						self.counts.trash -= 1;
+						self.loading = false;
+					},
+					error: function () {
+						self.loading = false;
 					}
 				})
 			},
@@ -192,6 +215,7 @@
 			},
 			trashItems(items) {
 				let $ = window.jQuery, self = this;
+				self.loading = true;
 				$.ajax({
 					url: ajaxurl,
 					method: 'POST',
@@ -206,11 +230,15 @@
 							self.counts.trash += response.status.success;
 						}
 						self.getItems();
+					},
+					error: function () {
+						self.loading = false;
 					}
 				});
 			},
 			deleteItems(items) {
 				let $ = window.jQuery, self = this;
+				self.loading = true;
 				$.ajax({
 					url: ajaxurl,
 					method: 'POST',
@@ -224,11 +252,15 @@
 							self.counts.trash -= response.status.success;
 						}
 						self.getItems();
+					},
+					error: function () {
+						self.loading = false;
 					}
 				});
 			},
 			restoreItems(items) {
 				let $ = window.jQuery, self = this;
+				self.loading = true;
 				$.ajax({
 					url: ajaxurl,
 					method: 'POST',
@@ -242,6 +274,9 @@
 							self.counts.trash -= response.status.success;
 						}
 						self.getItems();
+					},
+					error: function () {
+						self.loading = false;
 					}
 				});
 			},

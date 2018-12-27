@@ -3,7 +3,7 @@
 
 		<div class="carousel-slider-control-rich-text--input" v-if="is_enabled('text')">
 			<h5>Text</h5>
-			<textarea class="" rows="3"></textarea>
+			<textarea rows="3" v-model="value.text"></textarea>
 		</div>
 
 		<div class="carousel-slider-control-rich-text--font-family" v-if="is_enabled('font-family')">
@@ -22,7 +22,7 @@
 
 		<div class="carousel-slider-control-rich-text--font-size" v-if="is_enabled('font-size')">
 			<h5>Font Size</h5>
-			<input type="text" value=""/>
+			<input type="text" v-model="value.font_size"/>
 		</div>
 
 		<div class="carousel-slider-control-rich-text--line-height" v-if="is_enabled('line-height')">

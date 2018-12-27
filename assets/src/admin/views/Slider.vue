@@ -20,6 +20,9 @@
 				<template v-if="slider.type === 'video-carousel'">
 					<video-carousel :options="slider"></video-carousel>
 				</template>
+				<template v-if="slider.type === 'hero-banner-slider'">
+					<hero-carousel :options="slider"></hero-carousel>
+				</template>
 			</div>
 		</div>
 		<div class="carousel-slider-sidebar">
@@ -124,6 +127,9 @@
 					  d="M17 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V7l-4-4zm2 16H5V5h11.17L19 7.83V19zm-7-7c-1.66 0-3 1.34-3 3s1.34 3 3 3 3-1.34 3-3-1.34-3-3-3zM6 6h9v4H6z"></path>
 			</svg>
 		</mdl-fab>
+		<div class="carousel-slider-spinner" v-show="loading">
+			<mdl-spinner :active="loading"></mdl-spinner>
+		</div>
 	</div>
 </template>
 
@@ -133,6 +139,7 @@
 	import ImageCarousel from '../components/sliders/ImageCarousel.vue';
 	import ImageCarouselUrl from '../components/sliders/ImageCarouselUrl.vue';
 	import VideoCarousel from '../components/sliders/VideoCarousel.vue';
+	import HeroCarousel from '../components/sliders/HeroCarousel.vue';
 	import AccordionRepeater from '../components/AccordionRepeater.vue';
 	import ColorPicker from '../components/fields/ColorPicker.vue';
 	import MediaUploader from '../components/fields/MediaUploader.vue';
@@ -146,6 +153,7 @@
 	import mdlTooltip from '../../material-design-lite/tooltip/mdlTooltip.vue';
 	import mdlButton from '../../material-design-lite/button/mdlButton.vue';
 	import mdlTextfield from '../../material-design-lite/textfield/mdlTextfield.vue';
+	import mdlSpinner from '../../material-design-lite/spinner/mdlSpinner.vue';
 
 	export default {
 		name: "Slider",
@@ -161,10 +169,12 @@
 			mdlTooltip,
 			mdlButton,
 			mdlTextfield,
+			mdlSpinner,
 			MediaUploader,
 			ImageCarousel,
 			ImageCarouselUrl,
 			VideoCarousel,
+			HeroCarousel,
 			Background,
 			RichText,
 			ButtonGenerator,
@@ -172,6 +182,7 @@
 		data() {
 			return {
 				id: 0,
+				loading: true,
 				slider: {},
 				sections: [],
 				fields: [],
@@ -212,6 +223,7 @@
 			},
 			getItem() {
 				let $ = window.jQuery, self = this;
+				self.loading = true;
 				$.ajax({
 					method: 'GET',
 					url: carouselSliderSettings.root + '/sliders/' + self.id,
@@ -219,6 +231,10 @@
 						if (response.data) {
 							self.slider = response.data;
 						}
+						self.loading = false;
+					},
+					error: function () {
+						self.loading = false;
 					}
 				});
 			},
@@ -245,24 +261,23 @@
 			},
 			saveSlider() {
 				let $ = jQuery, self = this;
+				self.loading = true;
 				$.ajax({
 					url: window.carouselSliderSettings.root + '/sliders/' + self.slider.id,
 					method: 'PUT',
 					data: self.slider,
 					success: function () {
+						self.loading = false;
 						self.$root.$emit('show-snackbar', {
 							message: 'Data hes been saved!',
 						});
+					},
+					error: function () {
+						self.loading = false;
 					}
 				});
 			},
 			getItemTitle(index, item, field) {
-				let primary_field = field.fields[0].id;
-				if (typeof field.primary_field !== "undefined") {
-					primary_field = field.primary_field;
-				}
-				let title = item[primary_field];
-
 				return 'Item ' + (index + 1);
 			},
 			addRepeaterItem(field, options) {
@@ -410,7 +425,7 @@
 		background: white;
 		margin-top: 20px;
 		min-height: 100px;
-		padding: 15px;
+		padding: 50px;
 		width: 100%;
 	}
 </style>

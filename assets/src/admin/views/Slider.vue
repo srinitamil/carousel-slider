@@ -266,7 +266,10 @@
 					url: window.carouselSliderSettings.root + '/sliders/' + self.slider.id,
 					method: 'PUT',
 					data: self.slider,
-					success: function () {
+					success: function (response) {
+						if (response.data) {
+							self.slider = response.data;
+						}
 						self.loading = false;
 						self.$root.$emit('show-snackbar', {
 							message: 'Data hes been saved!',

@@ -18,9 +18,13 @@
 		props: {
 			options: {type: Object, required: true}
 		},
+		watch: {
+			options(newValue, oldValue) {
+				this.rebuildCarousel();
+			}
+		},
 		mounted() {
-			let $ = window.jQuery, slider = $(this.$el).find("[data-carousel_slider]");
-			slider.owlCarousel(this.owl_options);
+			this.initCarousel();
 		}
 	}
 </script>

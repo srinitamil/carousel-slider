@@ -69,6 +69,19 @@ const carousel = {
 			};
 		}
 	},
+	methods: {
+		initCarousel() {
+			let slider = window.jQuery(this.$el).find("[data-carousel_slider]");
+			slider.owlCarousel(this.owl_options);
+		},
+		rebuildCarousel() {
+			let slider = window.jQuery(this.$el).find("[data-carousel_slider]");
+			slider.owlCarousel('destroy');
+			setTimeout(function (options) {
+				slider.owlCarousel(options);
+			}, 1000, this.owl_options);
+		},
+	}
 };
 
 export {carousel}

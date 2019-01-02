@@ -380,62 +380,6 @@ var MaterialRipple = function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_mdlButton_vue__ = __webpack_require__(18);
-/* unused harmony namespace reexport */
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_8ac316ce_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mdlButton_vue__ = __webpack_require__(67);
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(66)
-}
-var normalizeComponent = __webpack_require__(0)
-/* script */
-
-
-/* template */
-
-/* template functional */
-var __vue_template_functional__ = false
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_mdlButton_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_8ac316ce_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mdlButton_vue__["a" /* default */],
-  __vue_template_functional__,
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "assets/src/material-design-lite/button/mdlButton.vue"
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-8ac316ce", Component.options)
-  } else {
-    hotAPI.reload("data-v-8ac316ce", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
-
-
-/***/ }),
-/* 3 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return carousel; });
 var carousel = {
 	props: {
@@ -523,7 +467,7 @@ var carousel = {
 
 
 /***/ }),
-/* 4 */
+/* 3 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -579,10 +523,206 @@ if (false) {(function () {
 
 
 /***/ }),
+/* 4 */,
 /* 5 */,
 /* 6 */,
-/* 7 */,
+/* 7 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MaterialButton; });
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+/**
+ * @license
+ * Copyright 2015 Google Inc. All Rights Reserved.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+var MaterialButton = function () {
+
+	/**
+  * Class constructor for Button MDL component.
+  * Implements MDL component design pattern defined at:
+  * https://github.com/jasonmayes/mdl-component-design-pattern
+  *
+  * @param {HTMLElement} element The element that will be upgraded.
+  */
+	function MaterialButton(element) {
+		_classCallCheck(this, MaterialButton);
+
+		this.element_ = element;
+
+		/**
+   * Store constants in one place so they can be updated easily.
+   *
+   * @enum {string | number}
+   * @private
+   */
+		this.Constant_ = {
+			// None for now.
+		};
+
+		/**
+   * Store strings for class names defined by this component that are used in
+   * JavaScript. This allows us to simply change it in one place should we
+   * decide to modify at a later date.
+   *
+   * @enum {string}
+   * @private
+   */
+		this.CssClasses_ = {
+			RIPPLE_EFFECT: 'mdl-js-ripple-effect',
+			RIPPLE_CONTAINER: 'mdl-button__ripple-container',
+			RIPPLE: 'mdl-ripple'
+		};
+
+		// Initialize instance.
+		this.init();
+	}
+
+	/**
+  * Handle blur of element.
+  *
+  * @param {Event} event The event that fired.
+  * @private
+  */
+
+
+	_createClass(MaterialButton, [{
+		key: 'blurHandler_',
+		value: function blurHandler_(event) {
+			if (event) {
+				this.element_.blur();
+			}
+		}
+	}, {
+		key: 'disable',
+
+
+		// Public methods.
+
+		/**
+   * Disable button.
+   *
+   * @public
+   */
+		value: function disable() {
+			this.element_.disabled = true;
+		}
+	}, {
+		key: 'enable',
+
+
+		/**
+   * Enable button.
+   *
+   * @public
+   */
+		value: function enable() {
+			this.element_.disabled = false;
+		}
+	}, {
+		key: 'init',
+
+
+		/**
+   * Initialize element.
+   */
+		value: function init() {
+			if (this.element_) {
+				if (this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)) {
+					var rippleContainer = document.createElement('span');
+					rippleContainer.classList.add(this.CssClasses_.RIPPLE_CONTAINER);
+					this.rippleElement_ = document.createElement('span');
+					this.rippleElement_.classList.add(this.CssClasses_.RIPPLE);
+					rippleContainer.appendChild(this.rippleElement_);
+					this.boundRippleBlurHandler = this.blurHandler_.bind(this);
+					this.rippleElement_.addEventListener('mouseup', this.boundRippleBlurHandler);
+					this.element_.appendChild(rippleContainer);
+				}
+				this.boundButtonBlurHandler = this.blurHandler_.bind(this);
+				this.element_.addEventListener('mouseup', this.boundButtonBlurHandler);
+				this.element_.addEventListener('mouseleave', this.boundButtonBlurHandler);
+			}
+		}
+	}]);
+
+	return MaterialButton;
+}();
+
+
+
+/***/ }),
 /* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_mdlButton_vue__ = __webpack_require__(18);
+/* unused harmony namespace reexport */
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_8ac316ce_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mdlButton_vue__ = __webpack_require__(67);
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(66)
+}
+var normalizeComponent = __webpack_require__(0)
+/* script */
+
+
+/* template */
+
+/* template functional */
+var __vue_template_functional__ = false
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = null
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_mdlButton_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_8ac316ce_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mdlButton_vue__["a" /* default */],
+  __vue_template_functional__,
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "assets/src/material-design-lite/button/mdlButton.vue"
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-8ac316ce", Component.options)
+  } else {
+    hotAPI.reload("data-v-8ac316ce", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
+
+/***/ }),
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -603,7 +743,7 @@ if (false) {(function () {
 });
 
 /***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -676,14 +816,14 @@ if (false) {(function () {
 });
 
 /***/ }),
-/* 10 */,
-/* 11 */
+/* 11 */,
+/* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__components_ListTable_vue__ = __webpack_require__(56);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__components_CopyToClipboard_vue__ = __webpack_require__(59);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__material_design_lite_button_mdlFab_vue__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__material_design_lite_button_mdlFab_vue__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__material_design_lite_modal_mdlModal_vue__ = __webpack_require__(64);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__material_design_lite_radio_mdlRadio_vue__ = __webpack_require__(69);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__material_design_lite_spinner_mdlSpinner_vue__ = __webpack_require__(20);
@@ -981,7 +1121,7 @@ if (false) {(function () {
 });
 
 /***/ }),
-/* 12 */
+/* 13 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1350,7 +1490,7 @@ if (false) {(function () {
 });
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1406,11 +1546,11 @@ if (false) {(function () {
 });
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_mdlFab_vue__ = __webpack_require__(15);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_mdlFab_vue__ = __webpack_require__(16);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_73c508b0_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mdlFab_vue__ = __webpack_require__(63);
 var disposed = false
@@ -1462,11 +1602,11 @@ if (false) {(function () {
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MaterialButton_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MaterialButton_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ripple_MaterialRipple_js__ = __webpack_require__(1);
 //
 //
@@ -1512,151 +1652,11 @@ if (false) {(function () {
 });
 
 /***/ }),
-/* 16 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return MaterialButton; });
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-/**
- * @license
- * Copyright 2015 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- *      http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-var MaterialButton = function () {
-
-	/**
-  * Class constructor for Button MDL component.
-  * Implements MDL component design pattern defined at:
-  * https://github.com/jasonmayes/mdl-component-design-pattern
-  *
-  * @param {HTMLElement} element The element that will be upgraded.
-  */
-	function MaterialButton(element) {
-		_classCallCheck(this, MaterialButton);
-
-		this.element_ = element;
-
-		/**
-   * Store constants in one place so they can be updated easily.
-   *
-   * @enum {string | number}
-   * @private
-   */
-		this.Constant_ = {
-			// None for now.
-		};
-
-		/**
-   * Store strings for class names defined by this component that are used in
-   * JavaScript. This allows us to simply change it in one place should we
-   * decide to modify at a later date.
-   *
-   * @enum {string}
-   * @private
-   */
-		this.CssClasses_ = {
-			RIPPLE_EFFECT: 'mdl-js-ripple-effect',
-			RIPPLE_CONTAINER: 'mdl-button__ripple-container',
-			RIPPLE: 'mdl-ripple'
-		};
-
-		// Initialize instance.
-		this.init();
-	}
-
-	/**
-  * Handle blur of element.
-  *
-  * @param {Event} event The event that fired.
-  * @private
-  */
-
-
-	_createClass(MaterialButton, [{
-		key: 'blurHandler_',
-		value: function blurHandler_(event) {
-			if (event) {
-				this.element_.blur();
-			}
-		}
-	}, {
-		key: 'disable',
-
-
-		// Public methods.
-
-		/**
-   * Disable button.
-   *
-   * @public
-   */
-		value: function disable() {
-			this.element_.disabled = true;
-		}
-	}, {
-		key: 'enable',
-
-
-		/**
-   * Enable button.
-   *
-   * @public
-   */
-		value: function enable() {
-			this.element_.disabled = false;
-		}
-	}, {
-		key: 'init',
-
-
-		/**
-   * Initialize element.
-   */
-		value: function init() {
-			if (this.element_) {
-				if (this.element_.classList.contains(this.CssClasses_.RIPPLE_EFFECT)) {
-					var rippleContainer = document.createElement('span');
-					rippleContainer.classList.add(this.CssClasses_.RIPPLE_CONTAINER);
-					this.rippleElement_ = document.createElement('span');
-					this.rippleElement_.classList.add(this.CssClasses_.RIPPLE);
-					rippleContainer.appendChild(this.rippleElement_);
-					this.boundRippleBlurHandler = this.blurHandler_.bind(this);
-					this.rippleElement_.addEventListener('mouseup', this.boundRippleBlurHandler);
-					this.element_.appendChild(rippleContainer);
-				}
-				this.boundButtonBlurHandler = this.blurHandler_.bind(this);
-				this.element_.addEventListener('mouseup', this.boundButtonBlurHandler);
-				this.element_.addEventListener('mouseleave', this.boundButtonBlurHandler);
-			}
-		}
-	}]);
-
-	return MaterialButton;
-}();
-
-
-
-/***/ }),
 /* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__button_mdlButton_vue__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__button_mdlButton_vue__ = __webpack_require__(8);
 //
 //
 //
@@ -1721,7 +1721,7 @@ var MaterialButton = function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MaterialButton_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__MaterialButton_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ripple_MaterialRipple_js__ = __webpack_require__(1);
 //
 //
@@ -2037,7 +2037,7 @@ if (false) {(function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__components_sliders_VideoCarousel_vue__ = __webpack_require__(92);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_5__components_sliders_HeroCarousel_vue__ = __webpack_require__(95);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_6__components_AccordionRepeater_vue__ = __webpack_require__(98);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_fields_ColorPicker_vue__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_7__components_fields_ColorPicker_vue__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_8__components_fields_MediaUploader_vue__ = __webpack_require__(103);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_9__components_fields_Background_vue__ = __webpack_require__(106);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_10__components_fields_RichText_vue__ = __webpack_require__(112);
@@ -2045,11 +2045,20 @@ if (false) {(function () {
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_12__material_design_lite_slider_mdlSlider_vue__ = __webpack_require__(120);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_13__material_design_lite_switch_mdlSwitch_vue__ = __webpack_require__(123);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_14__material_design_lite_radio_button_mdlRadioButton_vue__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__material_design_lite_button_mdlFab_vue__ = __webpack_require__(14);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_15__material_design_lite_button_mdlFab_vue__ = __webpack_require__(15);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_16__material_design_lite_tooltip_mdlTooltip_vue__ = __webpack_require__(127);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__material_design_lite_button_mdlButton_vue__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_17__material_design_lite_button_mdlButton_vue__ = __webpack_require__(8);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_18__material_design_lite_textfield_mdlTextfield_vue__ = __webpack_require__(131);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_19__material_design_lite_spinner_mdlSpinner_vue__ = __webpack_require__(20);
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -2408,7 +2417,7 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__carousel_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__carousel_js__ = __webpack_require__(2);
 //
 //
 //
@@ -2444,7 +2453,7 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__carousel_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__carousel_js__ = __webpack_require__(2);
 //
 //
 //
@@ -2479,7 +2488,7 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__carousel_js__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__carousel_js__ = __webpack_require__(2);
 //
 //
 //
@@ -2520,7 +2529,7 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__carousel__ = __webpack_require__(3);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__carousel__ = __webpack_require__(2);
 //
 //
 //
@@ -2728,7 +2737,7 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__material_design_lite_button_MaterialButton_js__ = __webpack_require__(16);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__material_design_lite_button_MaterialButton_js__ = __webpack_require__(7);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__material_design_lite_ripple_MaterialRipple_js__ = __webpack_require__(1);
 //
 //
@@ -2971,7 +2980,7 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ColorPicker_vue__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ColorPicker_vue__ = __webpack_require__(3);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__BackgroundImage_vue__ = __webpack_require__(108);
 //
 //
@@ -3199,7 +3208,7 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ColorPicker_vue__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__ColorPicker_vue__ = __webpack_require__(3);
 //
 //
 //
@@ -3349,7 +3358,7 @@ if (false) {(function () {
 
 "use strict";
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__material_design_lite_radio_button_mdlRadioButton_vue__ = __webpack_require__(37);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ColorPicker_vue__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__ColorPicker_vue__ = __webpack_require__(3);
 //
 //
 //
@@ -3542,7 +3551,7 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__button_mdlButton_vue__ = __webpack_require__(2);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__button_mdlButton_vue__ = __webpack_require__(8);
 //
 //
 //
@@ -3792,7 +3801,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(5);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(4);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__App_vue__ = __webpack_require__(46);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__routers_js__ = __webpack_require__(53);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__utils_admin_menu_fix_js__ = __webpack_require__(136);
@@ -3825,7 +3834,7 @@ Object(__WEBPACK_IMPORTED_MODULE_3__utils_admin_menu_fix_js__["a" /* default */]
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_App_vue__ = __webpack_require__(8);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_App_vue__ = __webpack_require__(9);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6bc4b6d8_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_App_vue__ = __webpack_require__(52);
 var disposed = false
@@ -3887,7 +3896,7 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_mdlSnackbar_vue__ = __webpack_require__(9);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_mdlSnackbar_vue__ = __webpack_require__(10);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_6d6e6182_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_mdlSnackbar_vue__ = __webpack_require__(51);
 var disposed = false
@@ -4218,8 +4227,8 @@ if (false) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(5);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(10);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_vue__ = __webpack_require__(4);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1_vue_router__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_2__views_Home_vue__ = __webpack_require__(54);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_3__views_Documentation_vue__ = __webpack_require__(77);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_4__views_Slider_vue__ = __webpack_require__(80);
@@ -4242,7 +4251,7 @@ var routes = [{ path: '/', name: 'Home', component: __WEBPACK_IMPORTED_MODULE_2_
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Home_vue__ = __webpack_require__(11);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_Home_vue__ = __webpack_require__(12);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_2ceff6f9_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_Home_vue__ = __webpack_require__(76);
 var disposed = false
@@ -4304,7 +4313,7 @@ if (false) {(function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_ListTable_vue__ = __webpack_require__(12);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_ListTable_vue__ = __webpack_require__(13);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_693f87a0_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_ListTable_vue__ = __webpack_require__(58);
 var disposed = false
@@ -5168,7 +5177,7 @@ if (false) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_CopyToClipboard_vue__ = __webpack_require__(13);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_vue_loader_lib_selector_type_script_index_0_CopyToClipboard_vue__ = __webpack_require__(14);
 /* unused harmony namespace reexport */
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_vue_loader_lib_template_compiler_index_id_data_v_3164d406_hasScoped_false_buble_transforms_node_modules_vue_loader_lib_selector_type_template_index_0_CopyToClipboard_vue__ = __webpack_require__(61);
 var disposed = false
@@ -10719,27 +10728,305 @@ var render = function() {
                                               return [
                                                 _vm.isTextfield(_field.type)
                                                   ? [
-                                                      _c("mdl-textfield", {
-                                                        attrs: {
-                                                          type: _field.type,
-                                                          label: _field.label
+                                                      _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "carousel-slider-control__field"
                                                         },
-                                                        model: {
-                                                          value:
-                                                            item[_field.id],
-                                                          callback: function(
-                                                            $$v
-                                                          ) {
-                                                            _vm.$set(
-                                                              item,
-                                                              _field.id,
-                                                              $$v
-                                                            )
-                                                          },
-                                                          expression:
-                                                            "item[_field.id]"
-                                                        }
-                                                      })
+                                                        [
+                                                          _c(
+                                                            "label",
+                                                            {
+                                                              staticClass:
+                                                                "carousel-slider-control__label"
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                _vm._s(
+                                                                  _field.label
+                                                                )
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _field.type ===
+                                                          "checkbox"
+                                                            ? _c("input", {
+                                                                directives: [
+                                                                  {
+                                                                    name:
+                                                                      "model",
+                                                                    rawName:
+                                                                      "v-model",
+                                                                    value:
+                                                                      item[
+                                                                        _field
+                                                                          .id
+                                                                      ],
+                                                                    expression:
+                                                                      "item[_field.id]"
+                                                                  }
+                                                                ],
+                                                                staticClass:
+                                                                  "widefat",
+                                                                attrs: {
+                                                                  type:
+                                                                    "checkbox"
+                                                                },
+                                                                domProps: {
+                                                                  checked: Array.isArray(
+                                                                    item[
+                                                                      _field.id
+                                                                    ]
+                                                                  )
+                                                                    ? _vm._i(
+                                                                        item[
+                                                                          _field
+                                                                            .id
+                                                                        ],
+                                                                        null
+                                                                      ) > -1
+                                                                    : item[
+                                                                        _field
+                                                                          .id
+                                                                      ]
+                                                                },
+                                                                on: {
+                                                                  change: function(
+                                                                    $event
+                                                                  ) {
+                                                                    var $$a =
+                                                                        item[
+                                                                          _field
+                                                                            .id
+                                                                        ],
+                                                                      $$el =
+                                                                        $event.target,
+                                                                      $$c = $$el.checked
+                                                                        ? true
+                                                                        : false
+                                                                    if (
+                                                                      Array.isArray(
+                                                                        $$a
+                                                                      )
+                                                                    ) {
+                                                                      var $$v = null,
+                                                                        $$i = _vm._i(
+                                                                          $$a,
+                                                                          $$v
+                                                                        )
+                                                                      if (
+                                                                        $$el.checked
+                                                                      ) {
+                                                                        $$i <
+                                                                          0 &&
+                                                                          _vm.$set(
+                                                                            item,
+                                                                            _field.id,
+                                                                            $$a.concat(
+                                                                              [
+                                                                                $$v
+                                                                              ]
+                                                                            )
+                                                                          )
+                                                                      } else {
+                                                                        $$i >
+                                                                          -1 &&
+                                                                          _vm.$set(
+                                                                            item,
+                                                                            _field.id,
+                                                                            $$a
+                                                                              .slice(
+                                                                                0,
+                                                                                $$i
+                                                                              )
+                                                                              .concat(
+                                                                                $$a.slice(
+                                                                                  $$i +
+                                                                                    1
+                                                                                )
+                                                                              )
+                                                                          )
+                                                                      }
+                                                                    } else {
+                                                                      _vm.$set(
+                                                                        item,
+                                                                        _field.id,
+                                                                        $$c
+                                                                      )
+                                                                    }
+                                                                  }
+                                                                }
+                                                              })
+                                                            : _field.type ===
+                                                              "radio"
+                                                            ? _c("input", {
+                                                                directives: [
+                                                                  {
+                                                                    name:
+                                                                      "model",
+                                                                    rawName:
+                                                                      "v-model",
+                                                                    value:
+                                                                      item[
+                                                                        _field
+                                                                          .id
+                                                                      ],
+                                                                    expression:
+                                                                      "item[_field.id]"
+                                                                  }
+                                                                ],
+                                                                staticClass:
+                                                                  "widefat",
+                                                                attrs: {
+                                                                  type: "radio"
+                                                                },
+                                                                domProps: {
+                                                                  checked: _vm._q(
+                                                                    item[
+                                                                      _field.id
+                                                                    ],
+                                                                    null
+                                                                  )
+                                                                },
+                                                                on: {
+                                                                  change: function(
+                                                                    $event
+                                                                  ) {
+                                                                    _vm.$set(
+                                                                      item,
+                                                                      _field.id,
+                                                                      null
+                                                                    )
+                                                                  }
+                                                                }
+                                                              })
+                                                            : _c("input", {
+                                                                directives: [
+                                                                  {
+                                                                    name:
+                                                                      "model",
+                                                                    rawName:
+                                                                      "v-model",
+                                                                    value:
+                                                                      item[
+                                                                        _field
+                                                                          .id
+                                                                      ],
+                                                                    expression:
+                                                                      "item[_field.id]"
+                                                                  }
+                                                                ],
+                                                                staticClass:
+                                                                  "widefat",
+                                                                attrs: {
+                                                                  type:
+                                                                    _field.type
+                                                                },
+                                                                domProps: {
+                                                                  value:
+                                                                    item[
+                                                                      _field.id
+                                                                    ]
+                                                                },
+                                                                on: {
+                                                                  input: function(
+                                                                    $event
+                                                                  ) {
+                                                                    if (
+                                                                      $event
+                                                                        .target
+                                                                        .composing
+                                                                    ) {
+                                                                      return
+                                                                    }
+                                                                    _vm.$set(
+                                                                      item,
+                                                                      _field.id,
+                                                                      $event
+                                                                        .target
+                                                                        .value
+                                                                    )
+                                                                  }
+                                                                }
+                                                              })
+                                                        ]
+                                                      )
+                                                    ]
+                                                  : _vm._e(),
+                                                _vm._v(" "),
+                                                "textarea" === _field.type
+                                                  ? [
+                                                      _c(
+                                                        "div",
+                                                        {
+                                                          staticClass:
+                                                            "carousel-slider-control__field"
+                                                        },
+                                                        [
+                                                          _c(
+                                                            "label",
+                                                            {
+                                                              staticClass:
+                                                                "carousel-slider-control__label"
+                                                            },
+                                                            [
+                                                              _vm._v(
+                                                                _vm._s(
+                                                                  _field.label
+                                                                )
+                                                              )
+                                                            ]
+                                                          ),
+                                                          _vm._v(" "),
+                                                          _c("textarea", {
+                                                            directives: [
+                                                              {
+                                                                name: "model",
+                                                                rawName:
+                                                                  "v-model",
+                                                                value:
+                                                                  item[
+                                                                    _field.id
+                                                                  ],
+                                                                expression:
+                                                                  "item[_field.id]"
+                                                              }
+                                                            ],
+                                                            staticClass:
+                                                              "widefat",
+                                                            attrs: {
+                                                              rows:
+                                                                _field
+                                                                  .input_attrs
+                                                                  .rows
+                                                            },
+                                                            domProps: {
+                                                              value:
+                                                                item[_field.id]
+                                                            },
+                                                            on: {
+                                                              input: function(
+                                                                $event
+                                                              ) {
+                                                                if (
+                                                                  $event.target
+                                                                    .composing
+                                                                ) {
+                                                                  return
+                                                                }
+                                                                _vm.$set(
+                                                                  item,
+                                                                  _field.id,
+                                                                  $event.target
+                                                                    .value
+                                                                )
+                                                              }
+                                                            }
+                                                          })
+                                                        ]
+                                                      )
                                                     ]
                                                   : _vm._e(),
                                                 _vm._v(" "),
@@ -11132,19 +11419,106 @@ var render = function() {
                           _vm._v(" "),
                           _vm.isTextfield(field.type)
                             ? [
-                                _c("mdl-textfield", {
-                                  attrs: {
-                                    type: field.type,
-                                    label: field.label
-                                  },
-                                  model: {
-                                    value: _vm.slider[field.id],
-                                    callback: function($$v) {
-                                      _vm.$set(_vm.slider, field.id, $$v)
-                                    },
-                                    expression: "slider[field.id]"
-                                  }
-                                })
+                                field.type === "checkbox"
+                                  ? _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.item[field.id],
+                                          expression: "item[field.id]"
+                                        }
+                                      ],
+                                      staticClass: "widefat",
+                                      attrs: { type: "checkbox" },
+                                      domProps: {
+                                        checked: Array.isArray(
+                                          _vm.item[field.id]
+                                        )
+                                          ? _vm._i(_vm.item[field.id], null) >
+                                            -1
+                                          : _vm.item[field.id]
+                                      },
+                                      on: {
+                                        change: function($event) {
+                                          var $$a = _vm.item[field.id],
+                                            $$el = $event.target,
+                                            $$c = $$el.checked ? true : false
+                                          if (Array.isArray($$a)) {
+                                            var $$v = null,
+                                              $$i = _vm._i($$a, $$v)
+                                            if ($$el.checked) {
+                                              $$i < 0 &&
+                                                _vm.$set(
+                                                  _vm.item,
+                                                  field.id,
+                                                  $$a.concat([$$v])
+                                                )
+                                            } else {
+                                              $$i > -1 &&
+                                                _vm.$set(
+                                                  _vm.item,
+                                                  field.id,
+                                                  $$a
+                                                    .slice(0, $$i)
+                                                    .concat($$a.slice($$i + 1))
+                                                )
+                                            }
+                                          } else {
+                                            _vm.$set(_vm.item, field.id, $$c)
+                                          }
+                                        }
+                                      }
+                                    })
+                                  : field.type === "radio"
+                                  ? _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.item[field.id],
+                                          expression: "item[field.id]"
+                                        }
+                                      ],
+                                      staticClass: "widefat",
+                                      attrs: { type: "radio" },
+                                      domProps: {
+                                        checked: _vm._q(
+                                          _vm.item[field.id],
+                                          null
+                                        )
+                                      },
+                                      on: {
+                                        change: function($event) {
+                                          _vm.$set(_vm.item, field.id, null)
+                                        }
+                                      }
+                                    })
+                                  : _c("input", {
+                                      directives: [
+                                        {
+                                          name: "model",
+                                          rawName: "v-model",
+                                          value: _vm.item[field.id],
+                                          expression: "item[field.id]"
+                                        }
+                                      ],
+                                      staticClass: "widefat",
+                                      attrs: { type: field.type },
+                                      domProps: { value: _vm.item[field.id] },
+                                      on: {
+                                        input: function($event) {
+                                          if ($event.target.composing) {
+                                            return
+                                          }
+                                          _vm.$set(
+                                            _vm.item,
+                                            field.id,
+                                            $event.target.value
+                                          )
+                                        }
+                                      }
+                                    })
                               ]
                             : _vm._e()
                         ],

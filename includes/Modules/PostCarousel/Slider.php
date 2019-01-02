@@ -203,57 +203,9 @@ class Slider extends AbstractSlider {
 		$_posts = $this->get_posts();
 		$posts  = array();
 		foreach ( $_posts as $post ) {
-			setup_postdata( $post );
-			// Author
-			$author      = (int) $post->post_author;
-			$author_url  = esc_url( get_author_posts_url( $author ) );
-			$author_name = esc_html( get_the_author_meta( 'display_name', $author ) );
-			// Categories
-			$_categories = get_the_terms( $post, 'category' );
-			$categories  = array();
-			foreach ( $_categories as $category ) {
-				$categories[] = array(
-					'id'    => $category->term_id,
-					'name'  => $category->name,
-					'count' => $category->count,
-					'link'  => get_category_link( $category->term_id ),
-				);
-			}
-			// Tags
-			$_tags = get_the_terms( $post, 'post_tag' );
-			$tags  = array();
-			foreach ( $_tags as $tag ) {
-				$tags[] = array(
-					'id'    => $tag->term_id,
-					'name'  => $tag->name,
-					'count' => $tag->count,
-					'link'  => get_category_link( $tag->term_id ),
-				);
-			}
-			$posts[] = array(
-				'id'         => $post->ID,
-				'link'       => get_permalink( $post->ID ),
-				'title'      => get_the_title( $post->ID ),
-				// 'excerpt'    => get_the_excerpt( $post ),
-				'author'     => array(
-					'id'     => $author,
-					'name'   => $author_name,
-					'url'    => $author_url,
-					'avatar' => get_avatar_url( $author, 20 ),
-				),
-				'date'       => array(
-					'created'  => mysql_to_rfc3339( $post->post_date ),
-					'modified' => mysql_to_rfc3339( $post->post_modified ),
-				),
-				'date_gmt'   => array(
-					'created'  => mysql_to_rfc3339( $post->post_date_gmt ),
-					'modified' => mysql_to_rfc3339( $post->post_modified_gmt ),
-				),
-				'categories' => $categories,
-				'tags'       => $tags,
-			);
+			$item    = new SliderItem( $post );
+			$posts[] = $item->to_array();
 		}
-		wp_reset_postdata();
 
 		return $posts;
 	}

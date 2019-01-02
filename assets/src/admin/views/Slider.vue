@@ -45,8 +45,18 @@
 														@click:copy="copyItem(item, slider[field.id])">
 										<template v-for="_field in field.fields">
 											<template v-if="isTextfield(_field.type)">
-												<mdl-textfield :type="_field.type" :label="_field.label"
-															   v-model="item[_field.id]"></mdl-textfield>
+												<div class="carousel-slider-control__field">
+													<label class="carousel-slider-control__label">{{_field.label}}</label>
+													<input class="widefat" :type="_field.type"
+														   v-model="item[_field.id]">
+												</div>
+											</template>
+											<template v-if="'textarea' === _field.type">
+												<div class="carousel-slider-control__field">
+													<label class="carousel-slider-control__label">{{_field.label}}</label>
+													<textarea class="widefat" :rows="_field.input_attrs.rows"
+															  v-model="item[_field.id]"></textarea>
+												</div>
 											</template>
 											<template v-if="'background' === _field.type">
 												<accordion :title="_field.label">
@@ -113,8 +123,7 @@
 							<media-uploader v-model="slider[field.id]" :multiple="true"></media-uploader>
 						</template>
 						<template v-if="isTextfield(field.type)">
-							<mdl-textfield :type="field.type" :label="field.label"
-										   v-model="slider[field.id]"></mdl-textfield>
+							<input class="widefat" :type="field.type" v-model="item[field.id]">
 						</template>
 					</div>
 				</template>

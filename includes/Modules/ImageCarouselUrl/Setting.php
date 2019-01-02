@@ -32,10 +32,11 @@ class Setting extends AbstractSetting {
 				'primary_field' => 'title',
 				'fields'        => array(
 					array(
-						'id'       => 'url',
-						'type'     => 'url',
-						'label'    => esc_html__( 'Image URL', 'carousel-slider' ),
-						'priority' => 10,
+						'id'          => 'url',
+						'type'        => 'textarea',
+						'label'       => esc_html__( 'Image URL', 'carousel-slider' ),
+						'priority'    => 10,
+						'input_attrs' => array( 'rows' => 3 ),
 					),
 					array(
 						'id'       => 'title',

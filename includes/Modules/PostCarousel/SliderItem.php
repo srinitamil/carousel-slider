@@ -29,6 +29,13 @@ class SliderItem implements \JsonSerializable {
 	private $tags;
 
 	/**
+	 * Post thumbnail size
+	 *
+	 * @var string
+	 */
+	private $image_size = 'thumbnail';
+
+	/**
 	 * SliderItem constructor.
 	 *
 	 * @param null|\WP_Post $post
@@ -38,6 +45,20 @@ class SliderItem implements \JsonSerializable {
 		$this->id         = $this->post->ID;
 		$this->categories = get_the_terms( $this->post, 'category' );
 		$this->tags       = get_the_terms( $this->post, 'post_tag' );
+	}
+
+	/**
+	 * @return string
+	 */
+	public function get_image_size() {
+		return $this->image_size;
+	}
+
+	/**
+	 * @param string $image_size
+	 */
+	public function set_image_size( $image_size ) {
+		$this->image_size = $image_size;
 	}
 
 	/**
@@ -51,6 +72,7 @@ class SliderItem implements \JsonSerializable {
 			'link'       => $this->get_permalink(),
 			'title'      => $this->get_title(),
 			'excerpt'    => $this->get_excerpt(),
+			'thumbnail'  => $this->get_post_thumbnail(),
 			'author'     => array(
 				'id'     => $this->get_author_id(),
 				'name'   => $this->get_author_display_name(),
@@ -68,6 +90,25 @@ class SliderItem implements \JsonSerializable {
 			'categories' => $this->categories_to_array(),
 			'tags'       => $this->tags_to_array(),
 		);
+	}
+
+	/**
+	 * Get post thumbnail
+	 *
+	 * @return array
+	 */
+	public function get_post_thumbnail() {
+		if ( ! has_post_thumbnail( $this->post ) ) {
+			return array();
+		}
+
+		$thumbnail_id = get_post_thumbnail_id( $this->post );
+		$image_src    = wp_get_attachment_image_src( $thumbnail_id, $this->get_image_size() );
+		if ( ! is_array( $image_src ) ) {
+			return array();
+		}
+
+		return array( 'src' => $image_src[0], 'width' => $image_src[1], 'height' => $image_src[2] );
 	}
 
 	/**

@@ -203,7 +203,8 @@ class Slider extends AbstractSlider {
 		$_posts = $this->get_posts();
 		$posts  = array();
 		foreach ( $_posts as $post ) {
-			$item    = new SliderItem( $post );
+			$item = new SliderItem( $post );
+			$item->set_image_size( $this->get_image_size() );
 			$posts[] = $item->to_array();
 		}
 

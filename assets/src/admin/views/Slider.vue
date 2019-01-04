@@ -23,6 +23,9 @@
 				<template v-if="slider.type === 'hero-banner-slider'">
 					<hero-carousel :options="slider"></hero-carousel>
 				</template>
+				<template v-if="slider.type === 'post-carousel'">
+					<post-carousel :options="slider"></post-carousel>
+				</template>
 			</div>
 		</div>
 		<div class="carousel-slider-sidebar">
@@ -40,7 +43,7 @@
 						<template v-if="'repeater' === field.type">
 							<draggable v-model="slider[field.id]">
 								<template v-for="(item, index) in slider[field.id]">
-									<accordion-repeater :title="getItemTitle(index, item, field)" :key="index + 1"
+									<accordion-repeater :title="getItemTitle(index)" :key="index + 1"
 														@click:clear="clearItem(item, slider[field.id])"
 														@click:copy="copyItem(item, slider[field.id])">
 										<template v-for="_field in field.fields">
@@ -123,7 +126,7 @@
 							<media-uploader v-model="slider[field.id]" :multiple="true"></media-uploader>
 						</template>
 						<template v-if="isTextfield(field.type)">
-							<input class="widefat" :type="field.type" v-model="item[field.id]">
+							<input class="widefat" :type="field.type" v-model="slider[field.id]">
 						</template>
 					</div>
 				</template>
@@ -149,6 +152,7 @@
 	import ImageCarouselUrl from '../components/sliders/ImageCarouselUrl.vue';
 	import VideoCarousel from '../components/sliders/VideoCarousel.vue';
 	import HeroCarousel from '../components/sliders/HeroCarousel.vue';
+	import PostCarousel from '../components/sliders/PostCarousel.vue';
 	import AccordionRepeater from '../components/AccordionRepeater.vue';
 	import ColorPicker from '../components/fields/ColorPicker.vue';
 	import MediaUploader from '../components/fields/MediaUploader.vue';
@@ -184,6 +188,7 @@
 			ImageCarouselUrl,
 			VideoCarousel,
 			HeroCarousel,
+			PostCarousel,
 			Background,
 			RichText,
 			ButtonGenerator,
@@ -289,7 +294,7 @@
 					}
 				});
 			},
-			getItemTitle(index, item, field) {
+			getItemTitle(index) {
 				return 'Item ' + (index + 1);
 			},
 			addRepeaterItem(field, options) {

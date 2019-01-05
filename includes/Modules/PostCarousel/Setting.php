@@ -37,6 +37,13 @@ class Setting extends AbstractSetting {
 				'type'        => 'date',
 				'label'       => esc_html__( 'Date from', 'carousel-slider' ),
 				'description' => sprintf( esc_html__( 'Example: %s', 'carousel-slider' ), date( 'F d, Y', strtotime( '-3 months' ) ) ),
+				'conditions'  => array(
+					array(
+						'name'     => 'query_type',
+						'operator' => '==',
+						'value'    => 'date_range',
+					),
+				),
 			),
 			array(
 				'id'          => 'date_to',
@@ -44,6 +51,13 @@ class Setting extends AbstractSetting {
 				'type'        => 'date',
 				'label'       => esc_html__( 'Date to', 'carousel-slider' ),
 				'description' => sprintf( esc_html__( 'Example: %s', 'carousel-slider' ), date( 'F d, Y', strtotime( '-7 days' ) ) ),
+				'conditions'  => array(
+					array(
+						'name'     => 'query_type',
+						'operator' => '==',
+						'value'    => 'date_range',
+					),
+				),
 			),
 			array(
 				'id'          => 'categories',
@@ -53,6 +67,13 @@ class Setting extends AbstractSetting {
 				'description' => esc_html__( 'Show posts associated with selected categories.', 'carousel-slider' ),
 				'input_attrs' => array( 'multiple' => true, ),
 				'choices'     => Slider::get_post_categories(),
+				'conditions'  => array(
+					array(
+						'name'     => 'query_type',
+						'operator' => '==',
+						'value'    => 'post_categories',
+					),
+				),
 			),
 			array(
 				'id'          => 'tags',
@@ -62,6 +83,13 @@ class Setting extends AbstractSetting {
 				'description' => esc_html__( 'Show posts associated with selected tags.', 'carousel-slider' ),
 				'input_attrs' => array( 'multiple' => true, ),
 				'choices'     => Slider::get_post_tags(),
+				'conditions'  => array(
+					array(
+						'name'     => 'query_type',
+						'operator' => '==',
+						'value'    => 'post_tags',
+					),
+				),
 			),
 			array(
 				'id'          => 'post_in',
@@ -71,6 +99,13 @@ class Setting extends AbstractSetting {
 				'description' => esc_html__( 'Select posts that you want to show as slider. Select at least 5 posts', 'carousel-slider' ),
 				'input_attrs' => array( 'multiple' => true, ),
 				'choices'     => Slider::get_posts_list(),
+				'conditions'  => array(
+					array(
+						'name'     => 'query_type',
+						'operator' => '==',
+						'value'    => 'specific_posts',
+					),
+				),
 			),
 			array(
 				'id'          => 'per_page',
@@ -99,14 +134,6 @@ class Setting extends AbstractSetting {
 					'ASC'  => esc_html__( 'Ascending', 'carousel-slider' ),
 					'DESC' => esc_html__( 'Descending', 'carousel-slider' ),
 				),
-			),
-			array(
-				'id'          => 'height',
-				'section'     => 'post_carousel',
-				'type'        => 'number',
-				'label'       => esc_html__( 'Columns Height', 'carousel-slider' ),
-				'description' => esc_html__( 'Enter columns height for posts carousel in numbers. 450 (px) is perfect when columns width is around 300px or higher. Otherwise you need to change it for perfection.', 'carousel-slider' ),
-				'default'     => 450,
 			),
 		);
 

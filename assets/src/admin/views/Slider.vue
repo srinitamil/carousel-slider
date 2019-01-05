@@ -31,7 +31,7 @@
 		<div class="carousel-slider-sidebar">
 			<accordion v-for="section in _sections" :title="section.title" :key="section.id" :active="section.active">
 				<template v-for="field in _fields" v-if="field.section === section.id">
-					<div class="carousel-slider-control__field" :data-type="field.type">
+					<div class="carousel-slider-control__field" :data-type="field.type" v-show="fieldConditions(field)">
 						<label class="carousel-slider-control__label" :for="field.id" v-if="'gallery' !== field.type">
 							{{field.label}}
 							<template v-if="field.description">
@@ -47,40 +47,37 @@
 														@click:clear="clearItem(item, slider[field.id])"
 														@click:copy="copyItem(item, slider[field.id])">
 										<template v-for="_field in field.fields">
-											<template v-if="isTextfield(_field.type)">
-												<div class="carousel-slider-control__field">
+											<div class="carousel-slider-control__field"
+												 v-show="fieldConditions(_field, item)">
+												<template v-if="isTextfield(_field.type)">
 													<label class="carousel-slider-control__label">{{_field.label}}</label>
 													<input class="widefat" :type="_field.type"
 														   v-model="item[_field.id]">
-												</div>
-											</template>
-											<template v-if="'textarea' === _field.type">
-												<div class="carousel-slider-control__field">
+												</template>
+												<template v-if="'textarea' === _field.type">
 													<label class="carousel-slider-control__label">{{_field.label}}</label>
 													<textarea class="widefat" :rows="_field.input_attrs.rows"
 															  v-model="item[_field.id]"></textarea>
-												</div>
-											</template>
-											<template v-if="'background' === _field.type">
-												<accordion :title="_field.label">
-													<background v-model="item[_field.id]"
-																:supports="_field.supports"></background>
-												</accordion>
-											</template>
-											<template v-if="'rich-text' === _field.type">
-												<accordion :title="_field.label">
-													<rich-text v-model="item[_field.id]"
-															   :supports="_field.supports"></rich-text>
-												</accordion>
-											</template>
-											<template v-if="'button-generator' === _field.type">
-												<accordion :title="_field.label">
-													<button-generator v-model="item[_field.id]"
-																	  :supports="_field.supports"></button-generator>
-												</accordion>
-											</template>
-											<template v-if="'radio-button' === _field.type">
-												<div class="carousel-slider-control__field">
+												</template>
+												<template v-if="'background' === _field.type">
+													<accordion :title="_field.label">
+														<background v-model="item[_field.id]"
+																	:supports="_field.supports"></background>
+													</accordion>
+												</template>
+												<template v-if="'rich-text' === _field.type">
+													<accordion :title="_field.label">
+														<rich-text v-model="item[_field.id]"
+																   :supports="_field.supports"></rich-text>
+													</accordion>
+												</template>
+												<template v-if="'button-generator' === _field.type">
+													<accordion :title="_field.label">
+														<button-generator v-model="item[_field.id]"
+																		  :supports="_field.supports"></button-generator>
+													</accordion>
+												</template>
+												<template v-if="'radio-button' === _field.type">
 													<label class="carousel-slider-control__label">{{_field.label}}</label>
 													<div class="mdl-radio-button-container">
 														<mdl-radio-button v-for="(value, key) in _field.choices"
@@ -88,8 +85,8 @@
 																		  :value="key"> {{value}}
 														</mdl-radio-button>
 													</div>
-												</div>
-											</template>
+												</template>
+											</div>
 										</template>
 									</accordion-repeater>
 								</template>
@@ -230,6 +227,24 @@
 			}
 		},
 		methods: {
+			fieldConditions(settings, item) {
+				if (typeof settings.conditions === "undefined") return true;
+				let conditions = settings.conditions,
+						firstCondition = conditions[0],
+						value = this.slider[firstCondition.name];
+
+				if (typeof item !== "undefined") {
+					value = item[firstCondition.name]
+				}
+
+				if (firstCondition.operator === '==' && (value === firstCondition.value)) {
+					return true;
+				}
+				if (firstCondition.operator === '!=' && (value !== firstCondition.value)) {
+					return true;
+				}
+				return false;
+			},
 			isTextfield(type) {
 				let valid = ['text', 'number', 'url', 'date'];
 

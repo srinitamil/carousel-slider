@@ -39,6 +39,13 @@ class Setting extends AbstractSetting {
 				'description' => esc_html__( 'Show products associated with selected categories.', 'carousel-slider' ),
 				'input_attrs' => array( 'multiple' => true ),
 				'choices'     => Slider::get_product_categories_list(),
+				'conditions'  => array(
+					array(
+						'name'     => 'query_type',
+						'operator' => '==',
+						'value'    => 'product_categories',
+					),
+				),
 			),
 			array(
 				'id'          => 'tags',
@@ -48,6 +55,13 @@ class Setting extends AbstractSetting {
 				'description' => esc_html__( 'Show products associated with selected tags.', 'carousel-slider' ),
 				'input_attrs' => array( 'multiple' => true ),
 				'choices'     => Slider::get_product_tags_list(),
+				'conditions'  => array(
+					array(
+						'name'     => 'query_type',
+						'operator' => '==',
+						'value'    => 'product_tags',
+					),
+				),
 			),
 			array(
 				'id'          => 'product_in',
@@ -57,15 +71,28 @@ class Setting extends AbstractSetting {
 				'description' => esc_html__( 'Select products that you want to show as slider. Select at least 5 products', 'carousel-slider' ),
 				'input_attrs' => array( 'multiple' => true ),
 				'choices'     => Slider::get_posts_list( 'product' ),
+				'conditions'  => array(
+					array(
+						'name'     => 'query_type',
+						'operator' => '==',
+						'value'    => 'specific_products',
+					),
+				),
 			),
 			array(
-				'id'               => 'per_page',
-				'section'          => 'product_carousel',
-				'type'             => 'number',
-				'label'            => esc_html__( 'Product per page', 'carousel-slider' ),
-				'default'          => 12,
-				'description'      => esc_html__( 'How many products you want to show on carousel slide.', 'carousel-slider' ),
-				'input_attributes' => array( 'class' => 'sp-input-text products_per_page' ),
+				'id'          => 'per_page',
+				'section'     => 'product_carousel',
+				'type'        => 'number',
+				'label'       => esc_html__( 'Product per page', 'carousel-slider' ),
+				'default'     => 12,
+				'description' => esc_html__( 'How many products you want to show on carousel slide.', 'carousel-slider' ),
+				'conditions'  => array(
+					array(
+						'name'     => 'query_type',
+						'operator' => '!=',
+						'value'    => 'specific_products',
+					),
+				),
 			),
 			array(
 				'id'          => 'show_title',

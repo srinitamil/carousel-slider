@@ -73,30 +73,58 @@ class Setting extends AbstractSetting {
 						'type'        => 'url',
 						'label'       => esc_html__( 'Slide Link:', 'carousel-slider' ),
 						'description' => esc_html__( 'Please enter your URL that will be used to link the full slide.', 'carousel-slider' ),
-					),
-					array(
-						'id'      => 'full_link_target',
-						'type'    => 'radio-button',
-						'label'   => esc_html__( 'Slide Link Target:', 'carousel-slider' ),
-						'default' => '_self',
-						'choices' => array(
-							'_self'  => esc_html__( 'Same Window', 'carousel-slider' ),
-							'_blank' => esc_html__( 'New Window', 'carousel-slider' ),
+						'conditions'  => array(
+							array(
+								'name'     => 'link_type',
+								'operator' => '==',
+								'value'    => 'full',
+							),
 						),
 					),
 					array(
-						'id'       => 'button_one',
-						'type'     => 'button-generator',
-						'label'    => esc_html__( 'Button #1', 'carousel-slider' ),
-						'supports' => array( 'text', 'url' ),
-						'default'  => array(),
+						'id'         => 'full_link_target',
+						'type'       => 'radio-button',
+						'label'      => esc_html__( 'Slide Link Target:', 'carousel-slider' ),
+						'default'    => '_self',
+						'choices'    => array(
+							'_self'  => esc_html__( 'Same Window', 'carousel-slider' ),
+							'_blank' => esc_html__( 'New Window', 'carousel-slider' ),
+						),
+						'conditions' => array(
+							array(
+								'name'     => 'link_type',
+								'operator' => '==',
+								'value'    => 'full',
+							),
+						),
 					),
 					array(
-						'id'       => 'button_two',
-						'type'     => 'button-generator',
-						'label'    => esc_html__( 'Button #2', 'carousel-slider' ),
-						'supports' => array( 'text', 'url' ),
-						'default'  => array(),
+						'id'         => 'button_one',
+						'type'       => 'button-generator',
+						'label'      => esc_html__( 'Button #1', 'carousel-slider' ),
+						'supports'   => array( 'text', 'url' ),
+						'default'    => array(),
+						'conditions' => array(
+							array(
+								'name'     => 'link_type',
+								'operator' => '==',
+								'value'    => 'button',
+							),
+						),
+					),
+					array(
+						'id'         => 'button_two',
+						'type'       => 'button-generator',
+						'label'      => esc_html__( 'Button #2', 'carousel-slider' ),
+						'supports'   => array( 'text', 'url' ),
+						'default'    => array(),
+						'conditions' => array(
+							array(
+								'name'     => 'link_type',
+								'operator' => '==',
+								'value'    => 'button',
+							),
+						),
 					),
 				),
 			),

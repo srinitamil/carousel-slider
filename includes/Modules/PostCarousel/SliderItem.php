@@ -107,8 +107,14 @@ class SliderItem implements \JsonSerializable {
 		if ( ! is_array( $image_src ) ) {
 			return array();
 		}
+		$alt = get_post_meta( $thumbnail_id, '_wp_attachment_image_alt', true );
 
-		return array( 'src' => $image_src[0], 'width' => $image_src[1], 'height' => $image_src[2] );
+		return array(
+			'src'       => $image_src[0],
+			'width'     => $image_src[1],
+			'height'    => $image_src[2],
+			'image_alt' => $alt,
+		);
 	}
 
 	/**
@@ -118,6 +124,9 @@ class SliderItem implements \JsonSerializable {
 	 */
 	public function categories_to_array() {
 		$categories = array();
+		if ( ! is_array( $this->categories ) ) {
+			return $categories;
+		}
 		foreach ( $this->get_categories() as $category ) {
 			$categories[] = array(
 				'id'    => $category->term_id,
@@ -137,7 +146,10 @@ class SliderItem implements \JsonSerializable {
 	 */
 	public function tags_to_array() {
 		$tags = array();
-		foreach ( $this->tags as $tag ) {
+		if ( ! is_array( $this->tags ) ) {
+			return $tags;
+		}
+		foreach ( $this->get_tags() as $tag ) {
 			$tags[] = array(
 				'id'    => $tag->term_id,
 				'name'  => $tag->name,

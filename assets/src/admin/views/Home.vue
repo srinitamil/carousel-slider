@@ -32,19 +32,34 @@
 		</list-table>
 
 		<mdl-fab @click="openModal">+</mdl-fab>
-		<mdl-modal :active="modalActive" @close="closeModal" title="Add New Slider">
+		<mdl-modal :active="modalActive" @close="closeModal" title= "Add New Slider">
 			<p v-for="(label, slug) in sliderTypes">
-				<mdl-radio v-model="sliderType" :value="slug">{{label}}</mdl-radio>
+				<mdl-radio v-model="sliderType" :value="slug">{{label}} </mdl-radio>
 			</p>
+			<div class="mdl-modal-card-foot is-pulled-right">
+				<slot name="foot">
+					<mdl-button @click.prevent="create">create</mdl-button>
+				</slot>
+				<slot name="foot">
+					<mdl-button @click.prevent="close">Cancel</mdl-button>
+				</slot>
+			</div>
 		</mdl-modal>
+
 		<div class="carousel-slider-spinner" v-show="loading">
-			<mdl-spinner :active="loading"></mdl-spinner>
+			<mdl-spinner :active="loading">
+
+			</mdl-spinner>
 		</div>
 	</div>
+
 </template>
+
+
 
 <script>
 	import ListTable from '../components/ListTable.vue';
+	import mdlButton from '../../material-design-lite/button/mdlButton.vue';
 	import CopyToClipboard from '../components/CopyToClipboard.vue';
 	import mdlFab from '../../material-design-lite/button/mdlFab.vue';
 	import mdlModal from '../../material-design-lite/modal/mdlModal.vue';
@@ -53,7 +68,7 @@
 
 	export default {
 		name: "Home",
-		components: {ListTable, mdlFab, mdlModal, mdlRadio, CopyToClipboard, mdlSpinner},
+		components: {ListTable, mdlFab, mdlModal, mdlRadio, CopyToClipboard, mdlSpinner,mdlButton},
 		data() {
 			return {
 				loading: true,
@@ -279,12 +294,36 @@
 						self.loading = false;
 					}
 				});
-			},
+			},create() {
+				let $ = window.jQuery, self = this;
+				self.loading = true;
+				$.ajax({
+					url: ajaxurl,
+					method: 'POST',
+					data: {
+						action: 'create_slider',
+						slider_type: this.sliderType,
+					},
+					success: function (response) {
+						let id = response.message;
+						window.location.href = "#/" + id;
+					},
+					error: function (response) {
+						console.log(response);
+					}
+				});
+			}
 		}
 	}
 </script>
 
 <style lang="scss">
+	.mdl-modal-card-body {
+		padding: 0px 0px !important;
+	}
+	.mdl-modal-card-body  p{
+		padding: 0px 20px;
+	}
 	.carousel-slider-list-page {
 		.mdl-button--fab {
 			position: fixed;

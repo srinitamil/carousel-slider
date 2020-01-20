@@ -16,11 +16,14 @@
 			<div class="mdl-modal-card-body">
 				<slot></slot>
 			</div>
-			<div class="mdl-modal-card-foot is-pulled-right">
-				<slot name="foot">
-					<mdl-button @click.prevent="close">Cancel</mdl-button>
-				</slot>
-			</div>
+			<!--	<div class="mdl-modal-card-foot is-pulled-right">
+					<slot name="foot">
+						<mdl-button @click.prevent="create">create</mdl-button>
+					</slot>
+					<slot name="foot">
+						<mdl-button @click.prevent="close">Cancel</mdl-button>
+					</slot>
+				</div> -->
 		</div>
 	</div>
 </template>
@@ -52,7 +55,8 @@
 		methods: {
 			close() {
 				this.$emit('close');
-			}
+			},
+
 		}
 	}
 </script>

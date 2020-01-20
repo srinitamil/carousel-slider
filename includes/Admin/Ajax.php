@@ -20,7 +20,7 @@ class Ajax {
 	public static function init() {
 		if ( is_null( self::$instance ) ) {
 			self::$instance = new self();
-
+			add_action( 'wp_ajax_create_slider', array( self::$instance, 'create_slider' ) );
 			add_action( 'wp_ajax_add_content_slide', array( self::$instance, 'add_slide_template' ) );
 			add_action( 'wp_ajax_carousel_slider_restore_slider', array( self::$instance, 'restore_slider' ) );
 			add_action( 'wp_ajax_carousel_slider_restore_sliders', array( self::$instance, 'restore_sliders' ) );
@@ -28,6 +28,69 @@ class Ajax {
 		}
 
 		return self::$instance;
+	}
+
+	/**
+	 * Create slider
+	 */
+	public function create_slider() {
+		$slider_type = $_POST['slider_type'];
+
+		if ( $slider_type != '' ) {
+			// insert the post and set the category
+			$post_id = wp_insert_post( array(
+				'post_type'   => 'carousels',
+				'post_title'  => $slider_type,
+				'post_status' => 'publish',
+			) );
+
+			if ( $post_id ) {
+				// General Settings
+				add_post_meta( $post_id, '_slide_type', $slider_type );
+				add_post_meta( $post_id, '_image_size', 'medium_large' );
+				add_post_meta( $post_id, '_stage_padding', '0' );
+				add_post_meta( $post_id, '_margin_right', '10' );
+				add_post_meta( $post_id, '_lazy_load_image', 'true' );
+				add_post_meta( $post_id, '_infinity_loop', 'true' );
+				add_post_meta( $post_id, '_auto_width', 'false' );
+
+				// Autoplay Settings
+				add_post_meta( $post_id, '_autoplay', 'false' );
+				add_post_meta( $post_id, '_autoplay_pause', 'autoplay_pause' );
+				add_post_meta( $post_id, '_autoplay_timeout', '5000' );
+				add_post_meta( $post_id, '_autoplay_speed', '500' );
+
+				// Navigation Settings
+				add_post_meta( $post_id, '_nav_button', 'hover' );
+				add_post_meta( $post_id, '_slide_by', 1 );
+				add_post_meta( $post_id, '_arrow_position', 'outside' );
+				add_post_meta( $post_id, '_arrow_size', 48 );
+				add_post_meta( $post_id, '_dot_nav', 'true' );
+				add_post_meta( $post_id, '_bullet_position', 'center' );
+				add_post_meta( $post_id, '_bullet_size', 10 );
+				add_post_meta( $post_id, '_bullet_shape', 'square' );
+				add_post_meta( $post_id, '_nav_color', '#f1f1f1' );
+				add_post_meta( $post_id, '_nav_active_color', '#00d1b2' );
+
+				// Responsive Settings
+				add_post_meta( $post_id, '_items_portrait_mobile', 1 );
+				add_post_meta( $post_id, '_items_small_portrait_tablet', 2 );
+				add_post_meta( $post_id, '_items_portrait_tablet', 3 );
+				add_post_meta( $post_id, '_items_small_desktop', 4 );
+				add_post_meta( $post_id, '_items_desktop', 4 );
+				add_post_meta( $post_id, '_items', 4 );
+
+			}
+			$response = array(
+				'success' => true,
+				'code'    => '201',
+				'message' => __( $post_id, 'carousel-slider' ),
+			);
+			$this->send_json( $response, 201 );
+		} else {
+			$response = array( 'success' => false );
+			$this->send_json( $response, 400 );
+		}
 	}
 
 	/**

@@ -78,8 +78,10 @@ class AbstractSlider implements \JsonSerializable {
 		/** @var \WP_Term[] $_terms */
 		$_terms = get_terms( array( 'taxonomy' => $taxonomy, 'hide_empty' => true ) );
 		$terms  = array();
-		foreach ( $_terms as $term ) {
-			$terms[ $term->term_id ] = sprintf( '%s (%s)', $term->name, $term->count );
+		if ( empty($_terms) ) {
+			foreach ( $_terms as $term ) {
+				$terms[ $term->term_id ] = sprintf( '%s (%s)', $term->name, $term->count );
+			}
 		}
 
 		return $terms;
@@ -749,7 +751,7 @@ class AbstractSlider implements \JsonSerializable {
 	 * one of the following values: 'yes', 'on', '1', 1, true, or 'true'.
 	 * This can be used for determining if an HTML checkbox has been checked.
 	 *
-	 * @param  mixed $value
+	 * @param mixed $value
 	 *
 	 * @return boolean
 	 */
@@ -804,8 +806,8 @@ class AbstractSlider implements \JsonSerializable {
 	 * Gets the value from either current pending changes, or the data itself.
 	 * Context controls what happens to the value before it's returned.
 	 *
-	 * @param  string $prop Name of prop to get.
-	 * @param  string $context What the value is for. Valid values are view and edit.
+	 * @param string $prop Name of prop to get.
+	 * @param string $context What the value is for. Valid values are view and edit.
 	 *
 	 * @return mixed
 	 */

@@ -78,7 +78,7 @@ class AbstractSlider implements \JsonSerializable {
 		/** @var \WP_Term[] $_terms */
 		$_terms = get_terms( array( 'taxonomy' => $taxonomy, 'hide_empty' => true ) );
 		$terms  = array();
-		if ( empty($_terms) ) {
+		if ( empty( $_terms ) ) {
 			foreach ( $_terms as $term ) {
 				$terms[ $term->term_id ] = sprintf( '%s (%s)', $term->name, $term->count );
 			}
@@ -375,14 +375,13 @@ class AbstractSlider implements \JsonSerializable {
 	 */
 	public function get_arrow_steps() {
 		$slide_by = $this->get_prop( 'arrow_steps' );
-
-		if ( ! empty( $slide_by ) && false !== strpos( 'page', $slide_by ) ) {
-			return 'page';
-		}
-		if ( in_array( $slide_by, array( 0, '0', 'zero' ), true ) ) {
-			return 'page';
-		}
-
+			 /*
+			if ( ! empty( $slide_by ) && false !== strpos( 'page', $slide_by ) ) {
+				return 'page';
+			}
+			if ( in_array( $slide_by, array( 0, '0', 'zero' ), true ) ) {
+				return 'page';
+			} */
 		return intval( $slide_by );
 	}
 

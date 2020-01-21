@@ -208,6 +208,12 @@
 			this.id = parseInt(this.$route.params.id);
 			this.getItem();
 		},
+		watch: {
+			slider(newValue, oldValue) {
+				console.log(newValue, oldValue);
+				console.log('asdfasdfasdf');
+			}
+		},
 		computed: {
 			_sections() {
 				if (typeof this.slider.type !== "undefined") {
@@ -291,6 +297,8 @@
 			saveSlider() {
 				let $ = jQuery, self = this;
 				self.loading = true;
+
+
 				$.ajax({
 					url: window.carouselSliderSettings.root + '/sliders/' + self.slider.id,
 					method: 'PUT',
@@ -299,6 +307,8 @@
 						if (response.data) {
 							self.slider = response.data;
 						}
+						console.log(self.slider);
+
 						self.loading = false;
 						self.$root.$emit('show-snackbar', {
 							message: 'Data hes been saved!',
@@ -306,6 +316,7 @@
 					},
 					error: function () {
 						self.loading = false;
+
 					}
 				});
 			},
@@ -459,5 +470,12 @@
 		min-height: 100px;
 		padding: 50px;
 		width: 100%;
+	}
+
+	.media-gallery-list--item-image {
+		height: 50px !important;
+		width: 68px !important;
+		object-fit: cover;
+		object-position: center;
 	}
 </style>

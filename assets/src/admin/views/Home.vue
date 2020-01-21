@@ -32,16 +32,16 @@
 		</list-table>
 
 		<mdl-fab @click="openModal">+</mdl-fab>
-		<mdl-modal :active="modalActive" @close="closeModal" title= "Add New Slider">
+		<mdl-modal :active="modalActive" @close="closeModal" title="Add New Slider">
 			<p v-for="(label, slug) in sliderTypes">
-				<mdl-radio v-model="sliderType" :value="slug">{{label}} </mdl-radio>
+				<mdl-radio v-model="sliderType" :value="slug">{{label}}</mdl-radio>
 			</p>
 			<div class="mdl-modal-card-foot is-pulled-right">
 				<slot name="foot">
 					<mdl-button @click.prevent="create">create</mdl-button>
 				</slot>
 				<slot name="foot">
-					<mdl-button @click.prevent="close">Cancel</mdl-button>
+					<mdl-button @click.prevent="closeModal">Cancel</mdl-button>
 				</slot>
 			</div>
 		</mdl-modal>
@@ -56,7 +56,6 @@
 </template>
 
 
-
 <script>
 	import ListTable from '../components/ListTable.vue';
 	import mdlButton from '../../material-design-lite/button/mdlButton.vue';
@@ -68,7 +67,7 @@
 
 	export default {
 		name: "Home",
-		components: {ListTable, mdlFab, mdlModal, mdlRadio, CopyToClipboard, mdlSpinner,mdlButton},
+		components: {ListTable, mdlFab, mdlModal, mdlRadio, CopyToClipboard, mdlSpinner, mdlButton},
 		data() {
 			return {
 				loading: true,
@@ -294,24 +293,40 @@
 						self.loading = false;
 					}
 				});
-			},create() {
+			}, create() {
 				let $ = window.jQuery, self = this;
 				self.loading = true;
 				$.ajax({
-					url: ajaxurl,
+					url: carouselSliderSettings.root + '/sliders/',
 					method: 'POST',
 					data: {
-						action: 'create_slider',
-						slider_type: this.sliderType,
+						title: self.sliderType,
+						type: self.sliderType,
 					},
 					success: function (response) {
-						let id = response.message;
+						let id = response.data.id;
+						//console.log(response.data.id);
 						window.location.href = "#/" + id;
 					},
-					error: function (response) {
-						console.log(response);
+					error: function () {
+						console.log('error');
 					}
 				});
+				/*	$.ajax({
+						url: ajaxurl,
+						method: 'POST',
+						data: {
+							action: 'create_slider',
+							slider_type: this.sliderType,
+						},
+						success: function (response) {
+							let id = response.message;
+							window.location.href = "#/" + id;
+						},
+						error: function (response) {
+							console.log(response);
+						}
+					}); */
 			}
 		}
 	}
@@ -321,9 +336,11 @@
 	.mdl-modal-card-body {
 		padding: 0px 0px !important;
 	}
-	.mdl-modal-card-body  p{
+
+	.mdl-modal-card-body p {
 		padding: 0px 20px;
 	}
+
 	.carousel-slider-list-page {
 		.mdl-button--fab {
 			position: fixed;

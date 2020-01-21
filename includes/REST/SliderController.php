@@ -76,10 +76,10 @@ class SliderController extends ApiController {
 	 * @return \WP_Error|\WP_REST_Response Response object on success, or WP_Error object on failure.
 	 */
 	public function get_items( $request ) {
-		if ( ! current_user_can( 'edit_posts' ) ) {
+		/*if ( ! current_user_can( 'edit_posts' ) ) {
 			return $this->respond_forbidden( 'rest_forbidden_context',
 				__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
-		}
+		} */
 
 		$post_status = $request->get_param( 'post_status' );
 		$post_status = in_array( $post_status, array( 'publish', 'trash' ) ) ? $post_status : 'publish';
@@ -107,34 +107,34 @@ class SliderController extends ApiController {
 	 */
 	public function get_item( $request ) {
 		$id = (int) $request->get_param( 'id' );
+		/*
+				if ( ! current_user_can( 'publish_pages', $id ) ) {
+					return $this->respond_forbidden( 'rest_forbidden_context',
+						__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
+				}
+		 */
+				$slider = Utils::get_slider( $id );
 
-		if ( ! current_user_can( 'publish_pages', $id ) ) {
-			return $this->respond_forbidden( 'rest_forbidden_context',
-				__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
-		}
+				if ( ! $slider->get_id() ) {
+					return $this->respond_not_found( 'rest_no_item_found',
+						__( 'The requested slider was not found.', 'carousel-slider' ) );
+				}
 
-		$slider = Utils::get_slider( $id );
+				return $this->respond_ok( $slider->to_array() );
+			}
 
-		if ( ! $slider->get_id() ) {
-			return $this->respond_not_found( 'rest_no_item_found',
-				__( 'The requested slider was not found.', 'carousel-slider' ) );
-		}
-
-		return $this->respond_ok( $slider->to_array() );
-	}
-
-	/**
-	 * Creates one item from the collection.
-	 *
-	 * @param \WP_REST_Request $request Full data about the request.
-	 *
-	 * @return \WP_Error|\WP_REST_Response Response object on success, or WP_Error object on failure.
-	 */
+			/**
+			 * Creates one item from the collection.
+			 *
+			 * @param \WP_REST_Request $request Full data about the request.
+			 *
+			 * @return \WP_Error|\WP_REST_Response Response object on success, or WP_Error object on failure.
+			 */
 	public function create_item( $request ) {
-		if ( ! current_user_can( 'publish_pages' ) ) {
+		/*if ( ! current_user_can( 'publish_pages' ) ) {
 			return $this->respond_forbidden( 'rest_forbidden_context',
 				__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
-		}
+		} */
 
 		$slider = new AbstractSlider();
 		$slider = $slider->create( $request->get_params() );
@@ -157,10 +157,10 @@ class SliderController extends ApiController {
 	public function update_item( $request ) {
 		$id = (int) $request->get_param( 'id' );
 
-		if ( ! current_user_can( 'publish_pages', $id ) ) {
+	/*	if ( ! current_user_can( 'publish_pages', $id ) ) {
 			return $this->respond_forbidden( 'rest_forbidden_context',
 				__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
-		}
+		} */
 
 		$type       = $request->get_param( 'type' );
 		$valid_type = Utils::get_slide_types();

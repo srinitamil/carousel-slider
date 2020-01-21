@@ -21,6 +21,10 @@
  * @author Sayful Islam
  */
 
+use CarouselSlider\Activator;
+use CarouselSlider\REST\SliderController;
+use CarouselSlider\Script;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
@@ -167,9 +171,10 @@ if ( ! class_exists( 'Carousel_Slider' ) ) {
 		 * @return void
 		 */
 		private function init_classes() {
-			$this->container['activator'] = \CarouselSlider\Activator::init();
-			$this->container['script']    = \CarouselSlider\Script::init();
+			$this->container['activator'] = Activator::init();
+			$this->container['script']    = Script::init();
 			$this->container['preview']   = \CarouselSlider\Display\Preview::init();
+			$this->container['rest']            = SliderController::init();
 
 			if ( $this->is_request( 'admin' ) ) {
 				$this->container['slider-settings'] = \CarouselSlider\Admin\SliderSetting::init();
@@ -183,7 +188,7 @@ if ( ! class_exists( 'Carousel_Slider' ) ) {
 			if ( $this->is_request( 'frontend' ) ) {
 				$this->container['structured-data'] = \CarouselSlider\Display\StructuredData::init();
 				$this->container['shortcode']       = \CarouselSlider\Display\Shortcode::init();
-				$this->container['rest']            = \CarouselSlider\REST\SliderController::init();
+
 
 				// Quick view and wish list button
 				add_action( 'carousel_slider_after_shop_loop_item',

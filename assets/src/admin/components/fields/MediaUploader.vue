@@ -54,6 +54,8 @@
 			},
 			thumbnails() {
 				return this.images.map((image) => {
+					return image;
+					/*
 					if (typeof image.thumbnail.source_url !== "undefined") {
 						return image.thumbnail.source_url;
 					}
@@ -65,7 +67,7 @@
 					}
 					if (typeof image.full.url !== "undefined") {
 						return image.full.url;
-					}
+					} */
 				});
 			}
 		},
@@ -190,10 +192,17 @@
 
 				return selection;
 			},
+			isEmpty(obj) {
+				for (var key in obj) {
+					if (obj.hasOwnProperty(key))
+						return false;
+				}
+				return true;
+			},
 			getImages(include) {
+
 				let wpApiSettings = window.wpApiSettings, $ = window.jQuery, self = this;
 				let url = wpApiSettings.root + wpApiSettings.versionString + 'media';
-
 				$.ajax({
 					url: url,
 					method: 'GET',
@@ -203,14 +212,11 @@
 					},
 					success: function (images) {
 						self.images = [];
+						var i = 0;
 						include.forEach((id) => {
 							images.forEach((element) => {
 								if (id === element.id) {
-									if (typeof element.media_details.sizes != "undefined") {
-										self.images.push(element.media_details.sizes);
-									} else {
-										self.images.push({full: {url: element.source_url}});
-									}
+									self.images.push(element.source_url);
 								}
 							});
 						});

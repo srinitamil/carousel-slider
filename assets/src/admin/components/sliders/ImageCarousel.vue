@@ -4,6 +4,10 @@
 			<div v-for="image in options.images" class="carousel-slider__item">
 				<img class="owl-lazy" :src="image.image_src" :width="image.image_width"
 					 :height="image.image_height" :alt="image.image_alt"/>
+				<div class="carousel-slider__caption">
+					<h4 class="title">{{image.title}}</h4>
+					<p class="caption"> {{image.caption}} </p>
+				</div>
 			</div>
 		</div>
 	</div>

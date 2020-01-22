@@ -123,6 +123,13 @@
         }
     }
 
+	// Dots hidden
+	&.dots-hidden {
+		.owl-dots {
+			display:none;
+		}
+	}
+
     // Dots shape
     &.dots-circle {
         .owl-dots {

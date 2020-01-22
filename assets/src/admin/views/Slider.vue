@@ -97,6 +97,7 @@
 								</mdl-button>
 							</div>
 						</template>
+
 						<template v-if="'select' === field.type">
 							<select :id="field.id" v-model="slider[field.id]" class="carousel-slider-control__input">
 								<option v-for="(choice, key) in field.choices" :value="key">{{choice}}</option>
@@ -165,6 +166,7 @@
 	import mdlTextfield from '../../material-design-lite/textfield/mdlTextfield.vue';
 	import mdlSpinner from '../../material-design-lite/spinner/mdlSpinner.vue';
 
+
 	export default {
 		name: "Slider",
 		components: {
@@ -200,6 +202,14 @@
 				modules: [],
 			}
 		},
+		watch: {
+			'slider': {
+				handler: function (after, before) {
+
+				},
+				deep: true
+			},
+		},
 		mounted() {
 			let settings = window.CAROUSEL_SLIDER_SETTINGS;
 			this.sections = settings.general_settings.sections;
@@ -207,12 +217,6 @@
 			this.modules = settings.modules_settings;
 			this.id = parseInt(this.$route.params.id);
 			this.getItem();
-		},
-		watch: {
-			slider(newValue, oldValue) {
-				console.log(newValue, oldValue);
-				console.log('asdfasdfasdf');
-			}
 		},
 		computed: {
 			_sections() {
@@ -230,7 +234,8 @@
 					return fields.concat(this.fields);
 				}
 				return this.fields;
-			}
+			},
+
 		},
 		methods: {
 			fieldConditions(settings, item) {
@@ -297,8 +302,6 @@
 			saveSlider() {
 				let $ = jQuery, self = this;
 				self.loading = true;
-
-
 				$.ajax({
 					url: window.carouselSliderSettings.root + '/sliders/' + self.slider.id,
 					method: 'PUT',
@@ -306,9 +309,8 @@
 					success: function (response) {
 						if (response.data) {
 							self.slider = response.data;
+							console.log(self.slider);
 						}
-						console.log(self.slider);
-
 						self.loading = false;
 						self.$root.$emit('show-snackbar', {
 							message: 'Data hes been saved!',
@@ -316,7 +318,6 @@
 					},
 					error: function () {
 						self.loading = false;
-
 					}
 				});
 			},
@@ -336,12 +337,16 @@
 			},
 			clearItem(item, items) {
 				this.$delete(items, items.indexOf(item));
-			}
+			},
 		}
 	}
 </script>
 
 <style lang="scss">
+	.carousel-slider {
+		display: block !important;
+	}
+
 	.carousel-slider-edit-page {
 		width: 100%;
 		height: 100%;
@@ -471,6 +476,7 @@
 		padding: 50px;
 		width: 100%;
 	}
+
 
 	.media-gallery-list--item-image {
 		height: 50px !important;

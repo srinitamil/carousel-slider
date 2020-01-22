@@ -1,4 +1,7 @@
 const carousel = {
+	data: {
+		nav_style :''
+	},
 	props: {
 		options: {type: Object, required: true}
 	},
@@ -38,9 +41,16 @@ const carousel = {
 				classes.push('dots-visible-hover');
 			}
 
+			// nav_colors
+
+			this.nav_style = 'style="fill:red"';
+			console.log(this.nav_style);
+			//nav_style.style.color = this.options.nav_color ;
+
 			return classes;
 		},
 		owl_options() {
+
 			return {
 				stagePadding: this.options.stage_padding,
 				nav: this.options.arrow_nav,
@@ -63,8 +73,8 @@ const carousel = {
 					1500: {items: this.options.items_desktop_large},
 				},
 				navText: [
-					'<svg class="carousel-slider-nav-icon" viewBox="0 0 20 20"><path d="M14 5l-5 5 5 5-1 2-7-7 7-7z"></path></svg>',
-					'<svg class="carousel-slider-nav-icon" viewBox="0 0 20 20"><path d="M6 15l5-5-5-5 1-2 7 7-7 7z"></path></svg>',
+					'<svg class="carousel-slider-nav-icon" '.this.nav_style+' viewBox="0 0 20 20"><path d="M14 5l-5 5 5 5-1 2-7-7 7-7z"></path></svg>',
+					'<svg class="carousel-slider-nav-icon" style="'+"fill:red"+'" viewBox="0 0 20 20"><path d="M6 15l5-5-5-5 1-2 7 7-7 7z"></path></svg>',
 				],
 			};
 		}
@@ -78,8 +88,9 @@ const carousel = {
 			let slider = window.jQuery(this.$el).find("[data-carousel_slider]");
 			slider.owlCarousel('destroy');
 			setTimeout(function (options) {
+				console.log(options);
 				slider.owlCarousel(options);
-			}, 1000, this.owl_options);
+			},10,this.owl_options);
 		},
 	}
 };

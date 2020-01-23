@@ -10,7 +10,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 class Setting extends AbstractSetting {
 
-	/**
+	/*
 	 * Register image carousel settings
 	 */
 	public function register_settings() {

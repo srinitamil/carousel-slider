@@ -1,5 +1,5 @@
 <template>
-	<div :class="outer_classes">
+	<div :class="outer_classes" :style="btnStyles">
 		<div :id='slider_id' :class='slider_classes' data-carousel_slider="true" :data-slide-type='options.type'>
 			<template v-for="data in options.content">
 				<div class="carousel-slider-hero__cell">

@@ -1,7 +1,5 @@
 const carousel = {
-	data: {
-		nav_style :''
-	},
+
 	props: {
 		options: {type: Object, required: true}
 	},
@@ -12,6 +10,12 @@ const carousel = {
 			classes.push('carousel-slider-' + this.options.type);
 
 			return classes;
+		},
+		btnStyles() {
+			return {
+				"--cs-nav-color": this.options.nav_color,
+				"--cs-nav-hover-color": this.options.nav_active_color,
+			};
 		},
 		slider_id() {
 			return 'id-' + this.options.id;
@@ -41,19 +45,17 @@ const carousel = {
 				classes.push('dots-visible-hover');
 			}
 
-			// nav_colors
-
-			this.nav_style = 'style="fill:red"';
-			console.log(this.nav_style);
 			//nav_style.style.color = this.options.nav_color ;
 
 			return classes;
 		},
 		owl_options() {
-
+			
 			return {
 				stagePadding: this.options.stage_padding,
 				nav: this.options.arrow_nav,
+				nav_color: this.options.nav_color,
+				nav_active_color: this.options.nav_active_color,
 				dots: this.options.dot_nav,
 				margin: this.options.item_spacing,
 				loop: this.options.infinity_loop,
@@ -73,8 +75,8 @@ const carousel = {
 					1500: {items: this.options.items_desktop_large},
 				},
 				navText: [
-					'<svg class="carousel-slider-nav-icon" '.this.nav_style+' viewBox="0 0 20 20"><path d="M14 5l-5 5 5 5-1 2-7-7 7-7z"></path></svg>',
-					'<svg class="carousel-slider-nav-icon" style="'+"fill:red"+'" viewBox="0 0 20 20"><path d="M6 15l5-5-5-5 1-2 7 7-7 7z"></path></svg>',
+					'<svg class="carousel-slider-nav-icon"  viewBox="0 0 20 20"><path d="M14 5l-5 5 5 5-1 2-7-7 7-7z"></path></svg>',
+					'<svg class="carousel-slider-nav-icon"  viewBox="0 0 20 20"><path d="M6 15l5-5-5-5 1-2 7 7-7 7z"></path></svg>',
 				],
 			};
 		}
@@ -90,7 +92,7 @@ const carousel = {
 			setTimeout(function (options) {
 				console.log(options);
 				slider.owlCarousel(options);
-			},10,this.owl_options);
+			}, 10, this.owl_options);
 		},
 	}
 };

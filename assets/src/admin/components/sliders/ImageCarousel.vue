@@ -1,5 +1,5 @@
 <template>
-	<div :class="outer_classes">
+	<div :class="outer_classes" :style="btnStyles">
 		<div :id='slider_id' :class='slider_classes' data-carousel_slider="true" :data-slide-type='options.type'>
 			<div v-for="image in options.images" class="carousel-slider__item">
 				<img class="owl-lazy" :src="image.image_src" :width="image.image_width"
@@ -29,10 +29,19 @@
 		},
 		mounted() {
 			this.initCarousel();
-		}
+		},
 	}
 </script>
 
 <style lang="scss">
-
+	svg.carousel-slider-nav-icon {
+		fill: var(--cs-nav-color);
+	}
+	.carousel-slider .owl-dots .owl-dot span{
+		background: var(--cs-nav-color);
+	}
+	.carousel-slider .owl-dots .owl-dot.active span, .carousel-slider .owl-dots .owl-dot:hover span
+	{
+		background: var(--cs-nav-hover-color);
+	}
 </style>

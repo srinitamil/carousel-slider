@@ -305,7 +305,7 @@
 					},
 					success: function (response) {
 						let id = response.data.id;
-						//console.log(response.data.id);
+						console.log(response.data.id);
 						window.location.href = "#/" + id;
 					},
 					error: function () {

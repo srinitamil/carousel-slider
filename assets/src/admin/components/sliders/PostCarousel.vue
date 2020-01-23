@@ -1,5 +1,5 @@
 <template>
-	<div :class="outer_classes">
+	<div :class="outer_classes" :style="btnStyles">
 		<div :id='slider_id' :class='slider_classes' data-carousel_slider="true" :data-slide-type='options.type'>
 			<div class="carousel-slider-post" v-for="post in options.posts">
 				<a class="carousel-slider-post__thumbnail" v-if="post.thumbnail" :href="post.link">

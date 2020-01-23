@@ -1,5 +1,5 @@
 <template>
-	<div :class="outer_classes">
+	<div :class="outer_classes" :style="btnStyles">
 		<div :id='slider_id' :class='slider_classes' data-carousel_slider="true" :data-slide-type='options.type'>
 			<div class="carousel-slider-item-video" v-for="video in options.videos">
 				<div class="carousel-slider-video-wrapper">

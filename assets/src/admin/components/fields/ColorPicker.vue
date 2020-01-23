@@ -1,6 +1,7 @@
 <template>
 	<div>
-		<input type="text" :value="value" :data-alpha="alpha">
+		<input type="text"  value="red" >
+		{{value}}
 	</div>
 </template>
 
@@ -14,14 +15,24 @@
 			alpha: {type: Boolean, default: true},
 		},
 		data() {
-			return {}
+			return {
+				color:'',
+			}
+		},
+		methods : {
+			check() {
+				//console.log(this.value);
+			}
 		},
 		mounted() {
+			this.check();
 			let $ = window.jQuery, self = this, element = $(this.$el).find('input');
 			element.wpColorPicker({
 				defaultColor: self.defaultColor,
 				change: function (event, ui) {
 					self.$emit('input', ui.color.toString());
+					this.color = ui.color.toString();
+					//console.log(this.color);
 				},
 			});
 		}

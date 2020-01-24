@@ -88,40 +88,40 @@ class Slider extends AbstractSlider
 	public function get_images()
 	{
 		$_urls = $this->get_image_urls();
-		/*
+
+		$urls = array();
 		if (gettype($_urls) != 'array') {
 			$_urls = array(
-						'caption' => '',
-						'image_alt' => '',
-						'image_height' => '',
-						'image_src' => '',
-						'image_target_url' => '',
-						'image_width ' => '',
-						'title' => '',
+				'title' => '',
+				'caption' => '',
+				'image_alt' => '',
+				'image_target_url' => '',
+				'image_src' => '',
+				'image_width' => null,
+				'image_height' => null,
 			);
-		} */
-		$urls = array();
-		foreach ($_urls as $url) {
-			@list($width, $height) = array('', '');
+		} else {
+			foreach ($_urls as $url) {
+				@list($width, $height) = array('', '');
 
-			// If it fails to get width and height from url,
-			// It should not generate any error
-			try {
-				@list($width, $height) = getimagesize($url['url']);
-			} catch (\Exception $e) {
+				// If it fails to get width and height from url,
+				// It should not generate any error
+				try {
+					@list($width, $height) = getimagesize($url['url']);
+				} catch (\Exception $e) {
 
+				}
+				$urls[] = array(
+					'title' => $url['title'],
+					'caption' => $url['caption'],
+					'image_alt' => $url['alt'],
+					'image_target_url' => $url['link_url'],
+					'image_src' => $url['url'],
+					'image_width' => $width,
+					'image_height' => $height,
+				);
 			}
-			$urls[] = array(
-				'title' => $url['title'],
-				'caption' => $url['caption'],
-				'image_alt' => $url['alt'],
-				'image_target_url' => $url['link_url'],
-				'image_src' => $url['url'],
-				'image_width' => $width,
-				'image_height' => $height,
-			);
 		}
-
 
 		return $urls;
 	}

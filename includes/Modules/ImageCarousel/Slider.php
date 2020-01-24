@@ -4,25 +4,27 @@ namespace CarouselSlider\Modules\ImageCarousel;
 
 use CarouselSlider\Abstracts\AbstractSlider;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
 	exit; // Exit if accessed directly.
 }
 
-class Slider extends AbstractSlider {
+class Slider extends AbstractSlider
+{
 
 	/**
 	 * Represent current class as array
 	 *
 	 * @return array
 	 */
-	public function to_array() {
-		$data                       = parent::to_array();
-		$data['show_image_title']   = $this->show_image_title();
+	public function to_array()
+	{
+		$data = parent::to_array();
+		$data['show_image_title'] = $this->show_image_title();
 		$data['show_image_caption'] = $this->show_image_caption();
-		$data['show_lightbox']      = $this->show_lightbox();
-		$data['image_target']       = $this->get_image_target();
-		$data['images_ids']         = $this->get_images_ids();
-		$data['images']             = $this->get_images();
+		$data['show_lightbox'] = $this->show_lightbox();
+		$data['image_target'] = $this->get_image_target();
+		$data['images_ids'] = $this->get_images_ids();
+		$data['images'] = $this->get_images();
 
 		return $data;
 	}
@@ -32,8 +34,9 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array
 	 */
-	public function get_images_ids() {
-		return $this->get_prop( 'images_ids' );
+	public function get_images_ids()
+	{
+		return $this->get_prop('images_ids');
 	}
 
 	/**
@@ -41,8 +44,9 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return bool
 	 */
-	public function show_image_title() {
-		return $this->is_checked( $this->get_prop( 'show_image_title' ) );
+	public function show_image_title()
+	{
+		return $this->is_checked($this->get_prop('show_image_title'));
 	}
 
 	/**
@@ -50,8 +54,9 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return bool
 	 */
-	public function show_image_caption() {
-		return $this->is_checked( $this->get_prop( 'show_image_caption' ) );
+	public function show_image_caption()
+	{
+		return $this->is_checked($this->get_prop('show_image_caption'));
 	}
 
 	/**
@@ -59,8 +64,9 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return bool
 	 */
-	public function show_lightbox() {
-		return $this->is_checked( $this->get_prop( 'show_lightbox' ) );
+	public function show_lightbox()
+	{
+		return $this->is_checked($this->get_prop('show_lightbox'));
 	}
 
 	/**
@@ -68,10 +74,11 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return string
 	 */
-	public function get_image_target() {
-		$target = $this->get_prop( 'image_target' );
+	public function get_image_target()
+	{
+		$target = $this->get_prop('image_target');
 
-		return in_array( $target, array( '_self', '_blank' ) ) ? $target : '_self';
+		return in_array($target, array('_self', '_blank')) ? $target : '_self';
 	}
 
 	/**
@@ -79,15 +86,16 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return SliderItem[]
 	 */
-	public function get_items() {
-		$images  = array();
-		$_images = get_posts( array(
-			'post_type'      => 'attachment',
-			'post__in'       => $this->get_images_ids(),
-			'posts_per_page' => - 1
-		) );
-		foreach ( $_images as $image ) {
-			$images[] = new SliderItem( $image );
+	public function get_items()
+	{
+		$images = array();
+		$_images = get_posts(array(
+			'post_type' => 'attachment',
+			'post__in' => $this->get_images_ids(),
+			'posts_per_page' => -1
+		));
+		foreach ($_images as $image) {
+			$images[] = new SliderItem($image);
 		}
 
 		return $images;
@@ -98,27 +106,28 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array
 	 */
-	public function get_images() {
-		$images  = array();
-		$_images = get_posts( array(
-			'post_type'      => 'attachment',
-			'post__in'       => $this->get_images_ids(),
-			'posts_per_page' => - 1
-		) );
+	public function get_images()
+	{
+		$images = array();
+		$_images = get_posts(array(
+			'post_type' => 'attachment',
+			'post__in' => $this->get_images_ids(),
+			'posts_per_page' => -1
+		));
 
-		foreach ( $_images as $image ) {
-			$image_src      = wp_get_attachment_image_src( $image->ID, $this->get_image_size() );
-			$image_link_url = get_post_meta( $image->ID, "_carousel_slider_link_url", true );
-			$alt_text       = trim( strip_tags( get_post_meta( $image->ID, '_wp_attachment_image_alt', true ) ) );
-			$images[]       = array(
-				'id'               => $image->ID,
-				'title'            => $image->post_title,
-				'caption'          => $image->post_excerpt,
-				'image_alt'        => $alt_text,
+		foreach ($_images as $image) {
+			$image_src = wp_get_attachment_image_src($image->ID, $this->get_image_size());
+			$image_link_url = get_post_meta($image->ID, "_carousel_slider_link_url", true);
+			$alt_text = trim(strip_tags(get_post_meta($image->ID, '_wp_attachment_image_alt', true)));
+			$images[] = array(
+				'id' => $image->ID,
+				'title' => $image->post_title,
+				'caption' => $image->post_excerpt,
+				'image_alt' => $alt_text,
 				'image_target_url' => $image_link_url,
-				'image_src'        => $image_src[0],
-				'image_width'      => $image_src[1],
-				'image_height'     => $image_src[2],
+				'image_src' => $image_src[0],
+				'image_width' => $image_src[1],
+				'image_height' => $image_src[2],
 			);
 		}
 
@@ -128,13 +137,14 @@ class Slider extends AbstractSlider {
 	/**
 	 * Read slider data
 	 */
-	protected function read_slider_data() {
+	protected function read_slider_data()
+	{
 		parent::read_slider_data();
-		$this->data['show_image_title']   = $this->get_meta( '_show_attachment_title' );
-		$this->data['show_image_caption'] = $this->get_meta( '_show_attachment_caption' );
-		$this->data['show_lightbox']      = $this->get_meta( '_image_lightbox' );
-		$this->data['image_target']       = $this->get_meta( '_image_target' );
-		$this->data['images_ids']         = $this->get_images_ids_meta();
+		$this->data['show_image_title'] = $this->get_meta('_show_attachment_title');
+		$this->data['show_image_caption'] = $this->get_meta('_show_attachment_caption');
+		$this->data['show_lightbox'] = $this->get_meta('_image_lightbox');
+		$this->data['image_target'] = $this->get_meta('_image_target');
+		$this->data['images_ids'] = $this->get_images_ids_meta();
 	}
 
 	/**
@@ -142,12 +152,13 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array
 	 */
-	protected function get_images_ids_meta() {
-		$new        = $this->get_meta( '_images_ids' );
-		$old        = $this->get_meta( '_wpdh_image_ids' );
-		$images_ids = ! empty( $new ) ? $new : $old;
-		$images_ids = is_string( $images_ids ) ? explode( ',', $images_ids ) : $images_ids;
-		$images_ids = count( $images_ids ) ? array_filter( array_map( 'intval', $images_ids ) ) : array();
+	protected function get_images_ids_meta()
+	{
+		$new = $this->get_meta('_images_ids');
+		$old = $this->get_meta('_wpdh_image_ids');
+		$images_ids = !empty($new) ? $new : $old;
+		$images_ids = is_string($images_ids) ? explode(',', $images_ids) : $images_ids;
+		$images_ids = count($images_ids) ? array_filter(array_map('intval', $images_ids)) : array();
 
 		return $images_ids;
 	}
@@ -157,14 +168,15 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array
 	 */
-	protected static function props_to_meta_key() {
+	protected static function props_to_meta_key()
+	{
 		$keys = parent::props_to_meta_key();
 
-		$keys['images_ids']         = '_images_ids';
-		$keys['show_image_title']   = '_show_attachment_title';
+		$keys['images_ids'] = '_images_ids';
+		$keys['show_image_title'] = '_show_attachment_title';
 		$keys['show_image_caption'] = '_show_attachment_caption';
-		$keys['show_lightbox']      = '_image_lightbox';
-		$keys['image_target']       = '_image_target';
+		$keys['show_lightbox'] = '_image_lightbox';
+		$keys['image_target'] = '_image_target';
 
 		return $keys;
 	}

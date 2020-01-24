@@ -45,16 +45,30 @@ const carousel = {
 				classes.push('dots-visible-hover');
 			}
 
-			//nav_style.style.color = this.options.nav_color ;
+			// caption and title visibility
+			if (this.options.show_image_title  === true) {
+				classes.push('visible-title');
+			}
+			else {
+				classes.push('hide-title');
+			}
+			// caption and title visibility
+			if (this.options.show_image_caption === true) {
+				classes.push('visible-caption');
+			}else
+			{
+				classes.push('hide-caption');
+			}
 
 			return classes;
 		},
 		owl_options() {
-			
+			console.log(this.options.categories);
 			return {
 				stagePadding: this.options.stage_padding,
 				nav: this.options.arrow_nav,
 				nav_color: this.options.nav_color,
+				categories: this.options.categories,
 				nav_active_color: this.options.nav_active_color,
 				dots: this.options.dot_nav,
 				margin: this.options.item_spacing,

@@ -33,7 +33,7 @@
 	}
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 	svg.carousel-slider-nav-icon {
 		fill: var(--cs-nav-color);
 	}

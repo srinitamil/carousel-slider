@@ -98,6 +98,9 @@ if ( ! class_exists( 'Carousel_Slider' ) ) {
 				add_action( 'plugins_loaded', array( self::$instance, 'load_textdomain' ) );
 				add_filter( 'admin_footer_text', array( self::$instance, 'admin_footer_text' ) );
 
+				// Load admin scripts
+				add_action( 'admin_enqueue_scripts', array( self::$instance, 'admin_scripts' ) );
+
 				// Register autoload for plugin classes
 				self::$instance->register_autoload();
 
@@ -132,6 +135,13 @@ if ( ! class_exists( 'Carousel_Slider' ) ) {
 			define( 'CAROUSEL_SLIDER_WIDGETS', CAROUSEL_SLIDER_PATH . '/widgets' );
 			define( 'CAROUSEL_SLIDER_URL', plugins_url( '', CAROUSEL_SLIDER_FILE ) );
 			define( 'CAROUSEL_SLIDER_ASSETS', CAROUSEL_SLIDER_URL . '/assets' );
+		}
+
+		/**
+		 * Enqueue admin scripts
+		 */
+		public function admin_scripts(){
+			wp_enqueue_script( 'my_custom_script', CAROUSEL_SLIDER_ASSETS. '/lib/magnific-popup/jquery.magnific-popup.js','jquery', '1.0',true );
 		}
 
 		/**

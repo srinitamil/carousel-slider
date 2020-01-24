@@ -26,6 +26,9 @@
 				<template v-if="slider.type === 'post-carousel'">
 					<post-carousel :options="slider"></post-carousel>
 				</template>
+				<template v-if="slider.type === 'product-carousel'">
+					<product-carousel :options="slider"></product-carousel>
+				</template>
 			</div>
 		</div>
 		<div class="carousel-slider-sidebar">
@@ -99,8 +102,8 @@
 						</template>
 
 						<template v-if="'select' === field.type">
-							<select :id="field.id" v-model="slider[field.id]" class="carousel-slider-control__input">
-								<option v-for="(choice, key) in field.choices" :value="key">{{choice}}</option>
+							<select :id="field.id" v-model="slider[field.id]" :multiple="field.input_attrs.multiple" class="carousel-slider-control__input">
+								<option v-for="(choice, key) in field.choices" :value="key"> {{choice}}</option>
 							</select>
 						</template>
 						<template v-if="'slider' === field.type">
@@ -151,6 +154,7 @@
 	import VideoCarousel from '../components/sliders/VideoCarousel.vue';
 	import HeroCarousel from '../components/sliders/HeroCarousel.vue';
 	import PostCarousel from '../components/sliders/PostCarousel.vue';
+	import ProductCarousel from '../components/sliders/ProductCarousel.vue';
 	import AccordionRepeater from '../components/AccordionRepeater.vue';
 	import ColorPicker from '../components/fields/ColorPicker.vue';
 	import MediaUploader from '../components/fields/MediaUploader.vue';
@@ -186,6 +190,7 @@
 			ImageCarousel,
 			ImageCarouselUrl,
 			VideoCarousel,
+			ProductCarousel,
 			HeroCarousel,
 			PostCarousel,
 			Background,

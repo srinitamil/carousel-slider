@@ -63,7 +63,7 @@ const carousel = {
 			return classes;
 		},
 		owl_options() {
-			console.log(this.options.categories);
+
 			return {
 				stagePadding: this.options.stage_padding,
 				nav: this.options.arrow_nav,
@@ -104,7 +104,6 @@ const carousel = {
 			let slider = window.jQuery(this.$el).find("[data-carousel_slider]");
 			slider.owlCarousel('destroy');
 			setTimeout(function (options) {
-				console.log(options);
 				slider.owlCarousel(options);
 			}, 10, this.owl_options);
 		},

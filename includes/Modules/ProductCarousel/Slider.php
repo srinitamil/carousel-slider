@@ -3,20 +3,27 @@
 namespace CarouselSlider\Modules\ProductCarousel;
 
 use CarouselSlider\Abstracts\AbstractSlider;
+use http\Exception\BadQueryStringException;
 
-if ( ! defined( 'ABSPATH' ) ) {
+if (!defined('ABSPATH')) {
 	exit; // Exit if accessed directly.
 }
 
-class Slider extends AbstractSlider {
+/**
+ * Class Slider
+ * @package CarouselSlider\Modules\ProductCarousel
+ */
+class Slider extends AbstractSlider
+{
 
 	/**
 	 * Check if WooCommerce version at least 3.0.0
 	 *
 	 * @return bool
 	 */
-	public static function is_wc_version_3() {
-		return defined( 'WC_VERSION' ) && version_compare( WC_VERSION, '3.0.0', '>=' );
+	public static function is_wc_version_3()
+	{
+		return defined('WC_VERSION') && version_compare(WC_VERSION, '3.0.0', '>=');
 	}
 
 	/**
@@ -26,21 +33,23 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array
 	 */
-	public static function get_query_types( $key_only = false ) {
+	public static function get_query_types($key_only = false)
+	{
+
 		$types = array(
-			'recent'                  => esc_html__( 'Recent Products', 'carousel-slider' ),
-			'featured'                => esc_html__( 'Featured Products', 'carousel-slider' ),
-			'sale'                    => esc_html__( 'Sale Products', 'carousel-slider' ),
-			'best_selling'            => esc_html__( 'Best-Selling Products', 'carousel-slider' ),
-			'top_rated'               => esc_html__( 'Top Rated Products', 'carousel-slider' ),
-			'product_categories_list' => esc_html__( 'Product Categories List', 'carousel-slider' ),
-			'product_categories'      => esc_html__( 'Products by Categories', 'carousel-slider' ),
-			'product_tags'            => esc_html__( 'Products by Tags', 'carousel-slider' ),
-			'specific_products'       => esc_html__( 'Specific Products', 'carousel-slider' ),
+			'recent' => esc_html__('Recent Products', 'carousel-slider'),
+			'featured' => esc_html__('Featured Products', 'carousel-slider'),
+			'sale' => esc_html__('Sale Products', 'carousel-slider'),
+			'best_selling' => esc_html__('Best-Selling Products', 'carousel-slider'),
+			'top_rated' => esc_html__('Top Rated Products', 'carousel-slider'),
+			'product_categories_list' => esc_html__('Product Categories List', 'carousel-slider'),
+			'product_categories' => esc_html__('Products by Categories', 'carousel-slider'),
+			'product_tags' => esc_html__('Products by Tags', 'carousel-slider'),
+			'specific_products' => esc_html__('Specific Products', 'carousel-slider'),
 		);
 
-		if ( $key_only ) {
-			return array_keys( $types );
+		if ($key_only) {
+			return array_keys($types);
 		}
 
 		return $types;
@@ -53,16 +62,17 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array
 	 */
-	public static function _get_query_types( $key_only = false ) {
+	public static function _get_query_types($key_only = false)
+	{
 		$types = array(
-			'query_product'      => esc_html__( 'Query Products', 'carousel-slider' ),
-			'product_categories' => esc_html__( 'Product Categories', 'carousel-slider' ),
-			'product_tags'       => esc_html__( 'Product Tags', 'carousel-slider' ),
-			'specific_products'  => esc_html__( 'Specific Products', 'carousel-slider' ),
+			'query_product' => esc_html__('Query Products', 'carousel-slider'),
+			'product_categories' => esc_html__('Product Categories', 'carousel-slider'),
+			'product_tags' => esc_html__('Product Tags', 'carousel-slider'),
+			'specific_products' => esc_html__('Specific Products', 'carousel-slider'),
 		);
 
-		if ( $key_only ) {
-			return array_keys( $types );
+		if ($key_only) {
+			return array_keys($types);
 		}
 
 		return $types;
@@ -75,18 +85,19 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array
 	 */
-	public static function _get_product_query_types( $key_only = false ) {
+	public static function _get_product_query_types($key_only = false)
+	{
 		$types = array(
-			'featured'                => esc_html__( 'Featured Products', 'carousel-slider' ),
-			'recent'                  => esc_html__( 'Recent Products', 'carousel-slider' ),
-			'sale'                    => esc_html__( 'Sale Products', 'carousel-slider' ),
-			'best_selling'            => esc_html__( 'Best-Selling Products', 'carousel-slider' ),
-			'top_rated'               => esc_html__( 'Top Rated Products', 'carousel-slider' ),
-			'product_categories_list' => esc_html__( 'Product Categories List', 'carousel-slider' ),
+			'featured' => esc_html__('Featured Products', 'carousel-slider'),
+			'recent' => esc_html__('Recent Products', 'carousel-slider'),
+			'sale' => esc_html__('Sale Products', 'carousel-slider'),
+			'best_selling' => esc_html__('Best-Selling Products', 'carousel-slider'),
+			'top_rated' => esc_html__('Top Rated Products', 'carousel-slider'),
+			'product_categories_list' => esc_html__('Product Categories List', 'carousel-slider'),
 		);
 
-		if ( $key_only ) {
-			return array_keys( $types );
+		if ($key_only) {
+			return array_keys($types);
 		}
 
 		return $types;
@@ -97,19 +108,19 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return string
 	 */
-	public function get_query_type() {
-		$valid_query_type = static::_get_query_types( true );
-		$query_type       = $this->get_prop( 'query_type' );
+	public function get_query_type()
+	{
+		$valid_query_type = static::_get_query_types(true);
+		$query_type = $this->get_prop('query_type');
 		// Typo mistake, for backup compatibility
-		$query_type = ( 'query_porduct' == $query_type ) ? 'query_product' : $query_type;
-		$query_type = in_array( $query_type, $valid_query_type ) ? $query_type : 'query_product';
+		$query_type = ('query_porduct' == $query_type) ? 'query_product' : $query_type;
+		$query_type = in_array($query_type, $valid_query_type) ? $query_type : 'query_product';
 
-		$valid_query = static::_get_product_query_types( true );
-		$query       = $this->get_prop( 'query' );
-		$query       = in_array( $query, $valid_query ) ? $query : 'recent';
+		$valid_query = static::_get_product_query_types(true);
+		$query = $this->get_prop('query');
+		$query = in_array($query, $valid_query) ? $query : 'recent';
 
-
-		if ( 'query_product' == $query_type ) {
+		if ('query_product' == $query_type) {
 			$query_type = $query;
 		}
 
@@ -121,7 +132,8 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return bool
 	 */
-	public function is_product_categories_list() {
+	public function is_product_categories_list()
+	{
 		return $this->get_query_type() == 'product_categories_list';
 	}
 
@@ -130,14 +142,15 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array
 	 */
-	public function get_product_in() {
-		$ids = $this->get_prop( 'product_in' );
+	public function get_product_in()
+	{
+		$ids = $this->get_prop('product_in');
 
-		if ( is_string( $ids ) ) {
-			$ids = explode( ',', $ids );
+		if (is_string($ids)) {
+			$ids = explode(',', $ids);
 		}
 
-		return array_filter( array_map( 'intval', $ids ) );
+		return array_filter(array_map('intval', $ids));
 	}
 
 	/**
@@ -145,14 +158,15 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array
 	 */
-	public function get_categories() {
-		$categories = $this->get_prop( 'categories' );
+	public function get_categories()
+	{
+		$categories = $this->get_prop('categories');
 
-		if ( is_string( $categories ) ) {
-			$categories = explode( ',', $categories );
+		if (is_string($categories)) {
+			$categories = explode(',', $categories);
 		}
 
-		$categories = array_filter( array_map( 'intval', $categories ) );
+		$categories = array_filter(array_map('intval', $categories));
 
 		return $categories;
 	}
@@ -162,14 +176,15 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array
 	 */
-	public function get_tags() {
-		$tags = $this->get_prop( 'tags' );
+	public function get_tags()
+	{
+		$tags = $this->get_prop('tags');
 
-		if ( is_string( $tags ) ) {
-			$tags = explode( ',', $tags );
+		if (is_string($tags)) {
+			$tags = explode(',', $tags);
 		}
 
-		return array_filter( array_map( 'intval', $tags ) );
+		return array_filter(array_map('intval', $tags));
 	}
 
 	/**
@@ -177,8 +192,9 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return int
 	 */
-	public function get_per_page() {
-		return intval( $this->get_prop( 'per_page' ) );
+	public function get_per_page()
+	{
+		return intval($this->get_prop('per_page'));
 	}
 
 	/**
@@ -186,8 +202,9 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return bool
 	 */
-	public function show_title() {
-		return $this->is_checked( $this->get_prop( 'show_title' ) );
+	public function show_title()
+	{
+		return $this->is_checked($this->get_prop('show_title'));
 	}
 
 	/**
@@ -195,8 +212,9 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return bool
 	 */
-	public function show_rating() {
-		return $this->is_checked( $this->get_prop( 'show_rating' ) );
+	public function show_rating()
+	{
+		return $this->is_checked($this->get_prop('show_rating'));
 	}
 
 	/**
@@ -204,8 +222,9 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return bool
 	 */
-	public function show_price() {
-		return $this->is_checked( $this->get_prop( 'show_price' ) );
+	public function show_price()
+	{
+		return $this->is_checked($this->get_prop('show_price'));
 	}
 
 	/**
@@ -213,8 +232,9 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return bool
 	 */
-	public function show_cart_button() {
-		return $this->is_checked( $this->get_prop( 'show_cart_button' ) );
+	public function show_cart_button()
+	{
+		return $this->is_checked($this->get_prop('show_cart_button'));
 	}
 
 	/**
@@ -222,8 +242,9 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return bool
 	 */
-	public function show_onsale() {
-		return $this->is_checked( $this->get_prop( 'show_onsale' ) );
+	public function show_onsale()
+	{
+		return $this->is_checked($this->get_prop('show_onsale'));
 	}
 
 	/**
@@ -231,8 +252,9 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return bool
 	 */
-	public function show_wishlist() {
-		return $this->is_checked( $this->get_prop( 'wishlist' ) );
+	public function show_wishlist()
+	{
+		return $this->is_checked($this->get_prop('wishlist'));
 	}
 
 	/**
@@ -240,8 +262,9 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return bool
 	 */
-	public function show_quick_view() {
-		return $this->is_checked( $this->get_prop( 'show_quick_view' ) );
+	public function show_quick_view()
+	{
+		return $this->is_checked($this->get_prop('show_quick_view'));
 	}
 
 	/**
@@ -249,8 +272,9 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return string
 	 */
-	public function get_title_color() {
-		return $this->get_prop( 'title_color' );
+	public function get_title_color()
+	{
+		return $this->get_prop('title_color');
 	}
 
 	/**
@@ -258,8 +282,9 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return string
 	 */
-	public function get_button_color() {
-		return $this->get_prop( 'button_color' );
+	public function get_button_color()
+	{
+		return $this->get_prop('button_color');
 	}
 
 	/**
@@ -267,8 +292,9 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return string
 	 */
-	public function get_button_text_color() {
-		return $this->get_prop( 'button_text_color' );
+	public function get_button_text_color()
+	{
+		return $this->get_prop('button_text_color');
 	}
 
 	/**
@@ -276,21 +302,23 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array
 	 */
-	public function to_array() {
-		$data                      = parent::to_array();
-		$data['query_type']        = $this->get_query_type();
-		$data['show_title']        = $this->show_title();
-		$data['show_rating']       = $this->show_rating();
-		$data['show_price']        = $this->show_price();
-		$data['show_cart_button']  = $this->show_cart_button();
-		$data['show_onsale']       = $this->show_onsale();
-		$data['show_wishlist']     = $this->show_wishlist();
-		$data['show_quick_view']   = $this->show_quick_view();
-		$data['title_color']       = $this->get_title_color();
-		$data['button_color']      = $this->get_button_color();
+	public function to_array()
+	{
+		$data = parent::to_array();
+		$data['query_type'] = $this->get_query_type();
+		$data['show_title'] = $this->show_title();
+		$data['show_rating'] = $this->show_rating();
+		$data['show_price'] = $this->show_price();
+		$data['show_cart_button'] = $this->show_cart_button();
+		$data['show_onsale'] = $this->show_onsale();
+		$data['show_wishlist'] = $this->show_wishlist();
+		$data['show_quick_view'] = $this->show_quick_view();
+		$data['title_color'] = $this->get_title_color();
+		$data['button_color'] = $this->get_button_color();
 		$data['button_text_color'] = $this->get_button_text_color();
-		$data['per_page']          = $this->get_per_page();
-		$data['products']          = array();
+		$data['per_page'] = $this->get_per_page();
+		$data['categories'] = $this->get_categories();
+		$data['products'] = $this->get_products();
 
 		return $data;
 	}
@@ -298,24 +326,25 @@ class Slider extends AbstractSlider {
 	/**
 	 * Read slider data
 	 */
-	protected function read_slider_data() {
+	protected function read_slider_data()
+	{
 		parent::read_slider_data();
-		$this->data['query_type']        = $this->get_meta( '_product_query_type' );
-		$this->data['query']             = $this->get_meta( '_product_query' );
-		$this->data['categories']        = $this->get_meta( '_product_categories' );
-		$this->data['tags']              = $this->get_meta( '_product_tags' );
-		$this->data['product_in']        = $this->get_meta( '_product_in' );
-		$this->data['per_page']          = $this->get_meta( '_products_per_page' );
-		$this->data['show_title']        = $this->get_meta( '_product_title' );
-		$this->data['show_rating']       = $this->get_meta( '_product_rating' );
-		$this->data['show_price']        = $this->get_meta( '_product_price' );
-		$this->data['show_cart_button']  = $this->get_meta( '_product_cart_button' );
-		$this->data['show_onsale']       = $this->get_meta( '_product_onsale' );
-		$this->data['wishlist']          = $this->get_meta( '_product_wishlist' );
-		$this->data['show_quick_view']   = $this->get_meta( '_product_quick_view' );
-		$this->data['title_color']       = $this->get_meta( '_product_title_color' );
-		$this->data['button_color']      = $this->get_meta( '_product_button_bg_color' );
-		$this->data['button_text_color'] = $this->get_meta( '_product_button_text_color' );
+		$this->data['query_type'] = $this->get_meta('_product_query_type');
+		$this->data['query'] = $this->get_meta('_product_query');
+		$this->data['categories'] = $this->get_meta('_product_categories');
+		$this->data['tags'] = $this->get_meta('_product_tags');
+		$this->data['product_in'] = $this->get_meta('_product_in');
+		$this->data['per_page'] = $this->get_meta('_products_per_page');
+		$this->data['show_title'] = $this->get_meta('_product_title');
+		$this->data['show_rating'] = $this->get_meta('_product_rating');
+		$this->data['show_price'] = $this->get_meta('_product_price');
+		$this->data['show_cart_button'] = $this->get_meta('_product_cart_button');
+		$this->data['show_onsale'] = $this->get_meta('_product_onsale');
+		$this->data['wishlist'] = $this->get_meta('_product_wishlist');
+		$this->data['show_quick_view'] = $this->get_meta('_product_quick_view');
+		$this->data['title_color'] = $this->get_meta('_product_title_color');
+		$this->data['button_color'] = $this->get_meta('_product_button_bg_color');
+		$this->data['button_text_color'] = $this->get_meta('_product_button_text_color');
 	}
 
 	/**
@@ -323,24 +352,25 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array
 	 */
-	protected static function props_to_meta_key() {
+	protected static function props_to_meta_key()
+	{
 		$keys = parent::props_to_meta_key();
 
-		$keys['query_type']        = '_product_query_type';
-		$keys['query']             = '_product_query';
-		$keys['categories']        = '_product_categories';
-		$keys['tags']              = '_product_tags';
-		$keys['product_in']        = '_product_in';
-		$keys['per_page']          = '_products_per_page';
-		$keys['title']             = '_product_title';
-		$keys['rating']            = '_product_rating';
-		$keys['price']             = '_product_price';
-		$keys['cart_button']       = '_product_cart_button';
-		$keys['onsale']            = '_product_onsale';
-		$keys['wishlist']          = '_product_wishlist';
-		$keys['quick_view']        = '_product_quick_view';
-		$keys['title_color']       = '_product_title_color';
-		$keys['button_color']      = '_product_button_bg_color';
+		$keys['query_type'] = '_product_query_type';
+		$keys['query'] = '_product_query';
+		$keys['categories'] = '_product_categories';
+		$keys['tags'] = '_product_tags';
+		$keys['product_in'] = '_product_in';
+		$keys['per_page'] = '_products_per_page';
+		$keys['title'] = '_product_title';
+		$keys['rating'] = '_product_rating';
+		$keys['price'] = '_product_price';
+		$keys['cart_button'] = '_product_cart_button';
+		$keys['onsale'] = '_product_onsale';
+		$keys['wishlist'] = '_product_wishlist';
+		$keys['quick_view'] = '_product_quick_view';
+		$keys['title_color'] = '_product_title_color';
+		$keys['button_color'] = '_product_button_bg_color';
 		$keys['button_text_color'] = '_product_button_text_color';
 
 		return $keys;
@@ -352,8 +382,15 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array
 	 */
-	public static function get_product_categories_list() {
-		return static::get_terms( 'product_cat' );
+	public static function get_product_categories_list()
+	{
+		$categories = get_terms('product_cat');
+		$data = array();
+		foreach ($categories as $category) {
+			$data[$category->term_id] = esc_html__($category->name, 'carousel-slider');
+		}
+		return $data;
+
 	}
 
 	/**
@@ -361,8 +398,15 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array
 	 */
-	public static function get_product_tags_list() {
-		return static::get_terms( 'product_tag' );
+	public static function get_product_tags_list()
+	{
+		$product_tags = get_terms('product_tag');
+		$data = array();
+		foreach ($product_tags as $category) {
+			$data[$category->term_id] = esc_html__($category->name, 'carousel-slider');
+		}
+
+		return $data;
 	}
 
 	/**
@@ -370,38 +414,39 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array|\WP_Post[] List of posts.
 	 */
-	public function get_products() {
+	public function get_products()
+	{
 		$product_query = $this->get_query_type();
 
-		if ( $product_query == 'featured' ) {
+		if ($product_query == 'featured') {
 			return $this->get_featured_products();
 		}
 
-		if ( $product_query == 'best_selling' ) {
+		if ($product_query == 'best_selling') {
 			return $this->get_best_selling_products();
 		}
 
-		if ( $product_query == 'recent' ) {
+		if ($product_query == 'recent') {
 			return $this->get_recent_products();
 		}
 
-		if ( $product_query == 'sale' ) {
+		if ($product_query == 'sale') {
 			return $this->get_sale_products();
 		}
 
-		if ( $product_query == 'top_rated' ) {
+		if ($product_query == 'top_rated') {
 			return $this->get_top_rated_products();
 		}
 
-		if ( $product_query == 'specific_products' ) {
+		if ($product_query == 'specific_products') {
 			return $this->get_products_by_ids();
 		}
 
-		if ( $product_query == 'product_categories' ) {
+		if ($product_query == 'product_categories') {
 			return $this->get_products_by_categories();
 		}
 
-		if ( $product_query == 'product_tags' ) {
+		if ($product_query == 'product_tags') {
 			return $this->get_products_by_tags();
 		}
 
@@ -414,23 +459,25 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array|\WP_Post[] List of posts.
 	 */
-	public function get_products_by_ids() {
+	public function get_products_by_ids()
+	{
 		$query_args = array(
-			'posts_per_page'      => - 1,
-			'post_type'           => 'product',
-			'post_status'         => 'publish',
+			'posts_per_page' => -1,
+			'post_type' => 'product',
+			'post_status' => 'publish',
 			'ignore_sticky_posts' => 1,
-			'orderby'             => 'title',
-			'order'               => 'asc',
-			'post__in'            => $this->get_product_in(),
-			'meta_query'          => WC()->query->get_meta_query(),
+			'orderby' => 'title',
+			'order' => 'asc',
+			'post__in' => $this->get_product_in(),
+			'meta_query' => WC()->query->get_meta_query(),
 		);
 
-		if ( static::is_wc_version_3() ) {
+		if (static::is_wc_version_3()) {
 			$query_args['tax_query'] = WC()->query->get_tax_query();
 		}
 
-		return get_posts( $query_args );
+		$data = $this->get_products_info($query_args);
+		return $data;
 	}
 
 	/**
@@ -439,22 +486,24 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array|\WP_Post[] List of posts.
 	 */
-	public function get_recent_products() {
+	public function get_recent_products()
+	{
 		$query_args = array(
-			'post_type'           => 'product',
-			'post_status'         => 'publish',
+			'post_type' => 'product',
+			'post_status' => 'publish',
 			'ignore_sticky_posts' => 1,
-			'orderby'             => 'date',
-			'order'               => 'desc',
-			'posts_per_page'      => $this->get_per_page(),
-			'meta_query'          => WC()->query->get_meta_query(),
+			'orderby' => 'date',
+			'order' => 'desc',
+			'posts_per_page' => $this->get_per_page(),
+			'meta_query' => WC()->query->get_meta_query(),
 		);
 
-		if ( static::is_wc_version_3() ) {
+		if (static::is_wc_version_3()) {
 			$query_args['tax_query'] = WC()->query->get_tax_query();
 		}
 
-		return get_posts( $query_args );
+		 $data = $this->get_products_info($query_args);
+		return $data;
 	}
 
 	/**
@@ -463,22 +512,24 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array|\WP_Post[] List of posts.
 	 */
-	public function get_best_selling_products() {
+	public function get_best_selling_products()
+	{
 		$query_args = array(
-			'post_type'           => 'product',
-			'post_status'         => 'publish',
+			'post_type' => 'product',
+			'post_status' => 'publish',
 			'ignore_sticky_posts' => 1,
-			'meta_key'            => 'total_sales',
-			'orderby'             => 'meta_value_num',
-			'posts_per_page'      => $this->get_per_page(),
-			'meta_query'          => WC()->query->get_meta_query(),
+			'meta_key' => 'total_sales',
+			'orderby' => 'meta_value_num',
+			'posts_per_page' => $this->get_per_page(),
+			'meta_query' => WC()->query->get_meta_query(),
 		);
 
-		if ( static::is_wc_version_3() ) {
+		if (static::is_wc_version_3()) {
 			$query_args['tax_query'] = WC()->query->get_tax_query();
 		}
 
-		return get_posts( $query_args );
+		$data = $this->get_products_info($query_args);
+		return $data;
 	}
 
 	/**
@@ -487,35 +538,37 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array|\WP_Post[] List of posts.
 	 */
-	public function get_featured_products() {
+	public function get_featured_products()
+	{
 		$meta_query = WC()->query->get_meta_query();
 
-		if ( ! static::is_wc_version_3() ) {
-			$meta_query[] = array( 'key' => '_featured', 'value' => 'yes' );
+		if (!static::is_wc_version_3()) {
+			$meta_query[] = array('key' => '_featured', 'value' => 'yes');
 		}
 
 		$query_args = array(
-			'post_type'           => 'product',
-			'post_status'         => 'publish',
+			'post_type' => 'product',
+			'post_status' => 'publish',
 			'ignore_sticky_posts' => 1,
-			'orderby'             => 'date',
-			'order'               => 'desc',
-			'posts_per_page'      => $this->get_per_page(),
-			'meta_query'          => $meta_query,
+			'orderby' => 'date',
+			'order' => 'desc',
+			'posts_per_page' => $this->get_per_page(),
+			'meta_query' => $meta_query,
 		);
 
-		if ( static::is_wc_version_3() ) {
-			$tax_query               = WC()->query->get_tax_query();
-			$tax_query[]             = array(
+		if (static::is_wc_version_3()) {
+			$tax_query = WC()->query->get_tax_query();
+			$tax_query[] = array(
 				'taxonomy' => 'product_visibility',
-				'field'    => 'name',
-				'terms'    => 'featured',
+				'field' => 'name',
+				'terms' => 'featured',
 				'operator' => 'IN',
 			);
 			$query_args['tax_query'] = $tax_query;
 		}
 
-		return get_posts( $query_args );
+		$data = $this->get_products_info($query_args);
+		return $data;
 	}
 
 	/**
@@ -524,23 +577,25 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array|\WP_Post[] List of posts.
 	 */
-	public function get_sale_products() {
+	public function get_sale_products()
+	{
 		$query_args = array(
-			'orderby'        => 'title',
-			'order'          => 'asc',
-			'no_found_rows'  => 1,
-			'post_status'    => 'publish',
-			'post_type'      => 'product',
+			'orderby' => 'title',
+			'order' => 'asc',
+			'no_found_rows' => 1,
+			'post_status' => 'publish',
+			'post_type' => 'product',
 			'posts_per_page' => $this->get_per_page(),
-			'meta_query'     => WC()->query->get_meta_query(),
-			'post__in'       => array_merge( array( 0 ), wc_get_product_ids_on_sale() ),
+			'meta_query' => WC()->query->get_meta_query(),
+			'post__in' => array_merge(array(0), wc_get_product_ids_on_sale()),
 		);
 
-		if ( static::is_wc_version_3() ) {
+		if (static::is_wc_version_3()) {
 			$query_args['tax_query'] = WC()->query->get_tax_query();
 		}
 
-		return get_posts( $query_args );
+		$data = $this->get_products_info($query_args);
+		return $data;
 	}
 
 	/**
@@ -549,39 +604,41 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array|\WP_Post[] List of posts.
 	 */
-	public function get_top_rated_products() {
-		if ( static::is_wc_version_3() ) {
+	public function get_top_rated_products()
+	{
+		if (static::is_wc_version_3()) {
 			$query_args = array(
-				'no_found_rows'  => 1,
-				'post_status'    => 'publish',
-				'post_type'      => 'product',
-				'meta_key'       => '_wc_average_rating',
-				'orderby'        => 'meta_value_num',
-				'order'          => 'DESC',
+				'no_found_rows' => 1,
+				'post_status' => 'publish',
+				'post_type' => 'product',
+				'meta_key' => '_wc_average_rating',
+				'orderby' => 'meta_value_num',
+				'order' => 'DESC',
 				'posts_per_page' => $this->get_per_page(),
-				'meta_query'     => WC()->query->get_meta_query(),
-				'tax_query'      => WC()->query->get_tax_query(),
+				'meta_query' => WC()->query->get_meta_query(),
+				'tax_query' => WC()->query->get_tax_query(),
 			);
 
-			return get_posts( $query_args );
+			$data = $this->get_products_info($query_args);
+			return $data;
 		}
 
 		// For WooCommerce version is less than 2.7.0
-		add_filter( 'posts_clauses', array( WC()->query, 'order_by_rating_post_clauses' ) );
+		add_filter('posts_clauses', array(WC()->query, 'order_by_rating_post_clauses'));
 
 		$query_args = array(
-			'post_type'           => 'product',
-			'post_status'         => 'publish',
-			'orderby'             => 'title',
-			'order'               => 'asc',
+			'post_type' => 'product',
+			'post_status' => 'publish',
+			'orderby' => 'title',
+			'order' => 'asc',
 			'ignore_sticky_posts' => 1,
-			'posts_per_page'      => $this->get_per_page(),
-			'meta_query'          => WC()->query->get_meta_query(),
+			'posts_per_page' => $this->get_per_page(),
+			'meta_query' => WC()->query->get_meta_query(),
 		);
 
-		$_posts = get_posts( $query_args );
+		$_posts = get_posts($query_args);
 
-		remove_filter( 'posts_clauses', array( WC()->query, 'order_by_rating_post_clauses' ) );
+		remove_filter('posts_clauses', array(WC()->query, 'order_by_rating_post_clauses'));
 
 		return $_posts;
 	}
@@ -593,15 +650,16 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return \WP_Term[] List of products terms.
 	 */
-	public function get_product_categories() {
-		$terms = get_terms( array(
-			'taxonomy'   => 'product_cat',
+	public function get_product_categories()
+	{
+		$terms = get_terms(array(
+			'taxonomy' => 'product_cat',
 			'hide_empty' => 1,
-			'orderby'    => 'name',
-			'order'      => 'ASC',
-		) );
+			'orderby' => 'name',
+			'order' => 'ASC',
+		));
 
-		if ( is_wp_error( $terms ) ) {
+		if (is_wp_error($terms)) {
 			return array();
 		}
 
@@ -614,23 +672,24 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array|\WP_Post[] List of posts.
 	 */
-	public function get_products_by_categories() {
+	public function get_products_by_categories()
+	{
 		$args = array(
-			'post_type'          => 'product',
-			'post_status'        => 'publish',
+			'post_type' => 'product',
+			'post_status' => 'publish',
 			'ignore_sticky_post' => 1,
-			'posts_per_page'     => $this->get_per_page(),
-			'tax_query'          => array(
+			'posts_per_page' => $this->get_per_page(),
+			'tax_query' => array(
 				array(
 					'taxonomy' => 'product_cat',
-					'field'    => 'term_id',
-					'terms'    => $this->get_categories(),
+					'field' => 'term_id',
+					'terms' => $this->get_categories(),
 					'operator' => 'IN',
 				),
 			),
 		);
-
-		return get_posts( $args );
+		$data = $this->get_products_info($args);
+		return $data;
 	}
 
 	/**
@@ -639,22 +698,67 @@ class Slider extends AbstractSlider {
 	 *
 	 * @return array|\WP_Post[] List of posts.
 	 */
-	public function get_products_by_tags() {
+	public function get_products_by_tags()
+	{
 		$args = array(
-			'post_type'          => 'product',
-			'post_status'        => 'publish',
+			'post_type' => 'product',
+			'post_status' => 'publish',
 			'ignore_sticky_post' => 1,
-			'posts_per_page'     => $this->get_per_page(),
-			'tax_query'          => array(
+			'posts_per_page' => $this->get_per_page(),
+			'tax_query' => array(
 				array(
 					'taxonomy' => 'product_tag',
-					'field'    => 'term_id',
-					'terms'    => $this->get_tags(),
+					'field' => 'term_id',
+					'terms' => $this->get_tags(),
 					'operator' => 'IN',
 				),
 			),
 		);
 
-		return get_posts( $args );
+		$data = $this->get_products_info($args);
+		return $data;
+	}
+
+
+	/**
+	 * @param $args
+	 * @return array
+	 */
+	public function get_products_info($args)
+	{
+		$products = get_posts($args);
+		$data = array();
+		foreach ($products as $product) {
+			$product_info = wc_get_product($product->ID);
+			$cart_url = '[add_to_cart id="' . $product->ID . '"]';
+			$data[] = array(
+				'ID' => $product->ID,
+				'product_date' => $product->post_date,
+				'product_date_gmt' => $product->post_date_gmt,
+				'product_title' => $product->post_title,
+				'product_content' => $product->post_content,
+				'product_thumbnail' => get_the_post_thumbnail_url($product->ID),
+				'product_excerpt' => $product->post_excerpt,
+				'product_status' => $product->post_status,
+				'comment_status' => $product->comment_status,
+				'ping_status' => $product->ping_status,
+				'product_name' => $product->post_name,
+				//'product_regular_price' => wc_price($product_info->get_regular_price($product->ID)),
+				//'product_sale_price' => wc_price($product_info->get_sale_price($product->ID)),
+				//'product_price' => wc_price($product_info->get_price($product->ID)),
+				'product_modified' => $product->post_modified,
+				'product_modified_gmt' => $product->post_modified_gmt,
+				'product_content_filtered' => $product->post_content_filtered,
+				'product_parent' => $product->post_parent,
+				'guid' => $product->guid,
+				'menu_order' => $product->menu_order,
+				'post_type' => $product->post_type,
+				'comment_count' => $product->comment_count,
+				'filter' => $product->filter,
+				'add_to_cart' => do_shortcode($cart_url),
+			);
+		}
+
+		return $data;
 	}
 }

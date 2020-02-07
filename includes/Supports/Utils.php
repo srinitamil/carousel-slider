@@ -2,6 +2,8 @@
 
 namespace CarouselSlider\Supports;
 
+use CarouselSlider\Abstracts\AbstractSlider;
+
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly.
 }
@@ -125,6 +127,7 @@ class Utils {
 			'image-carousel-url' => __( 'Image Carousel (URL)', 'carousel-slider' ),
 			'post-carousel'      => __( 'Post Carousel', 'carousel-slider' ),
 			'product-carousel'   => __( 'Product Carousel', 'carousel-slider' ),
+			'product-carousel'   => __( 'Product Carousel', 'carousel-slider' ),
 			'video-carousel'     => __( 'Video Carousel', 'carousel-slider' ),
 			'hero-banner-slider' => __( 'Hero Carousel', 'carousel-slider' ),
 		) );
@@ -193,10 +196,11 @@ class Utils {
 	 *
 	 * @param int $slider_id
 	 *
-	 * @return \CarouselSlider\Abstracts\AbstractSlider
+	 * @return AbstractSlider
 	 */
 	public static function get_slider( $slider_id ) {
 		$type = get_post_meta( $slider_id, '_slide_type', true );
+
 		if ( 'image-carousel' == $type ) {
 			return new \CarouselSlider\Modules\ImageCarousel\Slider( $slider_id );
 		}
@@ -216,7 +220,7 @@ class Utils {
 			return new \CarouselSlider\Modules\HeroCarousel\Slider( $slider_id );
 		}
 
-		return new \CarouselSlider\Abstracts\AbstractSlider( $slider_id );
+		return new AbstractSlider( $slider_id );
 	}
 
 	/**

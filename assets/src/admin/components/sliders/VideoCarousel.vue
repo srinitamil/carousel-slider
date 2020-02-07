@@ -43,8 +43,7 @@
 		},
 		methods: {
 			openModal(video) {
-				console.log(video.url);
-				console.log(video.provider);
+
 				let root = this
 				let config = _.extend(
 						this.config,

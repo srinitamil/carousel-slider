@@ -118,6 +118,7 @@ class SliderController extends ApiController
 						__( 'You are not allowed to access the requested slider.', 'carousel-slider' ) );
 				}
 		 */
+
 		$slider = Utils::get_slider($id);
 
 		if (!$slider->get_id()) {
@@ -170,7 +171,9 @@ class SliderController extends ApiController
 			} */
 
 		$type = $request->get_param('type');
+			
 		$valid_type = Utils::get_slide_types();
+
 		if (!in_array($type, $valid_type)) {
 			return $this->respond_unprocessable_entity('rest_invalid_slider_type',
 				__('Slider type is not registered.', 'carousel-slider'));
